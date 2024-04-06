@@ -1,1 +1,14 @@
-spring.application.name=kupica
+spring:
+  application:
+    name: kupica
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  thymeleaf:
+    cache: false
+  thymeleaf3:
+    decoupled-logic: true
+  config:
+    import: secret-info.properties

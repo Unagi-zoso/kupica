@@ -1,6 +1,6 @@
 const menuBtn = document.getElementById("navbar__toggleBtn");
 const menu = document.getElementById("navbar__menu__list");
-const sideMenuBar = document.getElementById("side__menu__bar");
+const sideMenuBar = document.getElementById("sidebar__menu");
 const toggleBtn = document.getElementById("navbar__toggleBtn");
 const menuComponents = document.getElementById("menu__components");
 

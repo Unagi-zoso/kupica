@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>upload modal</title>
+</head>
+<body>
+  <section id="upload_modal_section">
+    <div id="upload__modal__form" class="modal">
+      <div id="upload__modal__form__header">
+        <p>사진 등록</p>
+      </div>
+      <div id="upload__modal__form__container">
+        <div id="upload__modal__form__body">
+          <form action="/upload" method="post" enctype="multipart/form-data" id="upload__form">
+            <div id="upload__modal__form__image__input">
+              <label id="upload__modal__form__image__input__label" for="file-upload" class="custom-file-upload">
+                <img id="upload__image" src="/imgs/image-file.svg">
+              </label>
+              <input type="file" name="photo" id="file-upload" accept="image/*" style="display: none;">
+            </div>
+            <div id="upload__modal__form__detail__inputs">
+              <div id="upload__modal__form__nickname__input">
+                <label for="nickname">닉네임</label>
+                <input type="text" name="nickname" id="nickname" class="pretty__input" placeholder="닉네임을 입력해주세요">
+              </div>
+              <div id="upload__modal__form__password__input">
+                <label for="password">비밀번호</label>
+                <input type="password" name="password" id="password" class="pretty__input" placeholder="비밀번호를 입력해주세요">
+              </div>
+              <div id="upload__modal__form__caption__input">
+                <label for="caption">본문</label>
+                <textarea name="caption" id="caption" class="pretty__input" placeholder="본문을 입력해주세요"></textarea>
+              </div>
+              <div id="radio__type__image__type">
+                <div id="radio__type__sejong">
+                  <input type="radio" name="image__type" id="type__sejong" value="SEJONG">
+                  <label for="type__sejong">세종</label>
+                </div>
+                <div id="radio__type__seoul">
+                  <input type="radio" name="image__type" id="type__seoul" value="SEOUL">
+                  <label for="type__seoul">서울(안암)</label>
+                </div>
+                <div id="radio__type__out__of__campus">
+                  <input type="radio" name="image__type" id="type__out__of__campus" value="OOC">
+                  <label for="type__out__of__campus">캠퍼스 외</label>
+                </div>
+              </div>
+              <div id="upload__modal__form__hashtags__input">
+                <label for="hashtags">해시태그</label>
+                <input type="text" name="hashtags" id="hashtags" class="pretty__input" placeholder="해시태그를 입력해주세요">
+              </div>
+            </div>
+            <div id="upload__modal__form__buttons">
+              <div id="upload__modal__form__submit__btn">
+                <button type="submit">업로드</button>
+              </div>
+              <div id="upload__modal__form__quit__btn">
+                <button type="button" onclick="clearForm()">취소</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

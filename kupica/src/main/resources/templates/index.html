@@ -3,344 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <title>kupica</title>
-  <link rel="stylesheet" href="/static/css/style.css">
-  <link rel="stylesheet" href="/static/css/modal-style.css">
+  <link rel="stylesheet" href="/css/main-style.css">
+  <link rel="stylesheet" href="/css/modal-style.css">
+  <link rel="stylesheet" href="/css/header-navbar-style.css">
+  <link rel="stylesheet" href="/css/sidebar-style.css">
+  <link rel="stylesheet" href="/css/slideshow-style.css">
+  <link rel="stylesheet" href="/css/second-navbar.css">
+  <link rel="stylesheet" href="/css/article-style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-<script src="/static/js/SidebarBtn.js" defer></script>
-<script src="/static/js/SlideShow.js" defer></script>
-<script src="/static/js/ModalFormBtn.js" defer></script>
-<script src="/static/js/ScrollToTopBtn.js" defer></script>
-<script src="/static/js/UploadModalFunc.js" defer></script>
+<script src="/js/SidebarBtn.js" defer></script>
+<script src="/js/SlideShow.js" defer></script>
+<script src="/js/ModalFormBtn.js" defer></script>
+<script src="/js/ScrollToTopBtn.js" defer></script>
+<script src="/js/UploadModalFunc.js" defer></script>
 </head>
 <body>
-  <header id="header__nav">
-    <div id="logo__container">
-      <div id="logo__img"><img src="/static/imgs/main-logo.png" alt="main logo"></div>
-      <div id="logo__string">
-        <ul>
-          <li><h1>korea univ.</h1></li>
-          <li><h1>picture</h1></li>
-          <li><h1>archive</h1></li>
-        </ul>
-      </div>
-    </div>
-    <div id="navbar__menu">
-      <a id="navbar__toggleBtn">
-        <img src="/static/imgs/icon-bars.svg" alt="navbar menu">
-      </a>
-    </div>
+  <header id="empty__header__nav">
+    헤더 삽입부
   </header>
-  <div id="side__menu__bar" class="sidebar">
-    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <div id="menu__components">
-      <div class="login__info" href="#">
-        <div class="login__info__img">
-          <img src="/static/imgs/user-img.svg">
-        </div>
-        <a class="login__info__name"><p>민둥산 호랑이</p></a>
-        <a class="login__info__string">
-          <p>로그인이 필요합니다</p>
-        </a>
-      </div>
-      <a class="menu__component" href="#">로그인</ㅇ>
-      <a class="menu__component" href="#">회원가입</a>
-      <a class="menu__component" href="#">로그아웃</ㅁ>
-    </div>
+  <div id="empty__side__menu__bar">
+    사이드바 삽입부
   </div>
   <div>
-    <section>
-      <div class="main__slideshow__container">        
-        <div class="mySlides fade">
-          <img src="/static/imgs/test-1.jpg">
-        </div>      
-        <div class="mySlides fade">
-          <img src="/static/imgs/test-2.jpg">
-        </div>      
-        <div class="mySlides fade">
-          <img src="/static/imgs/test-3.jpg">
-        </div>
-        <div class="mySlides fade">
-          <img src="/static/imgs/test-4.jpg">
-        </div>
-        <div class="slideshow__dots">
-          <span class="dot" onclick="currentSlide(1)"></span>
-          <span class="dot" onclick="currentSlide(2)"></span>
-          <span class="dot" onclick="currentSlide(3)"></span>
-          <span class="dot" onclick="currentSlide(4)"></span>
-        </div>         
-        <a class="prev" onclick="plusSlides(-1)"><img class="slideshow__direction" src="/static/imgs/chevron-left.svg"></a>
-        <a class="next" onclick="plusSlides(1)"><img class="slideshow__direction" src="/static/imgs/chevron-right.svg"></a>
-      </div>
+    <section id="empty__slideshow__section">
+      슬라이드쇼 삽입부
+    </section>
+    <section id="empty__upload__modal__section">
+      업로드 모달 삽입부
     </section>
     <section>
-      <div id="upload__modal__form" class="modal">
-        <div id="upload__modal__form__header">
-          <p>사진 등록</p>
-        </div>
-        <div id="upload__modal__form__container">
-          <div id="upload__modal__form__body">
-            <form action="/upload" method="post" enctype="multipart/form-data" id="upload__form">
-              <div id="upload__modal__form__image__input">
-                <label id="upload__modal__form__image__input__label" for="file-upload" class="custom-file-upload">
-                  <img id="upload__image" src="/static/imgs/image-file.svg">
-                </label>
-                <input type="file" name="photo" id="file-upload" accept="image/*" style="display: none;">
-              </div>
-              <div id="upload__modal__form__detail__inputs">
-                <div id="upload__modal__form__nickname__input">
-                  <label for="nickname">닉네임</label>
-                  <input type="text" name="nickname" id="nickname" class="pretty__input" placeholder="닉네임을 입력해주세요">
-                </div>
-                <div id="upload__modal__form__password__input">
-                  <label for="password">비밀번호</label>
-                  <input type="password" name="password" id="password" class="pretty__input" placeholder="비밀번호를 입력해주세요">
-                </div>
-                <div id="upload__modal__form__caption__input">
-                  <label for="caption">본문</label>
-                  <textarea name="caption" id="caption" class="pretty__input" placeholder="본문을 입력해주세요"></textarea>
-                </div>
-                <div id="radio__type__image__type">
-                  <div id="radio__type__sejong">
-                    <input type="radio" name="image__type" id="type__sejong" value="SEJONG">
-                    <label for="type__sejong">세종</label>
-                  </div>
-                  <div id="radio__type__seoul">
-                    <input type="radio" name="image__type" id="type__seoul" value="SEOUL">
-                    <label for="type__seoul">서울(안암)</label>
-                  </div>
-                  <div id="radio__type__out__of__campus">
-                    <input type="radio" name="image__type" id="type__out__of__campus" value="OOC">
-                    <label for="type__out__of__campus">캠퍼스 외</label>
-                  </div>
-                </div>
-                <div id="upload__modal__form__hashtags__input">
-                  <label for="hashtags">해시태그</label>
-                  <input type="text" name="hashtags" id="hashtags" class="pretty__input" placeholder="해시태그를 입력해주세요">
-                </div>
-              </div>
-              <div id="upload__modal__form__buttons">
-                <div id="upload__modal__form__submit__btn">
-                  <button type="submit">업로드</button>
-                </div>
-                <div id="upload__modal__form__quit__btn">
-                  <button type="button" onclick="clearForm()">취소</button>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section>
-      <nav id="second__navbar">
-        <div id="left__icons">
-          <div id="top__scroll__btn">
-            <img src="/static/imgs/caret-up.svg">
-          </div>
-          <div id="ordering__selector">
-            <select name="order__type" id="ordering__select">
-              <option value="create_desc">최근 순서</option>
-              <option value="create_aes">오래된 순서</option>
-              <option value="greater_popular">인기 많은 순서</option>
-              <option value="lesser_popular">인기 적은 순서</option>
-            </select>
-          </div>
-        </div>
-        <div id="second__navbar__search">
-          <div>
-            <input id="second__navbar__search__input" type="text" placeholder="태그 검색">
-          </div>
-          <div>
-            <button id="second__navbar__search__btn" type="submit"><img src="/static/imgs/search.svg"></button>
-          </div>
-        </div>
+      <nav id="empty__second__navbar">
+        두 번째 네비게이션바 삽입부
       </nav>
-      <div id="article__container">
-        <article>
-          <div class="article__img">
-            <img src="/static/imgs/test-1.jpg">
-          </div>
-          <div class="article__info">
-            <div class="horizontal__info">
-              <div class="heart__and__comment left__component">
-                <div class="heart__component">
-                  <div class="heart__icon">
-                    <img src="/static/imgs/heart-regular.svg">
-                  </div>
-                  <p>13</p>
-                </div>
-                <div class="comment__component">
-                  <div class="comment__icon">
-                    <img src="/static/imgs/comment-regular.svg">
-                  </div>
-                  <p>5</p>
-                </div>
-              </div>
-              <div class="article__author right__component">
-                <h1>익명의 호랭이 xyz 님</h1>
-              </div>
-            </div>
-            <div class="horizontal__info">
-              <div class="article__hashtag left__component">
-                <p>#바닷가</p>
-                <p>#광안리 아님</p>
-              </div>              
-              <div class="article__caption right__component">
-                <p>바닷가 가고 싶어 ! 근데 ! 집에서 나가긴 싫어 !</p>
-              </div>
-            </div>
-          </div>
-        </article>
-        <article>
-          <div class="article__img">
-            <img src="/static/imgs/test-1.jpg">
-          </div>
-          <div class="article__info">
-            <div class="horizontal__info">
-              <div class="heart__and__comment left__component">
-                <div class="heart__component">
-                  <div class="heart__icon">
-                    <img src="/static/imgs/heart-regular.svg">
-                  </div>
-                  <p>13</p>
-                </div>
-                <div class="comment__component">
-                  <div class="comment__icon">
-                    <img src="/static/imgs/comment-regular.svg">
-                  </div>
-                  <p>5</p>
-                </div>
-              </div>
-              <div class="article__author right__component">
-                <h1>익명의 호랭이 xyz 님</h1>
-              </div>
-            </div>
-            <div class="horizontal__info">
-              <div class="article__hashtag left__component">
-                <p>#바닷가</p>
-                <p>#광안리 아님</p>
-              </div>              
-              <div class="article__caption right__component">
-                <p>바닷가 가고 싶어 ! 근데 ! 집에서 나가긴 싫어 !</p>
-              </div>
-            </div>
-          </div>
-        </article>
-        <article>
-          <div class="article__img">
-            <img src="/static/imgs/test-1.jpg">
-          </div>
-          <div class="article__info">
-            <div class="horizontal__info">
-              <div class="heart__and__comment left__component">
-                <div class="heart__component">
-                  <div class="heart__icon">
-                    <img src="/static/imgs/heart-regular.svg">
-                  </div>
-                  <p>13</p>
-                </div>
-                <div class="comment__component">
-                  <div class="comment__icon">
-                    <img src="/static/imgs/comment-regular.svg">
-                  </div>
-                  <p>5</p>
-                </div>
-              </div>
-              <div class="article__author right__component">
-                <h1>익명의 호랭이 xyz 님</h1>
-              </div>
-            </div>
-            <div class="horizontal__info">
-              <div class="article__hashtag left__component">
-                <p>#바닷가</p>
-                <p>#광안리 아님</p>
-              </div>              
-              <div class="article__caption right__component">
-                <p>바닷가 가고 싶어 ! 근데 ! 집에서 나가긴 싫어 !</p>
-              </div>
-            </div>
-          </div>
-        </article>
-        <article>
-          <div class="article__img">
-            <img src="/static/imgs/test-1.jpg">
-          </div>
-          <div class="article__info">
-            <div class="horizontal__info">
-              <div class="heart__and__comment left__component">
-                <div class="heart__component">
-                  <div class="heart__icon">
-                    <img src="/static/imgs/heart-regular.svg">
-                  </div>
-                  <p>13</p>
-                </div>
-                <div class="comment__component">
-                  <div class="comment__icon">
-                    <img src="/static/imgs/comment-regular.svg">
-                  </div>
-                  <p>5</p>
-                </div>
-              </div>
-              <div class="article__author right__component">
-                <h1>익명의 호랭이 xyz 님</h1>
-              </div>
-            </div>
-            <div class="horizontal__info">
-              <div class="article__hashtag left__component">
-                <p>#바닷가</p>
-                <p>#광안리 아님</p>
-              </div>              
-              <div class="article__caption right__component">
-                <p>바닷가 가고 싶어 ! 근데 ! 집에서 나가긴 싫어 !</p>
-              </div>
-            </div>
-          </div>
-        </article>
-        <article>
-          <div class="article__img">
-            <img src="/static/imgs/test-1.jpg">
-          </div>
-          <div class="article__info">
-            <div class="horizontal__info">
-              <div class="heart__and__comment left__component">
-                <div class="heart__component">
-                  <div class="heart__icon">
-                    <img src="/static/imgs/heart-regular.svg">
-                  </div>
-                  <p>13</p>
-                </div>
-                <div class="comment__component">
-                  <div class="comment__icon">
-                    <img src="/static/imgs/comment-regular.svg">
-                  </div>
-                  <p>5</p>
-                </div>
-              </div>
-              <div class="article__author right__component">
-                <h1>익명의 호랭이 xyz 님</h1>
-              </div>
-            </div>
-            <div class="horizontal__info">
-              <div class="article__hashtag left__component">
-                <p>#바닷가</p>
-                <p>#광안리 아님</p>
-              </div>              
-              <div class="article__caption right__component">
-                <p>바닷가 가고 싶어 ! 근데 ! 집에서 나가긴 싫어 !</p>
-              </div>
-            </div>
-          </div>
-        </article>
+      <div id="empty__article__container">
+        사진글 컨테이너 삽입부
       </div>
     </section>    
   </div>
   <section>
     <div id="upload__btn__container">
-      <a id="upload__btn" href="#"><img src="/static/imgs/plus.svg"></a>
+      <a id="upload__btn" href="#">
+        <img src="/imgs/plus.svg" alt="업로드 모달 표현 버튼 이미지">
+      </a>
     </div>
   </section>
 </body>

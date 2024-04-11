@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>detail article delete modal</title>
+</head>
+<body>
+  <section id="detail_article_delete_modal_section">
+    <div id="delete__modal__form" class="sub__modal__form">
+      <div class="submit__modal__form__container">
+        <div class="submit__modal__form__header">
+          <p class="modal__title">사진 삭제</p>
+        </div>
+        <div class="modal__text">
+          <p>정말로 삭제하시겠습니까?</p>
+        </div>
+        <div class ="submit__modal__form__detail__inputs">
+          <div id="detail__article__delete__modal__form__password__input">
+            <label for="detail__article__delete__password">비밀번호</label>
+            <input type="password" name="password" id="detail__article__delete__password" class="pretty__input" placeholder="비밀번호를 입력해주세요">
+          </div>
+        </div>
+        <div class="submit__modal__form__buttons">
+          <button id="delete__modal__delete__btn" type="button">삭제</button>
+          <button id="delete__modal__cancel__btn" type="button" onclick="dismissDetailArticleDeleteModal()">취소</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

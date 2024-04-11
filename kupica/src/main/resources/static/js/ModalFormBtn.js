@@ -1,17 +1,23 @@
 const uploadModal = document.getElementById("upload__modal__form");
-const span = document.getElementById("upload__modal__form__quit__btn");
-
+const  uploadModalSection = document.getElementById('upload_modal_section')
 function presentUploadModal() {
-    uploadModal.style.display = "block";
+    uploadModalSection.classList.add('modal__overlay')
+    uploadModal.style.visibility = "visible";
+    uploadModal.addEventListener("click", function(event) {
+        event.stopPropagation();
+    });
+    document.addEventListener("click", uploadModalOutsideClick);
 }
 
-span.onclick = function() {
-    uploadModal.style.display = "none";
+function dismissUploadModal() {
+    uploadModal.style.visibility = "hidden";
+    document.getElementById('upload__form').reset();
+    clearForm();
+    uploadModalSection.classList.remove('modal__overlay')
 }
 
-window.onclick = function(event) {
-    if (event.target === uploadModal) {
-        uploadModal.style.display = "none";
+function uploadModalOutsideClick(event) {
+    if (uploadModalSection.contains(event.target)) {
+        dismissUploadModal();
     }
 }
-

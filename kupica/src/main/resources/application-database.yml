@@ -1,0 +1,85 @@
+spring:
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+  config.import: secret-info.properties
+
+---
+spring:
+  config:
+    activate:
+      on-profile: production
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: # 미정
+    username: # 미정
+    password: # 미정
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+      idle-timeout: 30000
+      max-lifetime: 60000
+      connection-timeout: 30000
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+logging:
+  level:
+    org:
+      hibernate: info
+
+---
+spring:
+  config.activate.on-profile: development
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    hikari:
+      maximum-pool-size: 2
+      minimum-idle: 1
+      idle-timeout: 30000
+      max-lifetime: 60000
+      connection-timeout: 30000
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+
+---
+spring:
+  config.activate.on-profile: test
+  h2:
+    console:
+      enabled: true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+    database: h2
+    generate-ddl: off
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;
+    username: SA
+    password: password
+  #sql:
+  #  init:
+  #    mode: always
+  #    schema-locations: classpath:sql/schema-h2.sql
+  #    data-locations: classpath:sql/data-h2.sql
+
+logging:
+  level:
+    org:
+      hibernate: trace

@@ -71,4 +71,8 @@ public class Member extends ModifiableBaseEntity {
     public int hashCode() {
         return 31 * Objects.hashCode(this.getId());
     }
+
+    public void changeNickname(String newNickname) {
+        this.nickname = newNickname;
+    }
 }

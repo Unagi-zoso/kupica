@@ -9,5 +9,4 @@ class KupicaApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }

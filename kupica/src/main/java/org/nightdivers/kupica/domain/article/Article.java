@@ -13,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.util.Objects;
 import lombok.Getter;
+import org.nightdivers.kupica.domain.anonymoususer.AnonymousUser;
 import org.nightdivers.kupica.domain.member.Member;
 import org.nightdivers.kupica.support.domain.ModifiableBaseEntity;
 
@@ -23,42 +24,45 @@ public class Article extends ModifiableBaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="author_name", nullable = false, length = 18)
-    private String author_name;
-
-    @Column(name="password", length = 64)
-    private String password;
-
-    @Column(name="caption", length = 600)
+    @Column(name="caption", length = 600, nullable = false)
     private String caption;
 
     @ManyToOne
-    @JoinColumn(name="member_id", referencedColumnName = "id", foreignKey = @ForeignKey(NO_CONSTRAINT))
+    @JoinColumn(name="anonymous_user_id", referencedColumnName = "id", foreignKey = @ForeignKey(NO_CONSTRAINT), updatable = false)
+    private AnonymousUser anonymousUser;
+
+    @ManyToOne
+    @JoinColumn(name="member_id", referencedColumnName = "id", foreignKey = @ForeignKey(NO_CONSTRAINT), updatable = false)
     private Member member;
+
+    @Column(name="login_flag", nullable = false, columnDefinition = "TINYINT(1)", updatable = false)
+    private Boolean loginFlag;
 
     protected Article() {}
 
-    private Article(String author_name,
-                    String password,
-                    String caption,
-                    Member member) {
-        this.author_name = author_name;
-        this.password = password;
+    private Article(String caption,
+                    Member member,
+                    AnonymousUser anonymousUser,
+                    Boolean loginFlag) {
         this.caption = caption;
         this.member = member;
+        this.anonymousUser = anonymousUser;
+        this.loginFlag = loginFlag;
     }
 
-    public static Article of(String author_name,
-                             String password,
-                             String caption,
-                             Member member) {
-        return new Article(author_name, password, caption, member);
+    private static Article of(String caption,
+                             Member member,
+                             AnonymousUser anonymousUser,
+                             Boolean loginFlag) {
+        return new Article(caption, member, anonymousUser, loginFlag);
     }
 
-    public static Article of(String author_name,
-                             String password,
-                             String caption) {
-        return new Article(author_name, password, caption, null);
+    public static Article createMemberArticle(String caption, Member member) {
+        return of(caption, member, null, true);
+    }
+
+    public static Article createAnonymousArticle(String caption, AnonymousUser anonymousUser) {
+        return of(caption, null, anonymousUser, false);
     }
 
     @Override
@@ -78,5 +82,9 @@ public class Article extends ModifiableBaseEntity {
     @Override
     public int hashCode() {
         return 31 * Objects.hashCode(this.getId());
+    }
+
+    public void changeCaption(String caption) {
+        this.caption = caption;
     }
 }

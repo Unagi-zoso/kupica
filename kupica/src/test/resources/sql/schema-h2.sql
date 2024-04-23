@@ -4,42 +4,52 @@ CREATE TABLE IF NOT EXISTS member (
                                       email_address VARCHAR(255) NOT NULL,
                                       user_role VARCHAR(255) NOT NULL,
                                       social_login_type VARCHAR(255) NOT NULL,
-                                      created_datetime DATETIME(6),
-                                      updated_datetime DATETIME(6),
+                                      created_datetime DATETIME(6) NOT NULL,
+                                      updated_datetime DATETIME(6) NOT NULL,
                                       primary key (id)
+) engine=InnoDB;
+
+CREATE TABLE IF NOT EXISTS anonymous_user (
+                                id BIGINT NOT NULL AUTO_INCREMENT,
+                                nickname VARCHAR(18) NOT NULL,
+                                password VARCHAR(64) NOT NULL,
+                                ip_address VARCHAR(24) NOT NULL,
+                                user_role VARCHAR(255) NOT NULL,
+                                created_datetime DATETIME(6) NOT NULL,
+                                primary key (id)
 ) engine=InnoDB;
 
 CREATE TABLE IF NOT EXISTS article (
                                        id BIGINT NOT NULL AUTO_INCREMENT,
-                                       author_name VARCHAR(18) NOT NULL,
-                                       password VARCHAR(64),
                                        caption VARCHAR(600),
+                                       anonymous_user_id BIGINT,
                                        member_id BIGINT,
-                                       created_datetime DATETIME(6),
-                                       updated_datetime DATETIME(6),
+                                       login_flag TINYINT(1) NOT NULL ,
+                                       created_datetime DATETIME(6) NOT NULL,
+                                       updated_datetime DATETIME(6) NOT NULL,
                                        primary key (id)
 ) engine=InnoDB;
 
 CREATE TABLE IF NOT EXISTS comment (
                                        id BIGINT NOT NULL AUTO_INCREMENT,
-                                       author_name VARCHAR(18) NOT NULL,
                                        content VARCHAR(600),
                                        reply_target_comment_id BIGINT,
-                                       password VARCHAR(64),
+                                       anonymous_user_id BIGINT,
                                        member_id BIGINT,
                                        article_id BIGINT NOT NULL,
-                                       created_datetime DATETIME(6),
-                                       updated_datetime DATETIME(6),
+                                       login_flag TINYINT(1) NOT NULL,
+                                       created_datetime DATETIME(6) NOT NULL,
+                                       updated_datetime DATETIME(6) NOT NULL,
                                        primary key (id)
 ) engine=InnoDB;
 
 CREATE TABLE IF NOT EXISTS article_like (
                                             id BIGINT NOT NULL AUTO_INCREMENT,
-                                            ip_address VARCHAR(20),
+                                            ip_address VARCHAR(24),
                                             member_id BIGINT,
                                             article_id BIGINT NOT NULL,
-                                            created_datetime DATETIME(6),
-                                            updated_datetime DATETIME(6),
+                                            login_flag TINYINT(1) NOT NULL,
+                                            created_datetime DATETIME(6) NOT NULL,
                                             primary key (id)
 ) engine=InnoDB;
 
@@ -50,16 +60,16 @@ CREATE TABLE IF NOT EXISTS photo_download_source (
                                                      file_byte_size BIGINT NOT NULL,
                                                      download_count BIGINT NOT NULL,
                                                      article_id BIGINT NOT NULL,
-                                                     created_datetime DATETIME(6),
-                                                     updated_datetime DATETIME(6),
+                                                     created_datetime DATETIME(6) NOT NULL,
+                                                     updated_datetime DATETIME(6) NOT NULL,
                                                      primary key (id)
 ) engine=InnoDB;
 
 CREATE TABLE IF NOT EXISTS hashtag (
                                        id BIGINT NOT NULL AUTO_INCREMENT,
                                        tag_name VARCHAR(26) NOT NULL,
-                                       created_datetime DATETIME(6),
-                                       updated_datetime DATETIME(6),
+                                       created_datetime DATETIME(6) NOT NULL,
+                                       updated_datetime DATETIME(6) NOT NULL,
                                        primary key (id)
 ) engine=InnoDB;
 
@@ -67,8 +77,8 @@ CREATE TABLE IF NOT EXISTS article_hashtag (
                                                id BIGINT NOT NULL AUTO_INCREMENT,
                                                article_id BIGINT NOT NULL,
                                                hashtag_id BIGINT NOT NULL,
-                                               created_datetime DATETIME(6),
-                                               updated_datetime DATETIME(6),
+                                               created_datetime DATETIME(6) NOT NULL,
+                                               updated_datetime DATETIME(6) NOT NULL,
                                                primary key (id)
 ) engine=InnoDB;
 

@@ -15,7 +15,7 @@ import java.util.Objects;
 import lombok.Getter;
 import org.nightdivers.kupica.domain.article.Article;
 import org.nightdivers.kupica.domain.member.Member;
-import org.nightdivers.kupica.support.domain.ModifiableBaseEntity;
+import org.nightdivers.kupica.support.domain.BaseTimeEntity;
 
 @Getter
 @Entity
@@ -28,35 +28,49 @@ import org.nightdivers.kupica.support.domain.ModifiableBaseEntity;
                 )
         }
 )
-public class ArticleLike extends ModifiableBaseEntity {
+public class ArticleLike extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="ip_address", length = 20)
+    @Column(name="ip_address", length = 20, updatable = false)
     private String ipAddress;
 
     @ManyToOne
-    @JoinColumn(name="member_id", referencedColumnName = "id", foreignKey = @ForeignKey(NO_CONSTRAINT))
+    @JoinColumn(name="member_id", referencedColumnName = "id", foreignKey = @ForeignKey(NO_CONSTRAINT), updatable = false)
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name="article_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(NO_CONSTRAINT))
+    @JoinColumn(name="article_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(NO_CONSTRAINT), updatable = false)
     private Article article;
+
+    @Column(name="login_flag", nullable = false, columnDefinition = "TINYINT(1)", updatable = false)
+    private Boolean loginFlag;
 
     protected ArticleLike() {}
 
     private ArticleLike(String ipAddress,
                         Member member,
-                        Article article) {
+                        Article article,
+                        Boolean loginFlag) {
         this.ipAddress = ipAddress;
         this.member = member;
         this.article = article;
+        this.loginFlag = loginFlag;
     }
 
-    public static ArticleLike of(String ipAddress,
-                                 Member member,
-                                 Article article) {
-        return new ArticleLike(ipAddress, member, article);
+    private static ArticleLike of(String ipAddress,
+                                  Member member,
+                                  Article article,
+                                  Boolean loginFlag) {
+        return new ArticleLike(ipAddress, member, article, loginFlag);
+    }
+
+    public static ArticleLike createMemberArticleLike(Member member, Article article) {
+        return of(null, member, article, true);
+    }
+
+    public static ArticleLike createAnonymousUserArticleLike(String ipAddress, Article article) {
+        return of(ipAddress, null, article, false);
     }
 
     @Override

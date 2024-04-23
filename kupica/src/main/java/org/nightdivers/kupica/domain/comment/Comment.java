@@ -13,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.util.Objects;
 import lombok.Getter;
+import org.nightdivers.kupica.domain.anonymoususer.AnonymousUser;
 import org.nightdivers.kupica.domain.article.Article;
 import org.nightdivers.kupica.domain.member.Member;
 import org.nightdivers.kupica.support.domain.ModifiableBaseEntity;
@@ -24,9 +25,6 @@ public class Comment extends ModifiableBaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="author_name", nullable = false, length = 18)
-    private String authorName;
-
     @Column(name="content", nullable = false, length = 600)
     private String content;
 
@@ -34,8 +32,9 @@ public class Comment extends ModifiableBaseEntity {
     @JoinColumn(name="reply_target_comment_id", referencedColumnName = "id", foreignKey = @ForeignKey(NO_CONSTRAINT))
     private Comment replyTargetComment;
 
-    @Column(name="password", length = 64)
-    private String password;
+    @ManyToOne
+    @JoinColumn(name="anonymous_user_id", referencedColumnName = "id", foreignKey = @ForeignKey(NO_CONSTRAINT))
+    private AnonymousUser anonymousUser;
 
     @ManyToOne
     @JoinColumn(name="member_id", referencedColumnName = "id", foreignKey = @ForeignKey(NO_CONSTRAINT))
@@ -45,29 +44,48 @@ public class Comment extends ModifiableBaseEntity {
     @JoinColumn(name="article_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(NO_CONSTRAINT))
     private Article article;
 
+    @Column(name="login_flag", nullable = false, columnDefinition = "TINYINT(1)")
+    private Boolean loginFlag;
+
     protected Comment() {}
 
-    private Comment(String authorName,
-                    String content,
-                    Comment replyTargetComment,
-                    String password,
-                    Member member,
-                    Article article) {
-        this.authorName = authorName;
+    private Comment(String content,
+                   Comment replyTargetComment,
+                   AnonymousUser anonymousUser,
+                   Member member,
+                   Article article,
+                   Boolean loginFlag) {
         this.content = content;
         this.replyTargetComment = replyTargetComment;
-        this.password = password;
+        this.anonymousUser = anonymousUser;
         this.member = member;
         this.article = article;
+        this.loginFlag = loginFlag;
     }
 
-    public static Comment of(String authorName,
-                             String content,
-                             Comment replyTargetComment,
-                             String password,
-                             Member member,
-                             Article article) {
-        return new Comment(authorName, content, replyTargetComment, password, member, article);
+    private static Comment of(String content,
+                              Comment replyTargetComment,
+                              AnonymousUser anonymousUser,
+                              Member member,
+                              Article article,
+                              Boolean loginFlag) {
+        return new Comment(content, replyTargetComment, anonymousUser, member, article, loginFlag);
+    }
+
+    public static Comment createMemberComment(String content, Member member, Article article) {
+        return of(content, null, null, member, article, true);
+    }
+
+    public static Comment createAnonymousComment(String content, AnonymousUser anonymousUser, Article article) {
+        return of(content, null, anonymousUser, null, article, false);
+    }
+
+    public static Comment createMemberReplyComment(String content, Comment replyTargetComment, Member member, Article article) {
+        return of(content, replyTargetComment, null, member, article, true);
+    }
+
+    public static Comment createAnonymousReplyComment(String content, Comment replyTargetComment, AnonymousUser anonymousUser, Article article) {
+        return of(content, replyTargetComment, anonymousUser, null, article, false);
     }
 
     @Override

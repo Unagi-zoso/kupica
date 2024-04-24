@@ -79,4 +79,4 @@ spring:
 logging:
   level:
     org:
-      hibernate: trace
+      hibernate: debug

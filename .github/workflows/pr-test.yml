@@ -20,7 +20,7 @@ jobs:
       - name: Move to source root directory
         run: cd ./kupica
       
-      - name:Temp ls
+      - name: Temp ls
         run: ls -a
 
       - name: Grant execute permission for gradlew

@@ -4,6 +4,7 @@ spring:
   profiles:
     include:
       - database
+      - credential
   servlet:
     multipart:
       max-file-size: 10MB

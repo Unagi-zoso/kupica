@@ -1,0 +1,3 @@
+[submodule "kupica/store-submodule"]
+	path = kupica/store-submodule
+	url = git@github.com:Unagi-zoso/kupica-credential-store.git

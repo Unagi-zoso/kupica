@@ -16,10 +16,13 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'      
+      
+      - name: Move to source root directory
+        run: cd ./kupica
 
       - name: Grant execute permission for gradlew
-        run: chmod +x ./kupica/gradlew
+        run: chmod +x ./gradlew
  
       - name: Test with Gradle
-        run: ./kupica/gradlew --info test
+        run: ./gradlew --info test
 

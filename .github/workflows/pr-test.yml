@@ -18,7 +18,10 @@ jobs:
           java-version: '21'      
       
       - name: Move to source root directory
-        run: ls -a | cd ./kupica | ls -a
+        run: |
+          ls -a
+          cd ./kupica
+          ls -a
       
       - name: Temp ls
         run: ls -a

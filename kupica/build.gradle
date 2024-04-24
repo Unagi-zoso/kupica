@@ -47,3 +47,11 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+processResources.dependsOn('copyCredential')
+
+tasks.register('copyCredential', Copy) {
+    from './store-submodule'
+    include 'application*.yml'
+    into './src/main/resources'
+}

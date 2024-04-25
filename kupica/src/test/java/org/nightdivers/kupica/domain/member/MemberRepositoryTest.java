@@ -1,19 +1,24 @@
 package org.nightdivers.kupica.domain.member;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_INVALID_MEMBER_EMAIL;
 import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_INVALID_MEMBER_ID;
 import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_INVALID_MEMBER_NICKNAME;
 
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.exception.ConstraintViolationException;
+import org.hibernate.exception.DataException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.nightdivers.kupica.support.annotation.RepositoryTest;
-import org.nightdivers.kupica.support.generator.MemberGenerator;
+import org.nightdivers.kupica.support.factory.MemberFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 
 @RequiredArgsConstructor
 @RepositoryTest
@@ -26,68 +31,100 @@ class MemberRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        givenMember1 = memberRepository.save(MemberGenerator.createTestMember1());
-        givenMember2 = memberRepository.save(MemberGenerator.createTestMember2());
+        givenMember1 = memberRepository.save(MemberFactory.createTestMember1());
+        givenMember2 = memberRepository.save(MemberFactory.createTestMember2());
     }
 
     /* 회원 조회 */
-    @DisplayName("nickname 과 일치하는 회원 조회")
+    @DisplayName("nickname 과 일치하는 회원 조회 - [성공]")
     @Test
-    void testFindByNickname() {
+    void givenNickname_whenFindByNickname_thenSuccess() {
         // given
 
         // when
-        Member expected = memberRepository.findByNickname(givenMember1.getNickname()).orElseThrow(NoSuchElementException::new);
+        Member actual = memberRepository.findByNickname(givenMember1.getNickname()).orElseThrow(NoSuchElementException::new);
 
         // then
-        assertThat(givenMember1).isEqualTo(expected);
+        assertThat(actual).isEqualTo(givenMember1);
     }
 
-    @DisplayName("email address 와 일치하는 회원 조회")
+    @DisplayName("nickname 과 일치하는 회원 조회 - [실패 : 존재하지 않는 nickname]")
     @Test
-    void testFindByEmailAddress() {
+    void givenInvalidNickname_whenFindByNickname_thenThrowNoSuchElementException() {
+        // given
+
+        // when & then
+        assertThatThrownBy(() -> memberRepository.findByNickname(TEST_INVALID_MEMBER_NICKNAME).orElseThrow(NoSuchElementException::new))
+                .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @DisplayName("email address 와 일치하는 회원 조회 - [성공]")
+    @Test
+    void givenEmailAddress_whenFindByEmailAddress_thenSuccess() {
         // given
 
         // when
-        Member expected = memberRepository.findByEmailAddress(givenMember1.getEmailAddress()).orElseThrow(NoSuchElementException::new);
+        Member actual = memberRepository.findByEmailAddress(givenMember1.getEmailAddress()).orElseThrow(NoSuchElementException::new);
 
         // then
-        assertThat(givenMember1).isEqualTo(expected);
+        assertThat(actual).isEqualTo(givenMember1);
+    }
+
+    @DisplayName("email address 와 일치하는 회원 조회 - [실패 : 존재하지 않는 email address]")
+    @Test
+    void givenInvalidEmailAddress_whenFindByEmailAddress_thenThrowNoSuchElementException() {
+        // given
+
+        // when & then
+        assertThatThrownBy(() -> memberRepository.findByEmailAddress(TEST_INVALID_MEMBER_EMAIL).orElseThrow(NoSuchElementException::new))
+                .isInstanceOf(NoSuchElementException.class);
     }
 
 
     /* 회원 목록 조회 */
-    @DisplayName("모든 회원 조회")
+    @DisplayName("모든 회원 조회 - [성공]")
     @Test
-    void testFindAll() {
+    void givenMembers_whenFindAll_thenSuccess() {
         // given
 
         // when
-        Iterable<Member> members = memberRepository.findAll();
+        List<Member> actualMembers = memberRepository.findAll();
 
         // then
-        assertThat(members).contains(givenMember1, givenMember2);
+        assertThat(actualMembers).contains(givenMember1, givenMember2);
     }
 
-    @DisplayName("role 과 일치하는 회원 목록 조회")
+    @DisplayName("role 과 일치하는 회원 목록 조회 - [성공]")
     @Test
-    void testFindByRole() {
+    void givenRole_whenFindByRole_thenSuccess() {
         // given
 
         // when
-        Iterable<Member> members = memberRepository.findByRole(givenMember1.getRole());
+        List<Member> actualMembers = memberRepository.findByRole(givenMember1.getRole());
 
         // then
-        assertThat(members).contains(givenMember1, givenMember2);
+        assertThat(actualMembers).contains(givenMember1, givenMember2);
+    }
+
+    @DisplayName("role 과 일치하는 회원 목록 조회 - [실패 : 존재하지 않는 role]")
+    @Test
+    void givenInvalidRole_whenFindByRole_thenEmptyList() {
+        // given
+
+        // when
+        List<Member> actualMembers = memberRepository.findByRole(UserRole.ADMIN);
+
+        // then
+        assertThat(actualMembers).isEmpty();
     }
 
 
     /* 회원 등록 */
-    @DisplayName("회원 등록")
+    @DisplayName("회원 등록 - [성공]")
     @Test
-    void testSaveMember() {
+    void givenMember_whenSave_thenSuccess() {
         // given
-        Member expected = MemberGenerator.createTestMember3();
+        Member expected = MemberFactory.createTestMember3();
 
         // when
         Member actual = memberRepository.save(expected);
@@ -96,17 +133,61 @@ class MemberRepositoryTest {
         assertThat(actual).isEqualTo(expected);
     }
 
+    @DisplayName("회원 등록 - [실패 : 중복된 nickname]")
+    @Test
+    void givenDuplicatedNickname_whenSave_thenThrowDataIntegrityViolationException() {
+        // given
+        Member duplicatedMember = MemberFactory.createCustomMember(givenMember1.getNickname(), "valid email address");
+
+        // when & then
+        assertThatThrownBy(() -> memberRepository.save(duplicatedMember))
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @DisplayName("회원 등록 - [실패 : nickname 최대 길이 초과]")
+    @Test
+    void givenMemberWithTooLongNickname_whenSave_thenThrowDataIntegrityViolationException() {
+        // given
+        Member memberWithTooLongNickname = MemberFactory.createCustomMember("a".repeat(19), "valid email address");
+
+        // when & then
+        assertThatThrownBy(() -> memberRepository.save(memberWithTooLongNickname))
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @DisplayName("회원 등록 - [실패 : 중복된 email address]")
+    @Test
+    void givenDuplicatedEmailAddress_whenSave_thenThrowDataIntegrityViolationException() {
+        // given
+        Member duplicatedMember = MemberFactory.createCustomMember("valid nickname", givenMember1.getEmailAddress());
+
+        // when & then
+        assertThatThrownBy(() -> memberRepository.save(duplicatedMember))
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
+    @DisplayName("회원 등록 - [실패 : email address 최대 길이 초과]")
+    @Test
+    void givenMemberWithTooLongEmailAddress_whenSave_thenThrowDataIntegrityViolationException() {
+        // given
+        Member memberWithTooLongEmailAddress = MemberFactory.createCustomMember("valid nickname", "a".repeat(256));
+
+        // when & then
+        assertThatThrownBy(() -> memberRepository.save(memberWithTooLongEmailAddress))
+                .isInstanceOf(DataIntegrityViolationException.class);
+    }
+
 
     /* 회원 수정 */
-    @DisplayName("회원 수정")
+    @DisplayName("회원 닉네임 수정 - [성공]")
     @Test
-    void testUpdateMember() {
+    void givenMember_whenChangeNickname_thenSuccess() {
         // given
-        Member prevMember = memberRepository.save(MemberGenerator.createTestMember3());
+        Member prevMember = memberRepository.save(MemberFactory.createTestMember3());
+        LocalDateTime prevUpdatedDatetime = prevMember.getUpdatedDatetime();
 
         // when
         prevMember.changeNickname("newNickname");
-        LocalDateTime prevUpdatedDatetime = prevMember.getUpdatedDatetime();
         entityManager.flush();
 
         Member actual = memberRepository.findById(prevMember.getId()).orElseThrow(NoSuchElementException::new);
@@ -117,27 +198,80 @@ class MemberRepositoryTest {
         assertThat(actual.getUpdatedDatetime()).isNotEqualTo(prevUpdatedDatetime);
     }
 
-    /* 회원 삭제 */
-    @DisplayName("회원 삭제")
+    @DisplayName("회원 닉네임 수정 - [실패 : 중복된 nickname]")
     @Test
-    void testDeleteMember() {
+    void givenDuplicatedNickname_whenChangeNickname_thenThrowConstraintViolationException() {
         // given
-        Member member = memberRepository.save(MemberGenerator.createTestMember3());
+        Member duplicatedMember = memberRepository.save(MemberFactory.createTestMember3());
+
+        // when & then
+        duplicatedMember.changeNickname(givenMember1.getNickname());
+        assertThatThrownBy(entityManager::flush)
+                .isInstanceOf(ConstraintViolationException.class);
+
+    }
+
+    @DisplayName("회원 닉네임 수정 - [실패 : nickname 최대 길이 초과]")
+    @Test
+    void givenMemberWithTooLongNickname_whenChangeNickname_thenThrowDataException() {
+        // given
+        Member memberWithTooLongNickname = memberRepository.save(MemberFactory.createTestMember3());
+
+        // when & then
+        memberWithTooLongNickname.changeNickname("a".repeat(19));
+        assertThatThrownBy(entityManager::flush)
+                .isInstanceOf(DataException.class);
+    }
+
+
+    /* 회원 삭제 */
+    @DisplayName("회원 삭제 - [성공]")
+    @Test
+    void givenMember_whenDelete_thenSuccess() {
+        // given
+        Member givenMember = memberRepository.save(MemberFactory.createTestMember3());
 
         // when
-        memberRepository.delete(member);
-        entityManager.flush();
-        entityManager.clear();
+        memberRepository.delete(givenMember);
 
         // then
-        assertThat(memberRepository.findById(member.getId())).isEmpty();
+        assertThatThrownBy(() -> memberRepository.findById(givenMember.getId()).orElseThrow(NoSuchElementException::new))
+                .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @DisplayName("id 와 일치하는 회원 삭제 - [성공]")
+    @Test
+    void givenId_whenDeleteById_thenSuccess() {
+        // given
+        Member givenMember = memberRepository.save(MemberFactory.createTestMember3());
+
+        // when
+        memberRepository.deleteById(givenMember.getId());
+
+        // then
+        assertThatThrownBy(() -> memberRepository.findById(givenMember.getId()).orElseThrow(NoSuchElementException::new))
+                .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @DisplayName("id 와 일치하는 회원 삭제 - [실패 : 존재하지 않는 id]")
+    @Test
+    void givenInvalidId_whenDeleteById_thenNoEffect() {
+        // given
+        int prevSize = memberRepository.findAll().size();
+        
+        // when
+        memberRepository.deleteById(TEST_INVALID_MEMBER_ID);
+        int currentSize = memberRepository.findAll().size();
+        
+        // then
+        assertThat(currentSize).isEqualTo(prevSize);
     }
 
 
     /* 회원 존재 여부 확인 */
     @DisplayName("id 와 일치하는 회원 존재 여부 확인 - [성공]")
     @Test
-    void testExistsById() {
+    void givenId_whenExistsById_thenSuccess() {
         // given
 
         // when
@@ -147,9 +281,9 @@ class MemberRepositoryTest {
         assertThat(existedFlag).isTrue();
     }
 
-    @DisplayName("id 와 일치하는 회원 존재 여부 확인 - [실패]")
+    @DisplayName("id 와 일치하는 회원 존재 여부 확인 - [실패 : 존재하지 않는 id]")
     @Test
-    void testNotExistsById() {
+    void givenInvalidId_whenExistsById_thenFalse() {
         // given
 
         // when
@@ -162,7 +296,7 @@ class MemberRepositoryTest {
 
     @DisplayName("nickname 과 일치하는 회원 존재 여부 확인 - [성공]")
     @Test
-    void testExistsByNickname() {
+    void givenNickname_whenExistsByNickname_thenSuccess() {
         // given
 
         // when
@@ -172,9 +306,9 @@ class MemberRepositoryTest {
         assertThat(existedFlag).isTrue();
     }
 
-    @DisplayName("nickname 과 일치하는 회원 존재 여부 확인 - [실패]")
+    @DisplayName("nickname 과 일치하는 회원 존재 여부 확인 - [실패 : 존재하지 않는 nickname]")
     @Test
-    void testNotExistsByNickname() {
+    void givenInvalidNickname_whenExistsByNickname_thenFalse() {
         // given
 
         // when
@@ -186,7 +320,7 @@ class MemberRepositoryTest {
 
     @DisplayName("email address 와 일치하는 회원 존재 여부 확인 - [성공]")
     @Test
-    void testExistsByEmailAddress() {
+    void givenEmailAddress_whenExistsByEmailAddress_thenSuccess() {
         // given
 
         // when
@@ -196,9 +330,9 @@ class MemberRepositoryTest {
         assertThat(existedFlag).isTrue();
     }
 
-    @DisplayName("email address 와 일치하는 회원 존재 여부 확인 - [실패]")
+    @DisplayName("email address 와 일치하는 회원 존재 여부 확인 - [실패 : 존재하지 않는 email address]")
     @Test
-    void testNotExistsByEmailAddress() {
+    void givenInvalidEmailAddress_whenExistsByEmailAddress_thenFalse() {
         // given
 
         // when

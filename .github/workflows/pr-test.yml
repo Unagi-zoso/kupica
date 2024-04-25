@@ -32,8 +32,9 @@ jobs:
         run: ./gradlew --info test
 
       - name: Publish Unit Test Results
+        if: always()
         working-directory: ${{ env.working-directory }}
         uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always()
         with:
           files: build/test-results/**/*.xml
+

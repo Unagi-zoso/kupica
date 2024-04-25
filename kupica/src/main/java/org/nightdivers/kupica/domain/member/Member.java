@@ -64,7 +64,6 @@ public class Member extends ModifiableBaseEntity {
         Member member = (Member) o;
 
         return this.getId() != null && Objects.equals(this.getId(), member.getId());
-
     }
 
     @Override

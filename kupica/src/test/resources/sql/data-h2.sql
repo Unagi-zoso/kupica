@@ -1,15 +1,15 @@
 INSERT INTO `member` (`id`, `nickname`, `email_address`, `user_role`, `social_login_type`, `created_datetime`, `updated_datetime`)
 VALUES
-    (1,'Juditha Targe','jtarge0@github.com','USER','KAKAO','2022-02-02','2023-05-28'),
-    (2,'Lesya','lbottoner1@theatlantic.com','USER','KAKAO','2023-04-29','2023-09-17'),
-    (3,'Nannette','ndrysdall2@cam.ac.uk','USER','KAKAO','2023-04-19','2024-02-27'),
-    (4,'Zedekiah','zhartopp3@uiuc.edu','USER','KAKAO','2023-04-26','2024-01-15'),
-    (5,'Dody','dminards4@chicagotribune.com','USER','KAKAO','2023-04-28','2024-02-17'),
-    (6,'Emanuel','ecarter5@spotify.com','USER','KAKAO','2023-04-20','2024-03-01'),
-    (7,'Zaccaria','zworwood6@simplemachines.org','USER','KAKAO','2023-04-21','2023-10-15'),
-    (8,'Freeland','fde7@amazon.co.uk','USER','KAKAO','2023-04-21','2023-12-08'),
-    (9,'Aurlie','avitler8@forbes.com','USER','KAKAO','2023-04-21','2024-02-04'),
-    (10,'Joaquin','jdoldon9@studiopress.com','USER','KAKAO','2023-04-30','2024-03-23');
+    (1,'Juditha Targe','jtarge0@github.com','MEMBER','KAKAO','2022-02-02','2023-05-28'),
+    (2,'Lesya','lbottoner1@theatlantic.com','MEMBER','KAKAO','2023-04-29','2023-09-17'),
+    (3,'Nannette','ndrysdall2@cam.ac.uk','MEMBER','KAKAO','2023-04-19','2024-02-27'),
+    (4,'Zedekiah','zhartopp3@uiuc.edu','MEMBER','KAKAO','2023-04-26','2024-01-15'),
+    (5,'Dody','dminards4@chicagotribune.com','MEMBER','KAKAO','2023-04-28','2024-02-17'),
+    (6,'Emanuel','ecarter5@spotify.com','MEMBER','KAKAO','2023-04-20','2024-03-01'),
+    (7,'Zaccaria','zworwood6@simplemachines.org','MEMBER','KAKAO','2023-04-21','2023-10-15'),
+    (8,'Freeland','fde7@amazon.co.uk','MEMBER','KAKAO','2023-04-21','2023-12-08'),
+    (9,'Aurlie','avitler8@forbes.com','MEMBER','KAKAO','2023-04-21','2024-02-04'),
+    (10,'Joaquin','jdoldon9@studiopress.com','MEMBER','KAKAO','2023-04-30','2024-03-23');
 
 INSERT INTO `anonymous_user` (`id`, `nickname`, `password`, `ip_address`, `user_role`, `created_datetime`)
 VALUES

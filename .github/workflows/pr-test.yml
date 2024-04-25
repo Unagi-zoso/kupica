@@ -35,5 +35,5 @@ jobs:
         if: always()
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
-          files: /kupica/build/test-results/**/*.xml
+          files: ./kupica/build/test-results/**/*.xml
 

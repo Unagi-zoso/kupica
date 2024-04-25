@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
- 
+
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -26,15 +26,14 @@ jobs:
       - name: Copy credential info
         working-directory: ${{ env.working-directory }}
         run: ./gradlew copyCredential
- 
+
       - name: Test with Gradle
         working-directory: ${{ env.working-directory }}
         run: ./gradlew --info test
 
       - name: Publish Unit Test Results
         if: always()
-        working-directory: ${{ env.working-directory }}
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
-          files: build/test-results/**/*.xml
+          files: /kupica/build/test-results/**/*.xml
 

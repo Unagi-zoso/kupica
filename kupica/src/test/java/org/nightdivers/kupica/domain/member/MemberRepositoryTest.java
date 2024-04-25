@@ -2,6 +2,7 @@ package org.nightdivers.kupica.domain.member;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_INVALID_MEMBER_EMAIL;
 import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_INVALID_MEMBER_ID;
 import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_INVALID_MEMBER_NICKNAME;
@@ -193,9 +194,11 @@ class MemberRepositoryTest {
         Member actual = memberRepository.findById(prevMember.getId()).orElseThrow(NoSuchElementException::new);
 
         // then
-        assertThat(actual).isEqualTo(prevMember);
-        assertThat(actual.getNickname()).isEqualTo("newNickname");
-        assertThat(actual.getUpdatedDatetime()).isNotEqualTo(prevUpdatedDatetime);
+        assertAll(
+            () -> assertThat(actual).isEqualTo(prevMember),
+            () -> assertThat(actual.getNickname()).isEqualTo("newNickname"),
+            () -> assertThat(actual.getUpdatedDatetime()).isNotEqualTo(prevUpdatedDatetime)
+        );
     }
 
     @DisplayName("회원 닉네임 수정 - [실패 : 중복된 nickname]")

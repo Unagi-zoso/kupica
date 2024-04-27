@@ -50,19 +50,12 @@ public class Article extends ModifiableBaseEntity {
         this.loginFlag = loginFlag;
     }
 
-    private static Article of(String caption,
-                             Member member,
-                             AnonymousUser anonymousUser,
-                             Boolean loginFlag) {
-        return new Article(caption, member, anonymousUser, loginFlag);
-    }
-
     public static Article createMemberArticle(String caption, Member member) {
-        return of(caption, member, null, true);
+        return new Article(caption, member, null, true);
     }
 
     public static Article createAnonymousArticle(String caption, AnonymousUser anonymousUser) {
-        return of(caption, null, anonymousUser, false);
+        return new Article(caption, null, anonymousUser, false);
     }
 
     @Override

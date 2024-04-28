@@ -76,7 +76,7 @@ public class Comment extends ModifiableBaseEntity {
         return of(content, null, null, member, article, true);
     }
 
-    public static Comment createAnonymousComment(String content, AnonymousUser anonymousUser, Article article) {
+    public static Comment createAnonymousUserComment(String content, AnonymousUser anonymousUser, Article article) {
         return of(content, null, anonymousUser, null, article, false);
     }
 
@@ -105,5 +105,9 @@ public class Comment extends ModifiableBaseEntity {
     @Override
     public int hashCode() {
         return 31 * Objects.hashCode(this.getId());
+    }
+
+    public void changeContent(String content) {
+        this.content = content;
     }
 }

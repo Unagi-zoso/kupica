@@ -34,6 +34,10 @@ class ArticleRepositoryTest {
     private final AnonymousUserRepository anonymousUserRepository;
     private final EntityManager entityManager;
 
+    Member givenMember1;
+
+    AnonymousUser givenAnonymousUser1;
+
     // 실제론 테스트 시 test.resource.sql.data-h2.sql 에서 만들어 둔 테스트 셋이 더 존재합니다.
     int givenTestDataSetSize = 6;
 
@@ -44,10 +48,6 @@ class ArticleRepositoryTest {
     Article givenAnonymousArticle1;
     Article givenAnonymousArticle2;
     Article givenAnonymousArticle3;
-
-    Member givenMember1;
-
-    AnonymousUser givenAnonymousUser1;
 
     @BeforeEach
     void setUp() {

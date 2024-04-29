@@ -1,5 +1,6 @@
 package org.nightdivers.kupica.support.constant;
 
+import java.util.List;
 import org.nightdivers.kupica.domain.member.UserRole;
 
 public class AnonymousUserConstant {
@@ -29,4 +30,9 @@ public class AnonymousUserConstant {
     public static final String TEST_INVALID_ANONYMOUS_USER_NICKNAME = "invalid nickname";
     public static final String TEST_INVALID_ANONYMOUS_USER_PW = "invalid password";
     public static final String TEST_INVALID_ANONYMOUS_USER_IP_ADDRESS = "invalid ip address";
+
+    public static final List<String> TEST_ANONYMOUS_IP_LIST = List.of(
+            "169.81.95.209", "1.6.233.180", "49.69.156.152", "19.215.137.130", "148.87.86.200",
+            "92.36.8.110", "116.58.68.172", "247.41.225.160", "147.56.170.133", "28.188.117.88"
+    );
 }

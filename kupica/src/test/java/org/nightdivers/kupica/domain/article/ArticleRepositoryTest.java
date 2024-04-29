@@ -3,6 +3,8 @@ package org.nightdivers.kupica.domain.article;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.nightdivers.kupica.domain.articlelike.ArticleLike.createAnonymousArticleLike;
+import static org.nightdivers.kupica.support.constant.AnonymousUserConstant.TEST_ANONYMOUS_IP_LIST;
 import static org.nightdivers.kupica.support.constant.AnonymousUserConstant.TEST_INVALID_ANONYMOUS_USER_NICKNAME;
 import static org.nightdivers.kupica.support.constant.ArticleConstant.TEST_INVALID_ARTICLE_ID;
 import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_INVALID_MEMBER_ID;
@@ -18,6 +20,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.nightdivers.kupica.domain.anonymoususer.AnonymousUser;
 import org.nightdivers.kupica.domain.anonymoususer.AnonymousUserRepository;
+import org.nightdivers.kupica.domain.articlelike.ArticleLikeRepository;
 import org.nightdivers.kupica.domain.member.Member;
 import org.nightdivers.kupica.domain.member.MemberRepository;
 import org.nightdivers.kupica.support.annotation.RepositoryTest;
@@ -25,6 +28,7 @@ import org.nightdivers.kupica.support.factory.AnonymousUserFactory;
 import org.nightdivers.kupica.support.factory.ArticleFactory;
 import org.nightdivers.kupica.support.factory.MemberFactory;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
 
 @RequiredArgsConstructor
 @RepositoryTest
@@ -32,6 +36,7 @@ class ArticleRepositoryTest {
     private final ArticleRepository articleRepository;
     private final MemberRepository memberRepository;
     private final AnonymousUserRepository anonymousUserRepository;
+    private final ArticleLikeRepository articleLikeRepository;
     private final EntityManager entityManager;
 
     Member givenMember1;
@@ -233,6 +238,48 @@ class ArticleRepositoryTest {
 
         // when & then
         assertThat(articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeAsc(TEST_INVALID_ANONYMOUS_USER_NICKNAME)).isEmpty();
+    }
+
+    @DisplayName("좋아요 수가 많은 순서대로 게시글 목록 조회 - [성공]")
+    @Test
+    void givenArticlesAndArticleLikes_whenFindAllByOrderByLikeCountDesc_thenSuccess() {
+        // given
+        articleLikeRepository.deleteAll();
+
+        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size())
+                .forEach(ip -> articleLikeRepository.save(createAnonymousArticleLike(ip, givenAnonymousArticle1)));
+        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size()-1)
+                .forEach(ip -> articleLikeRepository.save(createAnonymousArticleLike(ip, givenAnonymousArticle2)));
+        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size()-2)
+                .forEach(ip -> articleLikeRepository.save(createAnonymousArticleLike(ip, givenAnonymousArticle3)));
+
+        // when
+        List<Article> actualArticles = articleRepository.findArticlesOrderByLikesCountDesc(PageRequest.of(0, 3)).getContent();
+
+        // then
+        assertThat(actualArticles).containsExactly(givenAnonymousArticle1, givenAnonymousArticle2, givenAnonymousArticle3);
+    }
+
+    @DisplayName("좋아요 수가 적은 순서대로 게시글 목록 조회 - [성공]")
+    @Test
+    void givenArticlesAndArticleLikes_whenFindAllByOrderByLikeCountAsc_thenSuccess() {
+        // given
+        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size())
+                .forEach(ip -> articleLikeRepository.save(createAnonymousArticleLike(ip, givenAnonymousArticle1)));
+        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size()-1)
+                .forEach(ip -> articleLikeRepository.save(createAnonymousArticleLike(ip, givenAnonymousArticle2)));
+        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size()-2)
+                .forEach(ip -> articleLikeRepository.save(createAnonymousArticleLike(ip, givenAnonymousArticle3)));
+
+        // when
+        List<Article> actualArticles = articleRepository.findArticlesOrderByLikesCountAsc(PageRequest.of(0, 50)).getContent();
+
+        // then
+        assertAll(
+                () -> assertThat(actualArticles.getLast()).isEqualTo(givenAnonymousArticle1),
+                () -> assertThat(actualArticles.get(actualArticles.size()-2)).isEqualTo(givenAnonymousArticle2),
+                () -> assertThat(actualArticles.get(actualArticles.size()-3)).isEqualTo(givenAnonymousArticle3)
+        );
     }
 
 

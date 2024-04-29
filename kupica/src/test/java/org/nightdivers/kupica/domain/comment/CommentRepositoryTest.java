@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.nightdivers.kupica.support.constant.AnonymousUserConstant.TEST_INVALID_ANONYMOUS_USER_NICKNAME;
 import static org.nightdivers.kupica.support.constant.ArticleConstant.TEST_ANONYMOUS_ARTICLE_1_CAPTION;
 import static org.nightdivers.kupica.support.constant.ArticleConstant.TEST_INVALID_ARTICLE_ID;
-import static org.nightdivers.kupica.support.constant.CommentConstant.TEST_INVALID_COMMENT_ID;
 import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_INVALID_MEMBER_ID;
 import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_INVALID_MEMBER_NICKNAME;
 import static org.nightdivers.kupica.support.factory.AnonymousUserFactory.createTestAnonymousUser1;
@@ -20,7 +19,6 @@ import static org.nightdivers.kupica.support.factory.CommentFactory.createTestMe
 import static org.nightdivers.kupica.support.factory.CommentFactory.createTestMemberReplyComment3;
 import static org.nightdivers.kupica.support.factory.MemberFactory.createTestMember1;
 
-import jakarta.persistence.EntityManager;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +39,6 @@ class CommentRepositoryTest {
     private final MemberRepository memberRepository;
     private final AnonymousUserRepository anonymousUserRepository;
     private final ArticleRepository articleRepository;
-    private final EntityManager entityManager;
 
     Member givenMember1;
 

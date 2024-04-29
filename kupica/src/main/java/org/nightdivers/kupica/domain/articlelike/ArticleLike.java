@@ -58,19 +58,12 @@ public class ArticleLike extends BaseTimeEntity {
         this.loginFlag = loginFlag;
     }
 
-    private static ArticleLike of(String ipAddress,
-                                  Member member,
-                                  Article article,
-                                  Boolean loginFlag) {
-        return new ArticleLike(ipAddress, member, article, loginFlag);
-    }
-
     public static ArticleLike createMemberArticleLike(Member member, Article article) {
-        return of(null, member, article, true);
+        return new ArticleLike(null, member, article, true);
     }
 
-    public static ArticleLike createAnonymousUserArticleLike(String ipAddress, Article article) {
-        return of(ipAddress, null, article, false);
+    public static ArticleLike createAnonymousArticleLike(String ipAddress, Article article) {
+        return new ArticleLike(ipAddress, null, article, false);
     }
 
     @Override

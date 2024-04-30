@@ -1,5 +1,7 @@
 package org.nightdivers.kupica.domain.hashtag;
 
+import static org.nightdivers.kupica.domain.hashtag.HashtagValidator.validateTagName;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,13 +19,13 @@ public class Hashtag extends ModifiableBaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="tag_name", nullable = false, unique = true, length = 26)
+    @Column(name="tag_name", nullable = false, unique = true, length = MAX_TAG_NAME_WITH_HASH_LENGTH)
     private String tagName;
 
     protected Hashtag() {}
 
     private Hashtag(String tagName) {
-        this.tagName = tagName;
+        this.tagName = validateTagName(tagName);
     }
 
     public static Hashtag of(String tagName) {
@@ -47,5 +49,11 @@ public class Hashtag extends ModifiableBaseEntity {
     @Override
     public int hashCode() {
         return 31 * Objects.hashCode(this.getId());
+    }
+
+    public final static int MAX_TAG_NAME_WITH_HASH_LENGTH = 26;
+
+    public void changeTagName(String tagName) {
+        this.tagName = validateTagName(tagName);
     }
 }

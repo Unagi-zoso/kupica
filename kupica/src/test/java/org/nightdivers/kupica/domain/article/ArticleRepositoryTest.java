@@ -3,8 +3,6 @@ package org.nightdivers.kupica.domain.article;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.nightdivers.kupica.domain.articlelike.ArticleLike.createAnonymousArticleLike;
-import static org.nightdivers.kupica.support.constant.AnonymousUserConstant.TEST_ANONYMOUS_IP_LIST;
 import static org.nightdivers.kupica.support.constant.AnonymousUserConstant.TEST_INVALID_ANONYMOUS_USER_NICKNAME;
 import static org.nightdivers.kupica.support.constant.ArticleConstant.TEST_INVALID_ARTICLE_ID;
 import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_INVALID_MEMBER_ID;
@@ -20,7 +18,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.nightdivers.kupica.domain.anonymoususer.AnonymousUser;
 import org.nightdivers.kupica.domain.anonymoususer.AnonymousUserRepository;
-import org.nightdivers.kupica.domain.articlelike.ArticleLikeRepository;
 import org.nightdivers.kupica.domain.member.Member;
 import org.nightdivers.kupica.domain.member.MemberRepository;
 import org.nightdivers.kupica.support.annotation.RepositoryTest;
@@ -36,7 +33,6 @@ class ArticleRepositoryTest {
     private final ArticleRepository articleRepository;
     private final MemberRepository memberRepository;
     private final AnonymousUserRepository anonymousUserRepository;
-    private final ArticleLikeRepository articleLikeRepository;
     private final EntityManager entityManager;
 
     Member givenMember1;
@@ -124,7 +120,7 @@ class ArticleRepositoryTest {
         // given
 
         // when
-        List<Article> actualArticles = articleRepository.findAllByOrderByCreatedDatetimeDesc();
+        List<Article> actualArticles = articleRepository.findAllByOrderByCreatedDatetimeDesc(PageRequest.of(0, givenTestDataSetSize)).getContent();
 
         // then
         assertThat(actualArticles.subList(0, givenTestDataSetSize)).containsExactly(givenAnonymousArticle3, givenAnonymousArticle2, givenAnonymousArticle1,
@@ -137,7 +133,7 @@ class ArticleRepositoryTest {
         // given
 
         // when
-        List<Article> actualArticles = articleRepository.findAllByOrderByCreatedDatetimeAsc();
+        List<Article> actualArticles = articleRepository.findAllByOrderByCreatedDatetimeAsc(PageRequest.of(0, 100)).getContent();
 
         // then
         assertThat(actualArticles.subList(actualArticles.size() - givenTestDataSetSize, actualArticles.size())).containsExactly(givenMemberArticle1, givenMemberArticle2, givenMemberArticle3,
@@ -153,7 +149,10 @@ class ArticleRepositoryTest {
         articleRepository.saveAll(List.of(givenMemberArticle1ByMember1, givenMemberArticle2ByMember1));
 
         // when
-        List<Article> actualArticles = articleRepository.findByMemberIdAndLoginFlagIsTrueOrderByCreatedDatetimeDesc(givenMemberArticle1ByMember1.getMember().getId());
+        List<Article> actualArticles = articleRepository.findByMemberIdAndLoginFlagIsTrueOrderByCreatedDatetimeDesc(
+                PageRequest.of(0, givenTestDataSetSize),
+                givenMemberArticle1ByMember1.getMember().getId())
+                .getContent();
 
         // then
         assertThat(actualArticles).containsExactly(givenMemberArticle2ByMember1, givenMemberArticle1ByMember1);
@@ -165,7 +164,10 @@ class ArticleRepositoryTest {
         // given
 
         // when & then
-        assertThat(articleRepository.findByMemberIdAndLoginFlagIsTrueOrderByCreatedDatetimeDesc(TEST_INVALID_MEMBER_ID)).isEmpty();
+        assertThat(articleRepository.findByMemberIdAndLoginFlagIsTrueOrderByCreatedDatetimeDesc(
+                PageRequest.of(0, givenTestDataSetSize),
+                TEST_INVALID_MEMBER_ID))
+                .isEmpty();
     }
 
     @DisplayName("member id 와 일치하며 등록된지 오래된 순서대로 member 게시글 목록 조회 - [성공]")
@@ -177,7 +179,10 @@ class ArticleRepositoryTest {
         articleRepository.saveAll(List.of(givenMemberArticle1ByMember1, givenMemberArticle2ByMember1));
 
         // when
-        List<Article> actualArticles = articleRepository.findByMemberIdAndLoginFlagIsTrueOrderByCreatedDatetimeAsc(givenMemberArticle1ByMember1.getMember().getId());
+        List<Article> actualArticles = articleRepository.findByMemberIdAndLoginFlagIsTrueOrderByCreatedDatetimeAsc(
+                PageRequest.of(0, givenTestDataSetSize),
+                givenMemberArticle1ByMember1.getMember().getId())
+                .getContent();
 
         // then
         assertThat(actualArticles).containsExactly(givenMemberArticle1ByMember1, givenMemberArticle2ByMember1);
@@ -189,7 +194,10 @@ class ArticleRepositoryTest {
         // given
 
         // when & then
-        assertThat(articleRepository.findByMemberIdAndLoginFlagIsTrueOrderByCreatedDatetimeAsc(TEST_INVALID_MEMBER_ID)).isEmpty();
+        assertThat(articleRepository.findByMemberIdAndLoginFlagIsTrueOrderByCreatedDatetimeAsc(
+                PageRequest.of(0, givenTestDataSetSize),
+                TEST_INVALID_MEMBER_ID))
+                .isEmpty();
     }
 
     @DisplayName("anonymousUser nickname 과 일치하며 최근 등록된 순서대로 anonymous 게시글 목록 조회 - [성공]")
@@ -201,7 +209,10 @@ class ArticleRepositoryTest {
         articleRepository.saveAll(List.of(givenAnonymousArticle1ByAnonymousUser1, givenAnonymousArticle2ByAnonymousUser1));
 
         // when
-        List<Article> actualArticles = articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeDesc(givenAnonymousUser1.getNickname());
+        List<Article> actualArticles = articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeDesc(
+                PageRequest.of(0, givenTestDataSetSize),
+                givenAnonymousUser1.getNickname())
+                .getContent();
 
         // then
         assertThat(actualArticles).containsExactly(givenAnonymousArticle2ByAnonymousUser1, givenAnonymousArticle1ByAnonymousUser1);
@@ -213,7 +224,10 @@ class ArticleRepositoryTest {
         // given
 
         // when & then
-        assertThat(articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeDesc("invalidAnonymousUser")).isEmpty();
+        assertThat(articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeDesc(
+                PageRequest.of(0, givenTestDataSetSize),
+                "invalidAnonymousUser"))
+                .isEmpty();
     }
 
     @DisplayName("anonymousUser nickname 과 일치하며 등록된지 오래된 순서대로 anonymous 게시글 목록 조회 - [성공]")
@@ -225,7 +239,10 @@ class ArticleRepositoryTest {
         articleRepository.saveAll(List.of(givenAnonymousArticle1ByAnonymousUser1, givenAnonymousArticle2ByAnonymousUser1));
 
         // when
-        List<Article> actualArticles = articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeAsc(givenAnonymousUser1.getNickname());
+        List<Article> actualArticles = articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeAsc(
+                PageRequest.of(0, givenTestDataSetSize),
+                givenAnonymousUser1.getNickname())
+                .getContent();
 
         // then
         assertThat(actualArticles).containsExactly(givenAnonymousArticle1ByAnonymousUser1, givenAnonymousArticle2ByAnonymousUser1);
@@ -237,49 +254,10 @@ class ArticleRepositoryTest {
         // given
 
         // when & then
-        assertThat(articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeAsc(TEST_INVALID_ANONYMOUS_USER_NICKNAME)).isEmpty();
-    }
-
-    @DisplayName("좋아요 수가 많은 순서대로 게시글 목록 조회 - [성공]")
-    @Test
-    void givenArticlesAndArticleLikes_whenFindAllByOrderByLikeCountDesc_thenSuccess() {
-        // given
-        articleLikeRepository.deleteAll();
-
-        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size())
-                .forEach(ip -> articleLikeRepository.save(createAnonymousArticleLike(ip, givenAnonymousArticle1)));
-        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size()-1)
-                .forEach(ip -> articleLikeRepository.save(createAnonymousArticleLike(ip, givenAnonymousArticle2)));
-        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size()-2)
-                .forEach(ip -> articleLikeRepository.save(createAnonymousArticleLike(ip, givenAnonymousArticle3)));
-
-        // when
-        List<Article> actualArticles = articleRepository.findArticlesOrderByLikesCountDesc(PageRequest.of(0, 3)).getContent();
-
-        // then
-        assertThat(actualArticles).containsExactly(givenAnonymousArticle1, givenAnonymousArticle2, givenAnonymousArticle3);
-    }
-
-    @DisplayName("좋아요 수가 적은 순서대로 게시글 목록 조회 - [성공]")
-    @Test
-    void givenArticlesAndArticleLikes_whenFindAllByOrderByLikeCountAsc_thenSuccess() {
-        // given
-        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size())
-                .forEach(ip -> articleLikeRepository.save(createAnonymousArticleLike(ip, givenAnonymousArticle1)));
-        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size()-1)
-                .forEach(ip -> articleLikeRepository.save(createAnonymousArticleLike(ip, givenAnonymousArticle2)));
-        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size()-2)
-                .forEach(ip -> articleLikeRepository.save(createAnonymousArticleLike(ip, givenAnonymousArticle3)));
-
-        // when
-        List<Article> actualArticles = articleRepository.findArticlesOrderByLikesCountAsc(PageRequest.of(0, 50)).getContent();
-
-        // then
-        assertAll(
-                () -> assertThat(actualArticles.getLast()).isEqualTo(givenAnonymousArticle1),
-                () -> assertThat(actualArticles.get(actualArticles.size()-2)).isEqualTo(givenAnonymousArticle2),
-                () -> assertThat(actualArticles.get(actualArticles.size()-3)).isEqualTo(givenAnonymousArticle3)
-        );
+        assertThat(articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeAsc(
+                PageRequest.of(0, givenTestDataSetSize),
+                TEST_INVALID_ANONYMOUS_USER_NICKNAME))
+                .isEmpty();
     }
 
 

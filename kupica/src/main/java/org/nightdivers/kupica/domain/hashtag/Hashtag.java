@@ -52,4 +52,8 @@ public class Hashtag extends ModifiableBaseEntity {
     }
 
     public final static int MAX_TAG_NAME_WITH_HASH_LENGTH = 26;
+
+    public void changeTagName(String tagName) {
+        this.tagName = validateTagName(tagName);
+    }
 }

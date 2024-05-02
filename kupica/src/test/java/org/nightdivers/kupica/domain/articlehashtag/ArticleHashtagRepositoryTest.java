@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 @RequiredArgsConstructor
 @RepositoryTest
 class ArticleHashtagRepositoryTest {
+
     private final ArticleHashtagRepository articleHashtagRepository;
 
     /* Article Hashtag 조회 */
@@ -22,9 +23,9 @@ class ArticleHashtagRepositoryTest {
     void givenHashtag_whenFindArticleByHashtag_thenReturnArticlePage() {
         // given
 
-
         // when
-        List<ArticleHashtag> articleHashtags = articleHashtagRepository.findByHashtagTagName(PageRequest.of(0, 5), TEST_VALID_TAG_NAME).getContent();
+        List<ArticleHashtag> articleHashtags = articleHashtagRepository.findByHashtagTagName(
+                PageRequest.of(0, 5), TEST_VALID_TAG_NAME).getContent();
 
         // then
         assertThat(articleHashtags).isNotEmpty();
@@ -36,8 +37,10 @@ class ArticleHashtagRepositoryTest {
         // given
 
         // when
-        List<ArticleHashtag> articleHashtags = articleHashtagRepository.findByHashtagTagName(PageRequest.of(0, 5),
-                TEST_INVALID_TAG_NAME).getContent();
+        List<ArticleHashtag> articleHashtags = articleHashtagRepository.findByHashtagTagName(
+                PageRequest.of(0, 5),
+                TEST_INVALID_TAG_NAME
+        ).getContent();
 
         // then
         assertThat(articleHashtags).isEmpty();

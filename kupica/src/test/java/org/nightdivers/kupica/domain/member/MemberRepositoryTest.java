@@ -24,6 +24,7 @@ import org.nightdivers.kupica.support.factory.MemberFactory;
 @RequiredArgsConstructor
 @RepositoryTest
 class MemberRepositoryTest {
+
     private final MemberRepository memberRepository;
     private final EntityManager entityManager;
 
@@ -142,7 +143,10 @@ class MemberRepositoryTest {
     @Test
     void givenDuplicatedNickname_whenSave_thenThrowConstraintViolationException() {
         // given
-        Member duplicatedMember = MemberFactory.createCustomMember(givenMember1.getNickname(), TEST_VALID_MEMBER_EMAIL);
+        Member duplicatedMember = MemberFactory.createCustomMember(
+                givenMember1.getNickname(),
+                TEST_VALID_MEMBER_EMAIL
+        );
         memberRepository.save(duplicatedMember);
 
         // when & then
@@ -154,7 +158,10 @@ class MemberRepositoryTest {
     @Test
     void givenDuplicatedEmailAddress_whenSave_thenThrowConstraintViolationException() {
         // given
-        Member duplicatedMember = MemberFactory.createCustomMember("valid nickname", givenMember1.getEmailAddress());
+        Member duplicatedMember = MemberFactory.createCustomMember(
+                "valid nickname",
+                givenMember1.getEmailAddress()
+        );
         memberRepository.save(duplicatedMember);
 
         // when & then
@@ -175,7 +182,8 @@ class MemberRepositoryTest {
         prevMember.changeNickname("newNickname");
         entityManager.flush();
 
-        Member actual = memberRepository.findById(prevMember.getId()).orElseThrow(NoSuchElementException::new);
+        Member actual = memberRepository.findById(prevMember.getId())
+                .orElseThrow(NoSuchElementException::new);
 
         // then
         assertAll(
@@ -227,7 +235,8 @@ class MemberRepositoryTest {
 
         // then
         assertThatThrownBy(
-                () -> memberRepository.findById(givenMember.getId()).orElseThrow(NoSuchElementException::new))
+                () -> memberRepository.findById(givenMember.getId())
+                        .orElseThrow(NoSuchElementException::new))
                 .isInstanceOf(NoSuchElementException.class);
     }
 
@@ -242,7 +251,8 @@ class MemberRepositoryTest {
 
         // then
         assertThatThrownBy(
-                () -> memberRepository.findById(givenMember.getId()).orElseThrow(NoSuchElementException::new))
+                () -> memberRepository.findById(givenMember.getId())
+                        .orElseThrow(NoSuchElementException::new))
                 .isInstanceOf(NoSuchElementException.class);
     }
 

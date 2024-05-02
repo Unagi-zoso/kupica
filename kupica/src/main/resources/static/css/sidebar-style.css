@@ -40,12 +40,18 @@
   align-items: center;
   margin: 20px 0;
 }
+
 .sidebar #menu__components .login__info .login__info__img img {
   width: var(--avatar-size);
   height: var(--avatar-size);
 }
 
 @media screen and (max-height: 450px) {
-  .sidebar {padding-top: 15px;}
-  .sidebar a {font-size: 18px;}
+  .sidebar {
+    padding-top: 15px;
+  }
+
+  .sidebar a {
+    font-size: 18px;
+  }
 }

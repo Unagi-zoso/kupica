@@ -12,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @ToString
 @MappedSuperclass
 public abstract class ModifiableBaseEntity extends BaseTimeEntity {
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @LastModifiedDate
     @Column(name = "updated_datetime", nullable = false)

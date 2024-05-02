@@ -3,6 +3,7 @@ package org.nightdivers.kupica.domain.hashtag;
 import static org.nightdivers.kupica.domain.hashtag.Hashtag.MAX_TAG_NAME_WITH_HASH_LENGTH;
 
 public class HashtagValidator {
+
     public static String returnValidTagName(String tagName) {
         if (tagName == null || tagName.isEmpty()) {
             throw new IllegalArgumentException("태그 이름은 비어있을 수 없습니다.");
@@ -15,7 +16,8 @@ public class HashtagValidator {
         }
 
         if (tagName.length() > MAX_TAG_NAME_WITH_HASH_LENGTH) {
-            throw new IllegalArgumentException("태그 이름은 " + MAX_TAG_NAME_WITH_HASH_LENGTH + " 을 넘을 수 없습니다.");
+            throw new IllegalArgumentException(
+                    "태그 이름은 " + MAX_TAG_NAME_WITH_HASH_LENGTH + " 을 넘을 수 없습니다.");
         }
 
         return tagName;

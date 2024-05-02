@@ -25,6 +25,7 @@ public class ThymeleafConfig {
     @Getter
     @ConfigurationProperties("spring.thymeleaf3")
     public static class Thymeleaf3Properties {
+
         /**
          * Use Thymeleaf 3 Decoupled Logic
          */

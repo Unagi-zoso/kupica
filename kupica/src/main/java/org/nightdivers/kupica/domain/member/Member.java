@@ -19,13 +19,11 @@ import org.nightdivers.kupica.support.domain.ModifiableBaseEntity;
 @Getter
 @Entity
 @Table(name = "member")
-@SequenceGenerator(
-        name = "member_sequence_generator",
-        sequenceName = "member_sequence",
-        allocationSize = 1
-)
+@SequenceGenerator(name = "member_sequence_generator", sequenceName = "member_sequence", allocationSize = 1)
 public class Member extends ModifiableBaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_sequence_generator")
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_sequence_generator")
     @Column(columnDefinition = "NUMERIC(19,0)")
     private Long id;
 
@@ -43,22 +41,27 @@ public class Member extends ModifiableBaseEntity {
     @Column(name = "social_login_type", nullable = false, updatable = false, length = 20)
     private SocialLoginType socialLoginType;
 
-    protected Member() {}
+    protected Member() {
+    }
 
-    private Member(String nickname,
-                   String emailAddress,
-                   UserRole role,
-                   SocialLoginType socialLoginType) {
+    private Member(
+            String nickname,
+            String emailAddress,
+            UserRole role,
+            SocialLoginType socialLoginType
+    ) {
         this.nickname = validateNickname(nickname);
         this.emailAddress = validateEmailAddress(emailAddress);
         this.role = role;
         this.socialLoginType = socialLoginType;
     }
 
-    public static Member of(String nickname,
-                            String emailAddress,
-                            UserRole role,
-                            SocialLoginType socialLoginType) {
+    public static Member of(
+            String nickname,
+            String emailAddress,
+            UserRole role,
+            SocialLoginType socialLoginType
+    ) {
         return new Member(nickname, emailAddress, role, socialLoginType);
     }
 

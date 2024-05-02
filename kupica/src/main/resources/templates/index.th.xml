@@ -1,14 +1,19 @@
 <?xml version="1.0"?>
 <thlogic>
-    <attr sel="#empty__header__nav" th:replace="~{header-navbar.html :: #header__nav}" />
-    <attr sel="#empty__side__menu__bar" th:replace="~{sidebar.html :: #sidebar__menu}" />
-    <attr sel="#empty__slideshow__section" th:replace="~{slideshow.html :: #slideshow_section}" />
-    <attr sel="#empty__detail__article__modal__section" th:replace="~{detail-article/detail-article-modal.html :: #detail_article_modal_section}" />
-    <attr sel="#empty__upload__modal__section" th:replace="~{upload-modal.html :: #upload_modal_section}" />
-    <attr sel="#empty__second__navbar" th:replace="~{second-navbar.html :: #second__navbar}" />
-    <attr sel="#empty__article__container" th:replace="~{article-container.html :: #article__container}" />
-    <attr sel="#empty__detail__article__modify__modal__section" th:replace="~{detail-article/detail-article-modify-modal.html :: #detail_article_modify_modal_section}" />
-    <attr sel="#empty__detail__article__delete__modal__section" th:replace="~{detail-article/detail-article-delete-modal.html :: #detail_article_delete_modal_section}" />
-    <attr sel="#empty__comment__modify__modal__section" th:replace="~{detail-article/comment-modify-modal.html :: #comment_modify_modal_section}" />
-    <attr sel="#empty__comment__delete__modal__section" th:replace="~{detail-article/comment-delete-modal.html :: #comment_delete_modal_section}" />
+    <attr sel="#empty__header__nav" th:replace="~{header-navbar.html :: #header__nav}"/>
+    <attr sel="#empty__side__menu__bar" th:replace="~{sidebar.html :: #sidebar__menu}"/>
+    <attr sel="#empty__slideshow__section" th:replace="~{slideshow.html :: #slideshow_section}"/>
+    <attr sel="#empty__detail__article__modal__section"
+          th:replace="~{detail-article/detail-article-modal.html :: #detail_article_modal_section}"/>
+    <attr sel="#empty__upload__modal__section" th:replace="~{upload-modal.html :: #upload_modal_section}"/>
+    <attr sel="#empty__second__navbar" th:replace="~{second-navbar.html :: #second__navbar}"/>
+    <attr sel="#empty__article__container" th:replace="~{article-container.html :: #article__container}"/>
+    <attr sel="#empty__detail__article__modify__modal__section"
+          th:replace="~{detail-article/detail-article-modify-modal.html :: #detail_article_modify_modal_section}"/>
+    <attr sel="#empty__detail__article__delete__modal__section"
+          th:replace="~{detail-article/detail-article-delete-modal.html :: #detail_article_delete_modal_section}"/>
+    <attr sel="#empty__comment__modify__modal__section"
+          th:replace="~{detail-article/comment-modify-modal.html :: #comment_modify_modal_section}"/>
+    <attr sel="#empty__comment__delete__modal__section"
+          th:replace="~{detail-article/comment-delete-modal.html :: #comment_delete_modal_section}"/>
 </thlogic>

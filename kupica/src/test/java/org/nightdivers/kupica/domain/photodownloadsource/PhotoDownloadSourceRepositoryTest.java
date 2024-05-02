@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 @RequiredArgsConstructor
 @RepositoryTest
 class PhotoDownloadSourceRepositoryTest {
+
     private final PhotoDownloadSourceRepository photoDownloadSourceRepository;
 
     /* PhotoDownloadSource 조회 */
@@ -21,7 +22,8 @@ class PhotoDownloadSourceRepositoryTest {
         // given
 
         // when
-        List<PhotoDownloadSource> photoDownloadSources = photoDownloadSourceRepository.findByArticleId(1L);
+        List<PhotoDownloadSource> photoDownloadSources = photoDownloadSourceRepository.findByArticleId(
+                1L);
 
         // then
         assertThat(photoDownloadSources).isNotEmpty();
@@ -33,7 +35,8 @@ class PhotoDownloadSourceRepositoryTest {
         // given
 
         // when
-        List<PhotoDownloadSource> photoDownloadSources = photoDownloadSourceRepository.findByArticleId(PageRequest.of(0, 5), 1L).getContent();
+        List<PhotoDownloadSource> photoDownloadSources = photoDownloadSourceRepository.findByArticleId(
+                PageRequest.of(0, 5), 1L).getContent();
 
         // then
         assertThat(photoDownloadSources).isNotEmpty();

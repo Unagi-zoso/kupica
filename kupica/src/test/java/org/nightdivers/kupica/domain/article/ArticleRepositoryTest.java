@@ -30,6 +30,7 @@ import org.springframework.data.domain.PageRequest;
 @RequiredArgsConstructor
 @RepositoryTest
 class ArticleRepositoryTest {
+
     private final ArticleRepository articleRepository;
     private final MemberRepository memberRepository;
     private final AnonymousUserRepository anonymousUserRepository;
@@ -58,14 +59,17 @@ class ArticleRepositoryTest {
         givenMemberArticle2 = ArticleFactory.createTestMemberArticle2();
         givenMemberArticle3 = ArticleFactory.createTestMemberArticle3();
 
-        givenAnonymousUser1 = anonymousUserRepository.save(AnonymousUserFactory.createTestAnonymousUser1());
+        givenAnonymousUser1 = anonymousUserRepository.save(
+                AnonymousUserFactory.createTestAnonymousUser1());
 
         givenAnonymousArticle1 = ArticleFactory.createTestAnonymousArticle1();
         givenAnonymousArticle2 = ArticleFactory.createTestAnonymousArticle2();
         givenAnonymousArticle3 = ArticleFactory.createTestAnonymousArticle3();
 
-        articleRepository.saveAll(List.of(givenMemberArticle1, givenMemberArticle2, givenMemberArticle3,
-                givenAnonymousArticle1, givenAnonymousArticle2, givenAnonymousArticle3));
+        articleRepository.saveAll(
+                List.of(givenMemberArticle1, givenMemberArticle2, givenMemberArticle3,
+                        givenAnonymousArticle1, givenAnonymousArticle2, givenAnonymousArticle3
+                ));
     }
 
     /* 게시글 단일 조회 */
@@ -75,8 +79,10 @@ class ArticleRepositoryTest {
         // given
 
         // when
-        Article actualMemberArticle = articleRepository.findById(givenMemberArticle1.getId()).orElseThrow(NoSuchElementException::new);
-        Article actualAnonymousArticle = articleRepository.findById(givenAnonymousArticle1.getId()).orElseThrow(NoSuchElementException::new);
+        Article actualMemberArticle = articleRepository.findById(givenMemberArticle1.getId())
+                .orElseThrow(NoSuchElementException::new);
+        Article actualAnonymousArticle = articleRepository.findById(givenAnonymousArticle1.getId())
+                .orElseThrow(NoSuchElementException::new);
 
         // then
         assertAll(
@@ -92,9 +98,11 @@ class ArticleRepositoryTest {
 
         // when & then
         assertAll(
-                () -> assertThatThrownBy(() -> articleRepository.findById(TEST_INVALID_ARTICLE_ID).orElseThrow(NoSuchElementException::new))
+                () -> assertThatThrownBy(() -> articleRepository.findById(TEST_INVALID_ARTICLE_ID)
+                        .orElseThrow(NoSuchElementException::new))
                         .isInstanceOf(NoSuchElementException.class),
-                () -> assertThatThrownBy(() -> articleRepository.findById(TEST_INVALID_ARTICLE_ID).orElseThrow(NoSuchElementException::new))
+                () -> assertThatThrownBy(() -> articleRepository.findById(TEST_INVALID_ARTICLE_ID)
+                        .orElseThrow(NoSuchElementException::new))
                         .isInstanceOf(NoSuchElementException.class)
         );
     }
@@ -110,8 +118,10 @@ class ArticleRepositoryTest {
         List<Article> actualArticles = articleRepository.findAll();
 
         // then
-        assertThat(actualArticles).contains(givenMemberArticle1, givenMemberArticle2, givenMemberArticle3,
-                givenAnonymousArticle1, givenAnonymousArticle2, givenAnonymousArticle3);
+        assertThat(actualArticles).contains(givenMemberArticle1, givenMemberArticle2,
+                                            givenMemberArticle3,
+                                            givenAnonymousArticle1, givenAnonymousArticle2, givenAnonymousArticle3
+        );
     }
 
     @DisplayName("최근 등록된 순서대로 게시글 목록 조회 - [성공]")
@@ -120,11 +130,15 @@ class ArticleRepositoryTest {
         // given
 
         // when
-        List<Article> actualArticles = articleRepository.findAllByOrderByCreatedDatetimeDesc(PageRequest.of(0, givenTestDataSetSize)).getContent();
+        List<Article> actualArticles = articleRepository.findAllByOrderByCreatedDatetimeDesc(
+                PageRequest.of(0, givenTestDataSetSize)).getContent();
 
         // then
-        assertThat(actualArticles.subList(0, givenTestDataSetSize)).containsExactly(givenAnonymousArticle3, givenAnonymousArticle2, givenAnonymousArticle1,
-                givenMemberArticle3, givenMemberArticle2,  givenMemberArticle1);
+        assertThat(actualArticles.subList(0, givenTestDataSetSize)).containsExactly(
+                givenAnonymousArticle3,
+                givenAnonymousArticle2, givenAnonymousArticle1,
+                givenMemberArticle3, givenMemberArticle2, givenMemberArticle1
+        );
     }
 
     @DisplayName("등록된지 오래된 순서대로 게시글 목록 조회 - [성공]")
@@ -133,29 +147,47 @@ class ArticleRepositoryTest {
         // given
 
         // when
-        List<Article> actualArticles = articleRepository.findAllByOrderByCreatedDatetimeAsc(PageRequest.of(0, 100)).getContent();
+        List<Article> actualArticles = articleRepository.findAllByOrderByCreatedDatetimeAsc(
+                        PageRequest.of(0, 100))
+                .getContent();
 
         // then
-        assertThat(actualArticles.subList(actualArticles.size() - givenTestDataSetSize, actualArticles.size())).containsExactly(givenMemberArticle1, givenMemberArticle2, givenMemberArticle3,
-                givenAnonymousArticle1, givenAnonymousArticle2, givenAnonymousArticle3);
+        assertThat(actualArticles.subList(
+                actualArticles.size() - givenTestDataSetSize,
+                actualArticles.size()
+        )).containsExactly(givenMemberArticle1, givenMemberArticle2,
+                           givenMemberArticle3,
+                           givenAnonymousArticle1, givenAnonymousArticle2, givenAnonymousArticle3
+        );
     }
 
     @DisplayName("member id 와 일치하며 최근 등록된 순서대로 member 게시글 목록 조회 - [성공]")
     @Test
     void givenMemberId_whenFindAllByMemberIdOrderByCreatedDatetimeDesc_thenSuccess() {
         // given
-        Article givenMemberArticle1ByMember1 = ArticleFactory.createCustomMemberArticle("memberArticle2ByMember1", givenMember1);
-        Article givenMemberArticle2ByMember1 = ArticleFactory.createCustomMemberArticle("memberArticle3ByMember1", givenMember1);
-        articleRepository.saveAll(List.of(givenMemberArticle1ByMember1, givenMemberArticle2ByMember1));
+        Article givenMemberArticle1ByMember1 = ArticleFactory.createCustomMemberArticle(
+                "memberArticle2ByMember1",
+                givenMember1
+        );
+        Article givenMemberArticle2ByMember1 = ArticleFactory.createCustomMemberArticle(
+                "memberArticle3ByMember1",
+                givenMember1
+        );
+        articleRepository.saveAll(
+                List.of(givenMemberArticle1ByMember1, givenMemberArticle2ByMember1));
 
         // when
         List<Article> actualArticles = articleRepository.findByMemberIdAndLoginFlagIsTrueOrderByCreatedDatetimeDesc(
-                PageRequest.of(0, givenTestDataSetSize),
-                givenMemberArticle1ByMember1.getMember().getId())
+                        PageRequest.of(0, givenTestDataSetSize),
+                        givenMemberArticle1ByMember1.getMember().getId()
+                )
                 .getContent();
 
         // then
-        assertThat(actualArticles).containsExactly(givenMemberArticle2ByMember1, givenMemberArticle1ByMember1);
+        assertThat(actualArticles).containsExactly(
+                givenMemberArticle2ByMember1,
+                givenMemberArticle1ByMember1
+        );
     }
 
     @DisplayName("member id 와 일치하며 최근 등록된 순서대로 member 게시글 목록 조회 - [실패 : 존재하지 않는 회원]")
@@ -166,7 +198,8 @@ class ArticleRepositoryTest {
         // when & then
         assertThat(articleRepository.findByMemberIdAndLoginFlagIsTrueOrderByCreatedDatetimeDesc(
                 PageRequest.of(0, givenTestDataSetSize),
-                TEST_INVALID_MEMBER_ID))
+                TEST_INVALID_MEMBER_ID
+        ))
                 .isEmpty();
     }
 
@@ -174,18 +207,29 @@ class ArticleRepositoryTest {
     @Test
     void givenMemberId_whenFindAllByMemberIdOrderByCreatedDatetimeAsc_thenSuccess() {
         // given
-        Article givenMemberArticle1ByMember1 = ArticleFactory.createCustomMemberArticle("memberArticle2ByMember1", givenMember1);
-        Article givenMemberArticle2ByMember1 = ArticleFactory.createCustomMemberArticle("memberArticle3ByMember1", givenMember1);
-        articleRepository.saveAll(List.of(givenMemberArticle1ByMember1, givenMemberArticle2ByMember1));
+        Article givenMemberArticle1ByMember1 = ArticleFactory.createCustomMemberArticle(
+                "memberArticle2ByMember1",
+                givenMember1
+        );
+        Article givenMemberArticle2ByMember1 = ArticleFactory.createCustomMemberArticle(
+                "memberArticle3ByMember1",
+                givenMember1
+        );
+        articleRepository.saveAll(
+                List.of(givenMemberArticle1ByMember1, givenMemberArticle2ByMember1));
 
         // when
         List<Article> actualArticles = articleRepository.findByMemberIdAndLoginFlagIsTrueOrderByCreatedDatetimeAsc(
-                PageRequest.of(0, givenTestDataSetSize),
-                givenMemberArticle1ByMember1.getMember().getId())
+                        PageRequest.of(0, givenTestDataSetSize),
+                        givenMemberArticle1ByMember1.getMember().getId()
+                )
                 .getContent();
 
         // then
-        assertThat(actualArticles).containsExactly(givenMemberArticle1ByMember1, givenMemberArticle2ByMember1);
+        assertThat(actualArticles).containsExactly(
+                givenMemberArticle1ByMember1,
+                givenMemberArticle2ByMember1
+        );
     }
 
     @DisplayName("member id 와 일치하며 등록된지 오래된 순서대로 member 게시글 목록 조회 - [실패 : 존재하지 않는 회원]")
@@ -196,7 +240,8 @@ class ArticleRepositoryTest {
         // when & then
         assertThat(articleRepository.findByMemberIdAndLoginFlagIsTrueOrderByCreatedDatetimeAsc(
                 PageRequest.of(0, givenTestDataSetSize),
-                TEST_INVALID_MEMBER_ID))
+                TEST_INVALID_MEMBER_ID
+        ))
                 .isEmpty();
     }
 
@@ -204,18 +249,28 @@ class ArticleRepositoryTest {
     @Test
     void givenAnonymousUserNickname_whenFindAllByAnonymousUserNicknameOrderByCreatedDatetimeDesc_thenSuccess() {
         // given
-        Article givenAnonymousArticle1ByAnonymousUser1 = ArticleFactory.createCustomAnonymousArticle("anonymousArticle2ByAnonymousUser1", givenAnonymousUser1);
-        Article givenAnonymousArticle2ByAnonymousUser1 = ArticleFactory.createCustomAnonymousArticle("anonymousArticle3ByAnonymousUser1", givenAnonymousUser1);
-        articleRepository.saveAll(List.of(givenAnonymousArticle1ByAnonymousUser1, givenAnonymousArticle2ByAnonymousUser1));
+        Article givenAnonymousArticle1ByAnonymousUser1 = ArticleFactory.createCustomAnonymousArticle(
+                "anonymousArticle2ByAnonymousUser1", givenAnonymousUser1);
+        Article givenAnonymousArticle2ByAnonymousUser1 = ArticleFactory.createCustomAnonymousArticle(
+                "anonymousArticle3ByAnonymousUser1", givenAnonymousUser1);
+        articleRepository.saveAll(
+                List.of(
+                        givenAnonymousArticle1ByAnonymousUser1,
+                        givenAnonymousArticle2ByAnonymousUser1
+                ));
 
         // when
         List<Article> actualArticles = articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeDesc(
-                PageRequest.of(0, givenTestDataSetSize),
-                givenAnonymousUser1.getNickname())
+                        PageRequest.of(0, givenTestDataSetSize),
+                        givenAnonymousUser1.getNickname()
+                )
                 .getContent();
 
         // then
-        assertThat(actualArticles).containsExactly(givenAnonymousArticle2ByAnonymousUser1, givenAnonymousArticle1ByAnonymousUser1);
+        assertThat(actualArticles).containsExactly(
+                givenAnonymousArticle2ByAnonymousUser1,
+                givenAnonymousArticle1ByAnonymousUser1
+        );
     }
 
     @DisplayName("anonymousUser nickname 과 일치하며 최근 등록된 순서대로 anonymous 게시글 목록 조회 - [실패 : 존재하지 않는 익명 사용자]")
@@ -224,9 +279,11 @@ class ArticleRepositoryTest {
         // given
 
         // when & then
-        assertThat(articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeDesc(
-                PageRequest.of(0, givenTestDataSetSize),
-                "invalidAnonymousUser"))
+        assertThat(
+                articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeDesc(
+                        PageRequest.of(0, givenTestDataSetSize),
+                        "invalidAnonymousUser"
+                ))
                 .isEmpty();
     }
 
@@ -234,18 +291,28 @@ class ArticleRepositoryTest {
     @Test
     void givenAnonymousUserNickname_whenFindAllByAnonymousUserNicknameOrderByCreatedDatetimeAsc_thenSuccess() {
         // given
-        Article givenAnonymousArticle1ByAnonymousUser1 = ArticleFactory.createCustomAnonymousArticle("anonymousArticle2ByAnonymousUser1", givenAnonymousUser1);
-        Article givenAnonymousArticle2ByAnonymousUser1 = ArticleFactory.createCustomAnonymousArticle("anonymousArticle3ByAnonymousUser1", givenAnonymousUser1);
-        articleRepository.saveAll(List.of(givenAnonymousArticle1ByAnonymousUser1, givenAnonymousArticle2ByAnonymousUser1));
+        Article givenAnonymousArticle1ByAnonymousUser1 = ArticleFactory.createCustomAnonymousArticle(
+                "anonymousArticle2ByAnonymousUser1", givenAnonymousUser1);
+        Article givenAnonymousArticle2ByAnonymousUser1 = ArticleFactory.createCustomAnonymousArticle(
+                "anonymousArticle3ByAnonymousUser1", givenAnonymousUser1);
+        articleRepository.saveAll(
+                List.of(
+                        givenAnonymousArticle1ByAnonymousUser1,
+                        givenAnonymousArticle2ByAnonymousUser1
+                ));
 
         // when
         List<Article> actualArticles = articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeAsc(
-                PageRequest.of(0, givenTestDataSetSize),
-                givenAnonymousUser1.getNickname())
+                        PageRequest.of(0, givenTestDataSetSize),
+                        givenAnonymousUser1.getNickname()
+                )
                 .getContent();
 
         // then
-        assertThat(actualArticles).containsExactly(givenAnonymousArticle1ByAnonymousUser1, givenAnonymousArticle2ByAnonymousUser1);
+        assertThat(actualArticles).containsExactly(
+                givenAnonymousArticle1ByAnonymousUser1,
+                givenAnonymousArticle2ByAnonymousUser1
+        );
     }
 
     @DisplayName("anonymousUser nickname 과 일치하며 등록된지 오래된 순서대로 anonymous 게시글 목록 조회 - [실패 : 존재하지 않는 익명 사용자]")
@@ -254,9 +321,11 @@ class ArticleRepositoryTest {
         // given
 
         // when & then
-        assertThat(articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeAsc(
-                PageRequest.of(0, givenTestDataSetSize),
-                TEST_INVALID_ANONYMOUS_USER_NICKNAME))
+        assertThat(
+                articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeAsc(
+                        PageRequest.of(0, givenTestDataSetSize),
+                        TEST_INVALID_ANONYMOUS_USER_NICKNAME
+                ))
                 .isEmpty();
     }
 
@@ -302,9 +371,11 @@ class ArticleRepositoryTest {
     @Test
     void givenArticle_whenChangeCaption_thenSuccess() {
         // given
-        Article memberArticle = articleRepository.findById(givenMemberArticle1.getId()).orElseThrow(NoSuchElementException::new);
+        Article memberArticle = articleRepository.findById(givenMemberArticle1.getId())
+                .orElseThrow(NoSuchElementException::new);
         LocalDateTime prevMemberArticleUpdatedDatetime = memberArticle.getUpdatedDatetime();
-        Article anonymousArticle = articleRepository.findById(givenAnonymousArticle1.getId()).orElseThrow(NoSuchElementException::new);
+        Article anonymousArticle = articleRepository.findById(givenAnonymousArticle1.getId())
+                .orElseThrow(NoSuchElementException::new);
         LocalDateTime prevAnonymousArticleUpdatedDatetime = anonymousArticle.getUpdatedDatetime();
 
         // when
@@ -313,15 +384,19 @@ class ArticleRepositoryTest {
 
         entityManager.flush();
 
-        Article actualMemberArticle = articleRepository.findById(memberArticle.getId()).orElseThrow(NoSuchElementException::new);
-        Article actualAnonymousArticle = articleRepository.findById(anonymousArticle.getId()).orElseThrow(NoSuchElementException::new);
+        Article actualMemberArticle = articleRepository.findById(memberArticle.getId())
+                .orElseThrow(NoSuchElementException::new);
+        Article actualAnonymousArticle = articleRepository.findById(anonymousArticle.getId())
+                .orElseThrow(NoSuchElementException::new);
 
         // then
         assertAll(
                 () -> assertThat(actualMemberArticle.getCaption()).isEqualTo("newCaption"),
-                () -> assertThat(actualMemberArticle.getUpdatedDatetime()).isAfter(prevMemberArticleUpdatedDatetime),
+                () -> assertThat(actualMemberArticle.getUpdatedDatetime()).isAfter(
+                        prevMemberArticleUpdatedDatetime),
                 () -> assertThat(actualAnonymousArticle.getCaption()).isEqualTo("newCaption"),
-                () -> assertThat(actualAnonymousArticle.getUpdatedDatetime()).isAfter(prevAnonymousArticleUpdatedDatetime)
+                () -> assertThat(actualAnonymousArticle.getUpdatedDatetime()).isAfter(
+                        prevAnonymousArticleUpdatedDatetime)
         );
     }
 
@@ -329,8 +404,10 @@ class ArticleRepositoryTest {
     @Test
     void givenArticle_whenChangeCaption_thenThrowPropertyValueException() {
         // given
-        Article memberArticle = articleRepository.findById(givenMemberArticle1.getId()).orElseThrow(NoSuchElementException::new);
-        Article anonymousArticle = articleRepository.findById(givenAnonymousArticle1.getId()).orElseThrow(NoSuchElementException::new);
+        Article memberArticle = articleRepository.findById(givenMemberArticle1.getId())
+                .orElseThrow(NoSuchElementException::new);
+        Article anonymousArticle = articleRepository.findById(givenAnonymousArticle1.getId())
+                .orElseThrow(NoSuchElementException::new);
 
         // when
         memberArticle.changeCaption(null);
@@ -338,7 +415,7 @@ class ArticleRepositoryTest {
 
         // then
         assertThatThrownBy(entityManager::flush)
-                        .isInstanceOf(PropertyValueException.class);
+                .isInstanceOf(PropertyValueException.class);
     }
 
 
@@ -353,7 +430,10 @@ class ArticleRepositoryTest {
         articleRepository.delete(givenAnonymousArticle1);
 
         // then
-        assertThat(articleRepository.findAll()).doesNotContain(givenMemberArticle1, givenAnonymousArticle1);
+        assertThat(articleRepository.findAll()).doesNotContain(
+                givenMemberArticle1,
+                givenAnonymousArticle1
+        );
     }
 
     @DisplayName("id 가 일치하는 게시글 삭제 - [성공]")
@@ -366,6 +446,9 @@ class ArticleRepositoryTest {
         articleRepository.deleteById(givenAnonymousArticle1.getId());
 
         // then
-        assertThat(articleRepository.findAll()).doesNotContain(givenMemberArticle1, givenAnonymousArticle1);
+        assertThat(articleRepository.findAll()).doesNotContain(
+                givenMemberArticle1,
+                givenAnonymousArticle1
+        );
     }
 }

@@ -5,17 +5,17 @@ const toggleBtn = document.getElementById("navbar__toggleBtn");
 const menuComponents = document.getElementById("menu__components");
 
 menuBtn.addEventListener('click', () => {
-    openNav();
+  openNav();
 });
 
 function openNav() {
-    sideMenuBar.style.width = "250px";
-    toggleBtn.style.marginLeft = "250px";
-    menuComponents.style.display = "block";
+  sideMenuBar.style.width = "250px";
+  toggleBtn.style.marginLeft = "250px";
+  menuComponents.style.display = "block";
 }
 
 function closeNav() {
-    menuComponents.style.display = "none";
-    sideMenuBar.style.width = "0";
-    toggleBtn.style.marginLeft = "0";
+  menuComponents.style.display = "none";
+  sideMenuBar.style.width = "0";
+  toggleBtn.style.marginLeft = "0";
 }

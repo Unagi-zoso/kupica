@@ -20,13 +20,11 @@ import org.nightdivers.kupica.support.domain.ModifiableBaseEntity;
 @Getter
 @Entity
 @Table(name = "photo_download_source")
-@SequenceGenerator(
-        name = "photo_download_source_sequence_generator",
-        sequenceName = "photo_download_source_sequence",
-        allocationSize = 1
-)
+@SequenceGenerator(name = "photo_download_source_sequence_generator", sequenceName = "photo_download_source_sequence", allocationSize = 1)
 public class PhotoDownloadSource extends ModifiableBaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "photo_download_source_sequence_generator")
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "photo_download_source_sequence_generator")
     @Column(columnDefinition = "NUMERIC(19,0)")
     private Long id;
 
@@ -46,13 +44,16 @@ public class PhotoDownloadSource extends ModifiableBaseEntity {
     @JoinColumn(name = "article_id", columnDefinition = "NUMERIC(19,0)", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(NO_CONSTRAINT))
     private Article article;
 
-    protected PhotoDownloadSource() {}
+    protected PhotoDownloadSource() {
+    }
 
-    private PhotoDownloadSource(String photoResolution,
-                                String fileSource,
-                                Long fileByteSize,
-                                Long downloadCount,
-                                Article article) {
+    private PhotoDownloadSource(
+            String photoResolution,
+            String fileSource,
+            Long fileByteSize,
+            Long downloadCount,
+            Article article
+    ) {
         this.photoResolution = photoResolution;
         this.fileSource = fileSource;
         this.fileByteSize = fileByteSize;
@@ -65,8 +66,11 @@ public class PhotoDownloadSource extends ModifiableBaseEntity {
             String fileSource,
             Long fileByteSize,
             Long downloadCount,
-            Article article) {
-        return new PhotoDownloadSource(photoResolution, fileSource, fileByteSize, downloadCount, article);
+            Article article
+    ) {
+        return new PhotoDownloadSource(photoResolution, fileSource, fileByteSize, downloadCount,
+                                       article
+        );
     }
 
     @Override

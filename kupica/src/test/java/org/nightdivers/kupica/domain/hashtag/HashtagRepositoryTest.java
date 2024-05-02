@@ -22,6 +22,7 @@ import org.nightdivers.kupica.support.factory.ArticleFactory;
 @RequiredArgsConstructor
 @RepositoryTest
 class HashtagRepositoryTest {
+
     private final HashtagRepository hashtagRepository;
     private final EntityManager entityManager;
 
@@ -61,7 +62,8 @@ class HashtagRepositoryTest {
 
         // when & then
         assertThatThrownBy(
-                () -> hashtagRepository.findById(TEST_INVALID_HASHTAG_ID).orElseThrow(NoSuchElementException::new))
+                () -> hashtagRepository.findById(TEST_INVALID_HASHTAG_ID)
+                        .orElseThrow(NoSuchElementException::new))
                 .isInstanceOf(NoSuchElementException.class);
     }
 

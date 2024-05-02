@@ -21,13 +21,11 @@ import org.nightdivers.kupica.support.domain.ModifiableBaseEntity;
 @Getter
 @Entity
 @Table(name = "article_hashtag")
-@SequenceGenerator(
-        name = "article_hashtag_sequence_generator",
-        sequenceName = "article_hashtag_sequence",
-        allocationSize = 1
-)
+@SequenceGenerator(name = "article_hashtag_sequence_generator", sequenceName = "article_hashtag_sequence", allocationSize = 1)
 public class ArticleHashtag extends ModifiableBaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_hashtag_sequence_generator")
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_hashtag_sequence_generator")
     @Column(columnDefinition = "NUMERIC(19,0)")
     private Long id;
 
@@ -39,16 +37,15 @@ public class ArticleHashtag extends ModifiableBaseEntity {
     @JoinColumn(name = "hashtag_id", columnDefinition = "NUMERIC(19,0)", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(NO_CONSTRAINT))
     private Hashtag hashtag;
 
-    protected ArticleHashtag() {}
+    protected ArticleHashtag() {
+    }
 
-    private ArticleHashtag(Article article,
-                           Hashtag hashtag) {
+    private ArticleHashtag(Article article, Hashtag hashtag) {
         this.article = article;
         this.hashtag = hashtag;
     }
 
-    public static ArticleHashtag of(Article article,
-                                    Hashtag hashtag) {
+    public static ArticleHashtag of(Article article, Hashtag hashtag) {
         return new ArticleHashtag(article, hashtag);
     }
 

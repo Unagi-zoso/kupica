@@ -15,6 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @MappedSuperclass
 @EntityListeners({AuditingEntityListener.class})
 public abstract class BaseTimeEntity {
+
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @CreatedDate
     @Column(name = "created_datetime", nullable = false, updatable = false)

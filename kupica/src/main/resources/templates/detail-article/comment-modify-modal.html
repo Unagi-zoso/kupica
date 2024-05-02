@@ -5,32 +5,38 @@
   <title>comment modify modal</title>
 </head>
 <body>
-  <section id="comment_modify_modal_section">
-    <div id="comment__modify__modal" class="sub__modal__form">
-      <div class="submit__modal__form__container">
-        <div class="submit__modal__form__header">
-          <p class="modal__title">댓글 수정</p>
+<section id="comment_modify_modal_section">
+  <div class="sub__modal__form" id="comment__modify__modal">
+    <div class="submit__modal__form__container">
+      <div class="submit__modal__form__header">
+        <p class="modal__title">댓글 수정</p>
+      </div>
+      <div class="submit__modal__form__detail__inputs" id="comment__modify__modal__form__body">
+        <div id="comment__modify__modal__form__body__nickname__input">
+          <label for="comment__modify__nickname">닉네임</label>
+          <input class="pretty__input" id="comment__modify__nickname" name="nickname" placeholder="닉네임을 입력해주세요"
+                 type="text">
         </div>
-        <div id="comment__modify__modal__form__body" class="submit__modal__form__detail__inputs">
-          <div id="comment__modify__modal__form__body__nickname__input">
-            <label for="comment__modify__nickname">닉네임</label>
-            <input type="text" name="nickname" id="comment__modify__nickname" class="pretty__input" placeholder="닉네임을 입력해주세요">
-          </div>
-          <div id="comment__modify__modal__form__body__password__input">
-            <label for="comment__modify__password">비밀번호</label>
-            <input type="password" name="password" id="comment__modify__password" class="pretty__input" placeholder="비밀번호를 입력해주세요">
-          </div>
-          <div id="comment__modify__modal__form__body__content__input">
-            <label for="comment__modify__content">내용</label>
-            <textarea name="content" id="comment__modify__content" class="pretty__input" placeholder="내용을 입력해주세요"></textarea>
-          </div>
+        <div id="comment__modify__modal__form__body__password__input">
+          <label for="comment__modify__password">비밀번호</label>
+          <input class="pretty__input" id="comment__modify__password" name="password" placeholder="비밀번호를 입력해주세요"
+                 type="password">
         </div>
-        <div id="comment__modify__modal__form__buttons" class="submit__modal__form__buttons">
-          <button id="comment__modify__modal__submit__btn" type="button" class="btn btn__primary">수정</button>
-          <button id="comment__modify__modal__cancel__btn" type="button" class="btn btn__secondary" data-dismiss="modal" onclick="dismissCommentModifyModal()">취소</button>
+        <div id="comment__modify__modal__form__body__content__input">
+          <label for="comment__modify__content">내용</label>
+          <textarea class="pretty__input" id="comment__modify__content" name="content"
+                    placeholder="내용을 입력해주세요"></textarea>
         </div>
       </div>
+      <div class="submit__modal__form__buttons" id="comment__modify__modal__form__buttons">
+        <button class="btn btn__primary" id="comment__modify__modal__submit__btn" type="button">수정</button>
+        <button class="btn btn__secondary" data-dismiss="modal" id="comment__modify__modal__cancel__btn"
+                onclick="dismissCommentModifyModal()"
+                type="button">취소
+        </button>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 </body>
 </html>

@@ -1,6 +1,7 @@
 package org.nightdivers.kupica.support.constant;
 
 public class HashtagConstant {
+
     public static final String TEST_TAG_NAME_1 = "#test1";
     public static final String TEST_TAG_NAME_2 = "#test2";
     public static final String TEST_TAG_NAME_3 = "#test3";

@@ -3,6 +3,7 @@ package org.nightdivers.kupica.support.provider;
 import java.util.List;
 
 public class MemberProvider {
+
     public static List<String> invalidEmailAddressParameters() {
         return List.of(
                 "abc",

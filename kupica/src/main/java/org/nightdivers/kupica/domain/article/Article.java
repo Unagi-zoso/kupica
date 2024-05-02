@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.util.Objects;
 import lombok.Getter;
@@ -20,22 +21,28 @@ import org.nightdivers.kupica.support.domain.ModifiableBaseEntity;
 @Getter
 @Entity
 @Table(name = "article")
+@SequenceGenerator(
+        name = "article_sequence_generator",
+        sequenceName = "article_sequence",
+        allocationSize = 1
+)
 public class Article extends ModifiableBaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_sequence_generator")
+    @Column(columnDefinition = "NUMERIC(19,0)")
     private Long id;
 
-    @Column(name="caption", length = 600, nullable = false)
+    @Column(name = "caption", length = 600, nullable = false)
     private String caption;
 
     @ManyToOne
-    @JoinColumn(name="anonymous_user_id", referencedColumnName = "id", foreignKey = @ForeignKey(NO_CONSTRAINT), updatable = false)
+    @JoinColumn(name = "anonymous_user_id", columnDefinition = "NUMERIC(19,0)", referencedColumnName = "id", foreignKey = @ForeignKey(NO_CONSTRAINT), updatable = false)
     private AnonymousUser anonymousUser;
 
     @ManyToOne
-    @JoinColumn(name="member_id", referencedColumnName = "id", foreignKey = @ForeignKey(NO_CONSTRAINT), updatable = false)
+    @JoinColumn(name = "member_id", columnDefinition = "NUMERIC(19,0)", referencedColumnName = "id", foreignKey = @ForeignKey(NO_CONSTRAINT), updatable = false)
     private Member member;
 
-    @Column(name="login_flag", nullable = false, columnDefinition = "TINYINT(1)", updatable = false)
+    @Column(name = "login_flag", nullable = false, updatable = false)
     private Boolean loginFlag;
 
     protected Article() {}

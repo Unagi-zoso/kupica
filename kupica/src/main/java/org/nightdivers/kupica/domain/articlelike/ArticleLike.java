@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.util.Objects;
 import lombok.Getter;
@@ -28,22 +29,28 @@ import org.nightdivers.kupica.support.domain.BaseTimeEntity;
                 )
         }
 )
+@SequenceGenerator(
+        name = "article_like_sequence_generator",
+        sequenceName = "article_like_sequence",
+        allocationSize = 1
+)
 public class ArticleLike extends BaseTimeEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_like_sequence_generator")
+    @Column(columnDefinition = "NUMERIC(19,0)")
     private Long id;
 
-    @Column(name="ip_address", length = 20, updatable = false)
+    @Column(name = "ip_address", length = 20, updatable = false)
     private String ipAddress;
 
     @ManyToOne
-    @JoinColumn(name="member_id", referencedColumnName = "id", foreignKey = @ForeignKey(NO_CONSTRAINT), updatable = false)
+    @JoinColumn(name = "member_id", columnDefinition = "NUMERIC(19,0)", referencedColumnName = "id", foreignKey = @ForeignKey(NO_CONSTRAINT), updatable = false)
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name="article_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(NO_CONSTRAINT), updatable = false)
+    @JoinColumn(name = "article_id", columnDefinition = "NUMERIC(19,0)", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(NO_CONSTRAINT), updatable = false)
     private Article article;
 
-    @Column(name="login_flag", nullable = false, columnDefinition = "TINYINT(1)", updatable = false)
+    @Column(name = "login_flag", nullable = false, updatable = false)
     private Boolean loginFlag;
 
     protected ArticleLike() {}

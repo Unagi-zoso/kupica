@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.util.Objects;
 import lombok.Getter;
@@ -20,41 +21,47 @@ import org.nightdivers.kupica.support.domain.ModifiableBaseEntity;
 
 @Getter
 @Entity
-@Table(name = "comment")
+@Table(name = "article_comment")
+@SequenceGenerator(
+        name = "article_comment_sequence_generator",
+        sequenceName = "article_comment_sequence",
+        allocationSize = 1
+)
 public class Comment extends ModifiableBaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_comment_sequence_generator")
+    @Column(columnDefinition = "NUMERIC(19,0)")
     private Long id;
 
-    @Column(name="content", nullable = false, length = 600)
+    @Column(name = "content", nullable = false, length = 600)
     private String content;
 
     @ManyToOne
-    @JoinColumn(name="reply_target_comment_id", referencedColumnName = "id", foreignKey = @ForeignKey(NO_CONSTRAINT))
+    @JoinColumn(name = "reply_target_comment_id", columnDefinition = "NUMERIC(19,0)", referencedColumnName = "id", foreignKey = @ForeignKey(NO_CONSTRAINT))
     private Comment replyTargetComment;
 
     @ManyToOne
-    @JoinColumn(name="anonymous_user_id", referencedColumnName = "id", foreignKey = @ForeignKey(NO_CONSTRAINT))
+    @JoinColumn(name = "anonymous_user_id", columnDefinition = "NUMERIC(19,0)", referencedColumnName = "id", foreignKey = @ForeignKey(NO_CONSTRAINT))
     private AnonymousUser anonymousUser;
 
     @ManyToOne
-    @JoinColumn(name="member_id", referencedColumnName = "id", foreignKey = @ForeignKey(NO_CONSTRAINT))
+    @JoinColumn(name = "member_id", columnDefinition = "NUMERIC(19,0)", referencedColumnName = "id", foreignKey = @ForeignKey(NO_CONSTRAINT))
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name="article_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(NO_CONSTRAINT))
+    @JoinColumn(name = "article_id", columnDefinition = "NUMERIC(19,0)", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(NO_CONSTRAINT))
     private Article article;
 
-    @Column(name="login_flag", nullable = false, columnDefinition = "TINYINT(1)")
+    @Column(name = "login_flag", nullable = false)
     private Boolean loginFlag;
 
     protected Comment() {}
 
     private Comment(String content,
-                   Comment replyTargetComment,
-                   AnonymousUser anonymousUser,
-                   Member member,
-                   Article article,
-                   Boolean loginFlag) {
+                    Comment replyTargetComment,
+                    AnonymousUser anonymousUser,
+                    Member member,
+                    Article article,
+                    Boolean loginFlag) {
         this.content = content;
         this.replyTargetComment = replyTargetComment;
         this.anonymousUser = anonymousUser;

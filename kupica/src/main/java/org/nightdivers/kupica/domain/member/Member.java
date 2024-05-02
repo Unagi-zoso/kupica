@@ -1,5 +1,8 @@
 package org.nightdivers.kupica.domain.member;
 
+import static org.nightdivers.kupica.domain.member.MemberValidator.validateEmailAddress;
+import static org.nightdivers.kupica.domain.member.MemberValidator.validateNickname;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -7,6 +10,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.util.Objects;
 import lombok.Getter;
@@ -15,8 +19,14 @@ import org.nightdivers.kupica.support.domain.ModifiableBaseEntity;
 @Getter
 @Entity
 @Table(name = "member")
+@SequenceGenerator(
+        name = "member_sequence_generator",
+        sequenceName = "member_sequence",
+        allocationSize = 1
+)
 public class Member extends ModifiableBaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_sequence_generator")
+    @Column(columnDefinition = "NUMERIC(19,0)")
     private Long id;
 
     @Column(nullable = false, unique = true, length = 18)
@@ -39,8 +49,8 @@ public class Member extends ModifiableBaseEntity {
                    String emailAddress,
                    UserRole role,
                    SocialLoginType socialLoginType) {
-        this.nickname = nickname;
-        this.emailAddress = emailAddress;
+        this.nickname = validateNickname(nickname);
+        this.emailAddress = validateEmailAddress(emailAddress);
         this.role = role;
         this.socialLoginType = socialLoginType;
     }

@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.util.Objects;
 import lombok.Getter;
@@ -19,24 +20,30 @@ import org.nightdivers.kupica.support.domain.ModifiableBaseEntity;
 @Getter
 @Entity
 @Table(name = "photo_download_source")
-public class PhotoDownloadSource  extends ModifiableBaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+@SequenceGenerator(
+        name = "photo_download_source_sequence_generator",
+        sequenceName = "photo_download_source_sequence",
+        allocationSize = 1
+)
+public class PhotoDownloadSource extends ModifiableBaseEntity {
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "photo_download_source_sequence_generator")
+    @Column(columnDefinition = "NUMERIC(19,0)")
     private Long id;
 
-    @Column(name="photo_resolution", nullable = false, length = 18)
+    @Column(name = "photo_resolution", nullable = false, length = 18)
     private String photoResolution;
 
-    @Column(name="file_source", nullable = false, unique = true, length = 600)
+    @Column(name = "file_source", nullable = false, unique = true, length = 600)
     private String fileSource;
 
-    @Column(name="file_byte_size", nullable = false)
+    @Column(name = "file_byte_size", columnDefinition = "NUMERIC(19,0)", nullable = false)
     private Long fileByteSize;
 
-    @Column(name="download_count", nullable = false)
+    @Column(name = "download_count", columnDefinition = "NUMERIC(19,0)", nullable = false)
     private Long downloadCount;
 
     @ManyToOne
-    @JoinColumn(name="article_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(NO_CONSTRAINT))
+    @JoinColumn(name = "article_id", columnDefinition = "NUMERIC(19,0)", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(NO_CONSTRAINT))
     private Article article;
 
     protected PhotoDownloadSource() {}

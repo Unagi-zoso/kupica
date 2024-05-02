@@ -7,6 +7,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.util.Objects;
 import lombok.Getter;
@@ -16,21 +17,23 @@ import org.nightdivers.kupica.support.domain.BaseTimeEntity;
 @Getter
 @Entity
 @Table(name = "anonymous_user")
+@SequenceGenerator(name = "anonymous_user_sequence_generator", sequenceName = "anonymous_user_sequence", allocationSize = 1)
 public class AnonymousUser extends BaseTimeEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "anonymous_user_sequence_generator")
+    @Column(columnDefinition = "NUMERIC(19,0)")
     private Long id;
 
-    @Column(name="nickname", nullable = false, length = 18, updatable = false)
+    @Column(name = "nickname", nullable = false, length = 18, updatable = false)
     private String nickname;
 
-    @Column(name="password", length = 64, nullable = false, updatable = false)
+    @Column(name = "password", length = 64, nullable = false, updatable = false)
     private String password;
 
-    @Column(name="ip_address", length = 20, nullable = false, updatable = false)
+    @Column(name = "ip_address", length = 20, nullable = false, updatable = false)
     private String ipAddress;
 
     @Enumerated(EnumType.STRING)
-    @Column(name="user_role", nullable = false, updatable = false)
+    @Column(name = "user_role", nullable = false, updatable = false)
     private UserRole role;
 
     protected AnonymousUser() {}

@@ -2,6 +2,7 @@ package org.nightdivers.kupica.domain.articlehashtag;
 
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.util.Objects;
 import lombok.Getter;
@@ -19,16 +21,22 @@ import org.nightdivers.kupica.support.domain.ModifiableBaseEntity;
 @Getter
 @Entity
 @Table(name = "article_hashtag")
+@SequenceGenerator(
+        name = "article_hashtag_sequence_generator",
+        sequenceName = "article_hashtag_sequence",
+        allocationSize = 1
+)
 public class ArticleHashtag extends ModifiableBaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_hashtag_sequence_generator")
+    @Column(columnDefinition = "NUMERIC(19,0)")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="article_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(NO_CONSTRAINT))
+    @JoinColumn(name = "article_id", columnDefinition = "NUMERIC(19,0)", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(NO_CONSTRAINT))
     private Article article;
 
     @ManyToOne
-    @JoinColumn(name="hashtag_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(NO_CONSTRAINT))
+    @JoinColumn(name = "hashtag_id", columnDefinition = "NUMERIC(19,0)", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(NO_CONSTRAINT))
     private Hashtag hashtag;
 
     protected ArticleHashtag() {}

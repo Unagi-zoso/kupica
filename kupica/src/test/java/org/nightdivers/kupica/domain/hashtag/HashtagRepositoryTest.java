@@ -18,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.nightdivers.kupica.domain.article.Article;
 import org.nightdivers.kupica.support.annotation.RepositoryTest;
 import org.nightdivers.kupica.support.factory.ArticleFactory;
-import org.springframework.dao.DataIntegrityViolationException;
 
 @RequiredArgsConstructor
 @RepositoryTest
@@ -48,7 +47,8 @@ class HashtagRepositoryTest {
         // given
 
         // when
-        Hashtag actualHashtag = hashtagRepository.findById(givenHashtag1.getId()).orElseThrow(NoSuchElementException::new);
+        Hashtag actualHashtag = hashtagRepository.findById(givenHashtag1.getId())
+                .orElseThrow(NoSuchElementException::new);
 
         // then
         assertThat(actualHashtag).isEqualTo(givenHashtag1);
@@ -60,7 +60,8 @@ class HashtagRepositoryTest {
         // given
 
         // when & then
-        assertThatThrownBy(() -> hashtagRepository.findById(TEST_INVALID_HASHTAG_ID).orElseThrow(NoSuchElementException::new))
+        assertThatThrownBy(
+                () -> hashtagRepository.findById(TEST_INVALID_HASHTAG_ID).orElseThrow(NoSuchElementException::new))
                 .isInstanceOf(NoSuchElementException.class);
     }
 
@@ -93,13 +94,13 @@ class HashtagRepositoryTest {
 
     @DisplayName("해시태그 생성 - [실패 : 중복된 태그명]")
     @Test
-    void givenHashtag_whenSave_thenThrowDataIntegrityViolationException() {
+    void givenHashtag_whenSave_thenThrowConstraintViolationException() {
         // given
-        Hashtag expectedHashtag = Hashtag.of(TEST_TAG_NAME_1);
+        hashtagRepository.save(Hashtag.of(TEST_TAG_NAME_1));
 
         // when & then
-        assertThatThrownBy(() -> hashtagRepository.save(expectedHashtag))
-                .isInstanceOf(DataIntegrityViolationException.class);
+        assertThatThrownBy(entityManager::flush)
+                .isInstanceOf(ConstraintViolationException.class);
     }
 
 
@@ -111,7 +112,8 @@ class HashtagRepositoryTest {
 
         // when
         givenHashtag1.changeTagName(TEST_TAG_NAME_4);
-        Hashtag actualHashtag = hashtagRepository.findById(givenHashtag1.getId()).orElseThrow(NoSuchElementException::new);
+        Hashtag actualHashtag = hashtagRepository.findById(givenHashtag1.getId())
+                .orElseThrow(NoSuchElementException::new);
 
         // then
         assertThat(actualHashtag.getTagName()).isEqualTo(TEST_TAG_NAME_4);

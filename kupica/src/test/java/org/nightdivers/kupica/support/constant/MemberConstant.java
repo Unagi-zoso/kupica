@@ -24,6 +24,8 @@ public class MemberConstant {
     public static final UserRole TEST_MEMBER_4_ROLE = UserRole.MEMBER;
     public static final SocialLoginType TEST_MEMBER_4_SOCIAL_LOGIN_TYPE = SocialLoginType.KAKAO;
 
+    public static final String TEST_VALID_MEMBER_EMAIL = "valid@test.com";
+
     public static final Long TEST_INVALID_MEMBER_ID = -1L;
     public static final String TEST_INVALID_MEMBER_NICKNAME = "invalid nickname";
     public static final String TEST_INVALID_MEMBER_EMAIL = "invalid@test.com";

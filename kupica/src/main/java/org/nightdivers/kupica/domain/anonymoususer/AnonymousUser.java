@@ -19,7 +19,9 @@ import org.nightdivers.kupica.support.domain.BaseTimeEntity;
 @Table(name = "anonymous_user")
 @SequenceGenerator(name = "anonymous_user_sequence_generator", sequenceName = "anonymous_user_sequence", allocationSize = 1)
 public class AnonymousUser extends BaseTimeEntity {
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "anonymous_user_sequence_generator")
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "anonymous_user_sequence_generator")
     @Column(columnDefinition = "NUMERIC(19,0)")
     private Long id;
 
@@ -36,22 +38,22 @@ public class AnonymousUser extends BaseTimeEntity {
     @Column(name = "user_role", nullable = false, updatable = false)
     private UserRole role;
 
-    protected AnonymousUser() {}
+    protected AnonymousUser() {
+    }
 
-    private AnonymousUser(String nickname,
-                          String password,
-                          String ipAddress,
-                          UserRole role) {
+    private AnonymousUser(String nickname, String password, String ipAddress, UserRole role) {
         this.nickname = nickname;
         this.password = password;
         this.ipAddress = ipAddress;
         this.role = role;
     }
 
-    public static AnonymousUser of(String nickname,
-                                   String password,
-                                   String ipAddress,
-                                   UserRole userRole) {
+    public static AnonymousUser of(
+            String nickname,
+            String password,
+            String ipAddress,
+            UserRole userRole
+    ) {
         return new AnonymousUser(nickname, password, ipAddress, userRole);
     }
 

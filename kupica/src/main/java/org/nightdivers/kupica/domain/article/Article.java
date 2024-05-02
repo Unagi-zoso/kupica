@@ -21,13 +21,11 @@ import org.nightdivers.kupica.support.domain.ModifiableBaseEntity;
 @Getter
 @Entity
 @Table(name = "article")
-@SequenceGenerator(
-        name = "article_sequence_generator",
-        sequenceName = "article_sequence",
-        allocationSize = 1
-)
+@SequenceGenerator(name = "article_sequence_generator", sequenceName = "article_sequence", allocationSize = 1)
 public class Article extends ModifiableBaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_sequence_generator")
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_sequence_generator")
     @Column(columnDefinition = "NUMERIC(19,0)")
     private Long id;
 
@@ -45,12 +43,10 @@ public class Article extends ModifiableBaseEntity {
     @Column(name = "login_flag", nullable = false, updatable = false)
     private Boolean loginFlag;
 
-    protected Article() {}
+    protected Article() {
+    }
 
-    private Article(String caption,
-                    Member member,
-                    AnonymousUser anonymousUser,
-                    Boolean loginFlag) {
+    private Article(String caption, Member member, AnonymousUser anonymousUser, Boolean loginFlag) {
         this.caption = caption;
         this.member = member;
         this.anonymousUser = anonymousUser;

@@ -35,6 +35,7 @@ import org.nightdivers.kupica.support.annotation.RepositoryTest;
 @RequiredArgsConstructor
 @RepositoryTest
 class CommentRepositoryTest {
+
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final AnonymousUserRepository anonymousUserRepository;
@@ -61,15 +62,39 @@ class CommentRepositoryTest {
     void setUp() {
         givenMember1 = memberRepository.save(createTestMember1());
         givenAnonymousUser1 = anonymousUserRepository.save(createTestAnonymousUser1());
-        givenAnonymousArticle1 = articleRepository.save(createCustomAnonymousArticle(TEST_ANONYMOUS_ARTICLE_1_CAPTION, givenAnonymousUser1));
-        givenMemberComment1 = commentRepository.save(createTestMemberComment1(givenMember1, givenAnonymousArticle1));
-        givenAnonymousComment1 = commentRepository.save(createTestAnonymousComment1(givenAnonymousUser1, givenAnonymousArticle1));
-        givenMemberReplyComment1 = commentRepository.save(createTestMemberReplyComment1(givenMemberComment1, givenMember1, givenAnonymousArticle1));
-        givenMemberReplyComment2 = commentRepository.save(createTestMemberReplyComment2(givenMemberComment1, givenMember1, givenAnonymousArticle1));
-        givenMemberReplyComment3 = commentRepository.save(createTestMemberReplyComment3(givenMemberComment1, givenMember1, givenAnonymousArticle1));
-        givenAnonymousReplyComment1 = commentRepository.save(createTestAnonymousReplyComment1(givenAnonymousComment1, givenAnonymousUser1, givenAnonymousArticle1));
-        givenAnonymousReplyComment2 = commentRepository.save(createTestAnonymousReplyComment2(givenAnonymousComment1, givenAnonymousUser1, givenAnonymousArticle1));
-        givenAnonymousReplyComment3 = commentRepository.save(createTestAnonymousReplyComment3(givenAnonymousComment1, givenAnonymousUser1, givenAnonymousArticle1));
+        givenAnonymousArticle1 = articleRepository.save(
+                createCustomAnonymousArticle(
+                        TEST_ANONYMOUS_ARTICLE_1_CAPTION,
+                        givenAnonymousUser1
+                ));
+        givenMemberComment1 = commentRepository.save(
+                createTestMemberComment1(givenMember1, givenAnonymousArticle1));
+        givenAnonymousComment1 = commentRepository.save(
+                createTestAnonymousComment1(givenAnonymousUser1, givenAnonymousArticle1));
+        givenMemberReplyComment1 = commentRepository.save(
+                createTestMemberReplyComment1(givenMemberComment1, givenMember1,
+                                              givenAnonymousArticle1
+                ));
+        givenMemberReplyComment2 = commentRepository.save(
+                createTestMemberReplyComment2(givenMemberComment1, givenMember1,
+                                              givenAnonymousArticle1
+                ));
+        givenMemberReplyComment3 = commentRepository.save(
+                createTestMemberReplyComment3(givenMemberComment1, givenMember1,
+                                              givenAnonymousArticle1
+                ));
+        givenAnonymousReplyComment1 = commentRepository.save(
+                createTestAnonymousReplyComment1(givenAnonymousComment1, givenAnonymousUser1,
+                                                 givenAnonymousArticle1
+                ));
+        givenAnonymousReplyComment2 = commentRepository.save(
+                createTestAnonymousReplyComment2(givenAnonymousComment1, givenAnonymousUser1,
+                                                 givenAnonymousArticle1
+                ));
+        givenAnonymousReplyComment3 = commentRepository.save(
+                createTestAnonymousReplyComment3(givenAnonymousComment1, givenAnonymousUser1,
+                                                 givenAnonymousArticle1
+                ));
     }
 
     /* 댓글 조회 */
@@ -79,7 +104,8 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByArticleId(givenAnonymousArticle1.getId());
+        List<Comment> comments = commentRepository.findAllByArticleId(
+                givenAnonymousArticle1.getId());
 
         // then
         assertThat(comments).contains(
@@ -130,7 +156,8 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByMemberNickname(givenMember1.getNickname());
+        List<Comment> comments = commentRepository.findAllByMemberNickname(
+                givenMember1.getNickname());
 
         // then
         assertThat(comments).contains(
@@ -147,7 +174,8 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByMemberNickname(TEST_INVALID_MEMBER_NICKNAME);
+        List<Comment> comments = commentRepository.findAllByMemberNickname(
+                TEST_INVALID_MEMBER_NICKNAME);
 
         // then
         assertThat(comments).isEmpty();
@@ -159,7 +187,10 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberNickname(givenAnonymousArticle1.getId(), givenMember1.getNickname());
+        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberNickname(
+                givenAnonymousArticle1.getId(),
+                givenMember1.getNickname()
+        );
 
         // then
         assertThat(comments).contains(
@@ -176,7 +207,10 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberNickname(TEST_INVALID_ARTICLE_ID, givenMember1.getNickname());
+        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberNickname(
+                TEST_INVALID_ARTICLE_ID,
+                givenMember1.getNickname()
+        );
 
         // then
         assertThat(comments).isEmpty();
@@ -188,7 +222,10 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberNickname(givenAnonymousArticle1.getId(), TEST_INVALID_MEMBER_NICKNAME);
+        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberNickname(
+                givenAnonymousArticle1.getId(),
+                TEST_INVALID_MEMBER_NICKNAME
+        );
 
         // then
         assertThat(comments).isEmpty();
@@ -200,7 +237,8 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByAnonymousUserNickname(givenAnonymousUser1.getNickname());
+        List<Comment> comments = commentRepository.findAllByAnonymousUserNickname(
+                givenAnonymousUser1.getNickname());
 
         // then
         assertThat(comments).contains(
@@ -217,7 +255,8 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByAnonymousUserNickname(TEST_INVALID_ANONYMOUS_USER_NICKNAME);
+        List<Comment> comments = commentRepository.findAllByAnonymousUserNickname(
+                TEST_INVALID_ANONYMOUS_USER_NICKNAME);
 
         // then
         assertThat(comments).isEmpty();
@@ -230,7 +269,10 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberId(givenAnonymousArticle1.getId(), givenMember1.getId());
+        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberId(
+                givenAnonymousArticle1.getId(),
+                givenMember1.getId()
+        );
 
         // then
         assertThat(comments).contains(
@@ -247,7 +289,10 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberId(TEST_INVALID_ARTICLE_ID, givenMember1.getId());
+        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberId(
+                TEST_INVALID_ARTICLE_ID,
+                givenMember1.getId()
+        );
 
         // then
         assertThat(comments).isEmpty();
@@ -259,7 +304,10 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberId(givenAnonymousArticle1.getId(), TEST_INVALID_MEMBER_ID);
+        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberId(
+                givenAnonymousArticle1.getId(),
+                TEST_INVALID_MEMBER_ID
+        );
 
         // then
         assertThat(comments).isEmpty();
@@ -271,7 +319,8 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByArticleIdAndAnonymousUserNickname(givenAnonymousArticle1.getId(), givenAnonymousUser1.getNickname());
+        List<Comment> comments = commentRepository.findAllByArticleIdAndAnonymousUserNickname(
+                givenAnonymousArticle1.getId(), givenAnonymousUser1.getNickname());
 
         // then
         assertThat(comments).contains(
@@ -288,7 +337,10 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByArticleIdAndAnonymousUserNickname(TEST_INVALID_ARTICLE_ID, givenAnonymousUser1.getNickname());
+        List<Comment> comments = commentRepository.findAllByArticleIdAndAnonymousUserNickname(
+                TEST_INVALID_ARTICLE_ID,
+                givenAnonymousUser1.getNickname()
+        );
 
         // then
         assertThat(comments).isEmpty();
@@ -300,13 +352,14 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByArticleIdAndAnonymousUserNickname(givenAnonymousArticle1.getId(), TEST_INVALID_ANONYMOUS_USER_NICKNAME);
+        List<Comment> comments = commentRepository.findAllByArticleIdAndAnonymousUserNickname(
+                givenAnonymousArticle1.getId(), TEST_INVALID_ANONYMOUS_USER_NICKNAME);
 
         // then
         assertThat(comments).isEmpty();
     }
-    
-    
+
+
     /* 댓글 생성 */
     @DisplayName("member 댓글 생성 - [성공]")
     @Test
@@ -314,7 +367,8 @@ class CommentRepositoryTest {
         // given
 
         // when
-        Comment comment = commentRepository.save(createTestMemberComment1(givenMember1, givenAnonymousArticle1));
+        Comment comment = commentRepository.save(
+                createTestMemberComment1(givenMember1, givenAnonymousArticle1));
 
         // then
         assertAll(
@@ -329,10 +383,15 @@ class CommentRepositoryTest {
     void givenAnonymousUser_whenSave_thenComment() {
         // given
         AnonymousUser anonymousUser = anonymousUserRepository.save(createTestAnonymousUser1());
-        Article article = articleRepository.save(createCustomAnonymousArticle(TEST_ANONYMOUS_ARTICLE_1_CAPTION, givenAnonymousUser1));
+        Article article = articleRepository.save(
+                createCustomAnonymousArticle(
+                        TEST_ANONYMOUS_ARTICLE_1_CAPTION,
+                        givenAnonymousUser1
+                ));
 
         // when
-        Comment comment = commentRepository.save(createTestAnonymousComment1(anonymousUser, article));
+        Comment comment = commentRepository.save(
+                createTestAnonymousComment1(anonymousUser, article));
 
         // then
         assertAll(
@@ -348,7 +407,10 @@ class CommentRepositoryTest {
         // given
 
         // when
-        Comment comment = commentRepository.save(createTestMemberReplyComment1(givenMemberComment1, givenMember1, givenAnonymousArticle1));
+        Comment comment = commentRepository.save(
+                createTestMemberReplyComment1(givenMemberComment1, givenMember1,
+                                              givenAnonymousArticle1
+                ));
 
         // then
         assertAll(
@@ -364,10 +426,15 @@ class CommentRepositoryTest {
     void givenParentCommentAndAnonymousUser_whenSave_thenComment() {
         // given
         AnonymousUser anonymousUser = anonymousUserRepository.save(createTestAnonymousUser1());
-        Article article = articleRepository.save(createCustomAnonymousArticle(TEST_ANONYMOUS_ARTICLE_1_CAPTION, givenAnonymousUser1));
+        Article article = articleRepository.save(
+                createCustomAnonymousArticle(
+                        TEST_ANONYMOUS_ARTICLE_1_CAPTION,
+                        givenAnonymousUser1
+                ));
 
         // when
-        Comment comment = commentRepository.save(createTestAnonymousReplyComment1(givenAnonymousComment1, anonymousUser, article));
+        Comment comment = commentRepository.save(
+                createTestAnonymousReplyComment1(givenAnonymousComment1, anonymousUser, article));
 
         // then
         assertAll(
@@ -405,10 +472,10 @@ class CommentRepositoryTest {
         givenMemberReplyComment1.changeContent(updatedContent);
         Comment updatedComment = commentRepository.save(givenMemberReplyComment1);
 
-
         // then
         assertAll(
-                () -> assertThat(updatedComment.getReplyTargetComment().getId()).isEqualTo(prevParentCommentId),
+                () -> assertThat(updatedComment.getReplyTargetComment().getId()).isEqualTo(
+                        prevParentCommentId),
                 () -> assertThat(updatedComment.getContent()).isEqualTo(updatedContent)
         );
     }

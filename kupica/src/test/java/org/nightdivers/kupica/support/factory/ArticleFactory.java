@@ -6,6 +6,7 @@ import org.nightdivers.kupica.domain.member.Member;
 import org.nightdivers.kupica.support.constant.ArticleConstant;
 
 public class ArticleFactory {
+
     public static Article createTestMemberArticle1() {
         return Article.createMemberArticle(
                 ArticleConstant.TEST_MEMBER_ARTICLE_1_CAPTION,
@@ -69,7 +70,10 @@ public class ArticleFactory {
         );
     }
 
-    public static Article createCustomAnonymousArticle(String caption, AnonymousUser anonymousUser) {
+    public static Article createCustomAnonymousArticle(
+            String caption,
+            AnonymousUser anonymousUser
+    ) {
         return Article.createAnonymousArticle(
                 caption,
                 anonymousUser

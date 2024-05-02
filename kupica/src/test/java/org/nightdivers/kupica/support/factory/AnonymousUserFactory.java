@@ -25,6 +25,7 @@ import org.nightdivers.kupica.domain.anonymoususer.AnonymousUser;
 import org.nightdivers.kupica.domain.member.UserRole;
 
 public class AnonymousUserFactory {
+
     public static AnonymousUser createTestAnonymousUser1() {
         return AnonymousUser.of(
                 TEST_ANONYMOUS_USER_1_NICKNAME,
@@ -61,13 +62,18 @@ public class AnonymousUserFactory {
         );
     }
 
-    public static List<AnonymousUser> createDuplicatedAnonymousUsers(Supplier<AnonymousUser> creatorMethod, int count) {
+    public static List<AnonymousUser> createDuplicatedAnonymousUsers(
+            Supplier<AnonymousUser> creatorMethod, int count
+    ) {
         return IntStream.range(0, count)
                 .mapToObj(i -> creatorMethod.get())
                 .collect(Collectors.toList());
     }
 
-    public static AnonymousUser createCustomAnonymousUsers(String nickname, String password, String ipAddress) {
+    public static AnonymousUser createCustomAnonymousUser(
+            String nickname, String password,
+            String ipAddress
+    ) {
         return AnonymousUser.of(
                 nickname,
                 password,

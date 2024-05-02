@@ -16,4 +16,5 @@ import org.springframework.context.annotation.Import;
 @Import(JpaAuditingConfig.class)
 @DataJpaTest
 public @interface RepositoryTest {
+
 }

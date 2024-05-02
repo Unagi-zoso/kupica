@@ -5,31 +5,33 @@
   <title>detail article modal</title>
 </head>
 <body>
-  <section id="detail_article_modal_section">
-    <div id="detail__article__modal" class="modal">
-      <div id="detail__article__modal__header" onclick="dismissDetailArticleModal()">
-        <button id="detail__article__modal__close__btn">
-          <img id="detail__article__close__btn__logo" src="/imgs/chevron-left.svg" alt="상세 사진글 모달 닫기 버튼 이미지">
-        </button>
+<section id="detail_article_modal_section">
+  <div class="modal" id="detail__article__modal">
+    <div id="detail__article__modal__header" onclick="dismissDetailArticleModal()">
+      <button id="detail__article__modal__close__btn">
+        <img alt="상세 사진글 모달 닫기 버튼 이미지" id="detail__article__close__btn__logo" src="/imgs/chevron-left.svg">
+      </button>
+    </div>
+    <div id="detail__article__modal__content">
+      <div id="detail__article__modal__content__img__container">
+        <img alt="상세 사진글 이미지" id="detail__article__modal__content__img" src="/imgs/test-1.jpg">
       </div>
-      <div id="detail__article__modal__content">
-        <div id="detail__article__modal__content__img__container">
-          <img id="detail__article__modal__content__img" src="/imgs/test-1.jpg" alt="상세 사진글 이미지">
-        </div>
-      </div>
-      <div id="detail__article__side__info__container">
+    </div>
+    <div id="detail__article__side__info__container">
       <div id="interactive__btn__container">
         <div id="left__interactive__btn__container">
           <div id="like__comment__container">
             <div id="like__info__container">
               <button id="detail__article__modal__content__like__btn">
-                <img id="detail__article__modal__content__like__btn__logo" src="/imgs/heart-regular.svg" alt="좋아요 버튼 이미지">
+                <img alt="좋아요 버튼 이미지" id="detail__article__modal__content__like__btn__logo"
+                     src="/imgs/heart-regular.svg">
               </button>
               <p id="detail__article__modal__content__like__count">5</p>
             </div>
             <div id="comment__info__container">
               <button id="detail__article__modal__content__comment__btn">
-                <img id="detail__article__modal__content__comment__btn__logo" src="/imgs/comment-regular.svg" alt="댓글 버튼 이미지">
+                <img alt="댓글 버튼 이미지" id="detail__article__modal__content__comment__btn__logo"
+                     src="/imgs/comment-regular.svg">
               </button>
               <p id="detail__article__modal__content__comment__count">3</p>
             </div>
@@ -51,7 +53,8 @@
               <option value="1440">1440</option>
             </select>
             <button id="detail__article__modal__content__download__btn">
-              <img id="detail__article__modal__content__download__btn__logo" src="/imgs/circle-down.svg" alt="다운로드 버튼 이미지">
+              <img alt="다운로드 버튼 이미지" id="detail__article__modal__content__download__btn__logo"
+                   src="/imgs/circle-down.svg">
             </button>
           </div>
         </div>
@@ -75,76 +78,78 @@
           <p id="comment__boarder__line__text">댓글</p>
         </div>
         <div id="comment__list__container">
-          <div id="comment__list__item1" class="comment__format">
-            <p id="comment__list__item__nickname1" class="comment__nickname">익명의 호랭이 abc 님 </p>
-            <p id="comment__list__item__content1" class="comment__content">우하하하 ! 산이나 타시죠 ! 때마침 밑글에 좋은 산이 있군요!</p>
+          <div class="comment__format" id="comment__list__item1">
+            <p class="comment__nickname" id="comment__list__item__nickname1">익명의 호랭이 abc 님 </p>
+            <p class="comment__content" id="comment__list__item__content1">우하하하 ! 산이나 타시죠 ! 때마침 밑글에 좋은 산이 있군요!</p>
             <div class="comment__interactive__btn__container">
-              <div id="comment__sub__btn1" class="comment__sub__btn">
+              <div class="comment__sub__btn" id="comment__sub__btn1">
                 <button id="comment__sub__reply__btn1">[답글 작성]</button>
-                <div id="comment__sub__modify__delete__container1" class="comment__sub__modify__delete__container">
+                <div class="comment__sub__modify__delete__container" id="comment__sub__modify__delete__container1">
                   <button id="comment__sub__modify__btn1" onclick="presentCommentModifyModal()">수정</button>
                   <button id="comment__sub__delete__btn1" onclick="presentCommentDeleteModal()">삭제</button>
                 </div>
               </div>
-              <p id="comment__list__item__date1" class="comment__date">24.04.08</p>
+              <p class="comment__date" id="comment__list__item__date1">24.04.08</p>
             </div>
           </div>
-          <div id="comment__list__item2" class="replied__comment comment__format">
-            <p id="comment__list__item__nickname2" class="comment__nickname">익명의 호랭이 xyz 님 </p>
-            <p id="comment__list__item__content2" class="comment__content">@익명의 호랭이 abc 산은 안돼요 !!!</p>
+          <div class="replied__comment comment__format" id="comment__list__item2">
+            <p class="comment__nickname" id="comment__list__item__nickname2">익명의 호랭이 xyz 님 </p>
+            <p class="comment__content" id="comment__list__item__content2">@익명의 호랭이 abc 산은 안돼요 !!!</p>
             <div class="comment__interactive__btn__container">
-              <div id="comment__sub__btn2" class="comment__sub__btn">
+              <div class="comment__sub__btn" id="comment__sub__btn2">
                 <button id="comment__sub__reply__btn2">[답글 작성]</button>
-                <div id="comment__sub__modify__delete__container2" class="comment__sub__modify__delete__container">
+                <div class="comment__sub__modify__delete__container" id="comment__sub__modify__delete__container2">
                   <button id="comment__sub__modify__btn2">수정</button>
                   <button id="comment__sub__delete__btn2">삭제</button>
                 </div>
               </div>
-              <p id="comment__list__item__date2" class="comment__date">24.04.08</p>
+              <p class="comment__date" id="comment__list__item__date2">24.04.08</p>
             </div>
           </div>
-          <div id="comment__list__item3" class="comment__format">
-            <p id="comment__list__item__nickname3" class="comment__nickname">익명의 호랭이 abc 님 </p>
-            <p id="comment__list__item__content3" class="comment__content">우하하하 ! 산이나 타시죠 ! 때마침 밑글에 좋은 산이 있군요!</p>
+          <div class="comment__format" id="comment__list__item3">
+            <p class="comment__nickname" id="comment__list__item__nickname3">익명의 호랭이 abc 님 </p>
+            <p class="comment__content" id="comment__list__item__content3">우하하하 ! 산이나 타시죠 ! 때마침 밑글에 좋은 산이 있군요!</p>
             <div class="comment__interactive__btn__container">
-              <div id="comment__sub__btn3" class="comment__sub__btn">
-              <button id="comment__sub__reply__btn3">[답글 작성]</button>
-              <div id="comment__sub__modify__delete__container3" class="comment__sub__modify__delete__container">
-                <button id="comment__sub__modify__btn3">수정</button>
-                <button id="comment__sub__delete__btn3">삭제</button>
+              <div class="comment__sub__btn" id="comment__sub__btn3">
+                <button id="comment__sub__reply__btn3">[답글 작성]</button>
+                <div class="comment__sub__modify__delete__container" id="comment__sub__modify__delete__container3">
+                  <button id="comment__sub__modify__btn3">수정</button>
+                  <button id="comment__sub__delete__btn3">삭제</button>
+                </div>
               </div>
-            </div>
-              <p id="comment__list__item__date3" class="comment__date">24.04.08</p>
+              <p class="comment__date" id="comment__list__item__date3">24.04.08</p>
             </div>
           </div>
-          <div id="comment__list__item4" class="replied__comment comment__format">
-            <p id="comment__list__item__nickname4" class="comment__nickname">익명의 호랭이 xyz 님 </p>
-            <p id="comment__list__item__content4" class="comment__content">@익명의 호랭이 abc 산은 안돼요 !!!</p>
+          <div class="replied__comment comment__format" id="comment__list__item4">
+            <p class="comment__nickname" id="comment__list__item__nickname4">익명의 호랭이 xyz 님 </p>
+            <p class="comment__content" id="comment__list__item__content4">@익명의 호랭이 abc 산은 안돼요 !!!</p>
             <div class="comment__interactive__btn__container">
-              <div id="comment__sub__btn4" class="comment__sub__btn">
+              <div class="comment__sub__btn" id="comment__sub__btn4">
                 <button id="comment__sub__reply__btn4">[답글 작성]</button>
-                <div id="comment__sub__modify__delete__container4" class="comment__sub__modify__delete__container">
+                <div class="comment__sub__modify__delete__container" id="comment__sub__modify__delete__container4">
                   <button id="comment__sub__modify__btn4">수정</button>
                   <button id="comment__sub__delete__btn4">삭제</button>
                 </div>
               </div>
-              <p id="comment__list__item__date4" class="comment__date">24.04.08</p>
+              <p class="comment__date" id="comment__list__item__date4">24.04.08</p>
             </div>
           </div>
         </div>
         <div id="comment__input__container">
           <div id="nickname__password__input__container">
-            <input id="detail__article__modal__content__comment__input__nickname" class="pretty__input" type="text" placeholder="닉네임">
-            <input id="detail__article__modal__content__comment__input__password" class="pretty__input" type="password" placeholder="비밀번호">
+            <input class="pretty__input" id="detail__article__modal__content__comment__input__nickname" placeholder="닉네임"
+                   type="text">
+            <input class="pretty__input" id="detail__article__modal__content__comment__input__password" placeholder="비밀번호"
+                   type="password">
           </div>
           <textarea id="detail__article__modal__content__comment__input" placeholder="댓글을 입력해주세요"></textarea>
           <button id="detail__article__modal__content__comment__submit__btn">
-            <img src="/imgs/greater-than.svg" alt="댓글 전송 버튼 이미지">
+            <img alt="댓글 전송 버튼 이미지" src="/imgs/greater-than.svg">
           </button>
         </div>
       </div>
     </div>
-    </div>
-  </section>
+  </div>
+</section>
 </body>
 </html>

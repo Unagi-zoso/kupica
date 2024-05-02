@@ -1,6 +1,7 @@
 package org.nightdivers.kupica.domain.member;
 
 public class MemberValidator {
+
     public static String validateNickname(String nickname) {
         if (nickname == null || nickname.isEmpty()) {
             throw new IllegalArgumentException("닉네임은 필수 입력값입니다.");

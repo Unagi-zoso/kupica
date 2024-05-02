@@ -22,13 +22,11 @@ import org.nightdivers.kupica.support.domain.ModifiableBaseEntity;
 @Getter
 @Entity
 @Table(name = "article_comment")
-@SequenceGenerator(
-        name = "article_comment_sequence_generator",
-        sequenceName = "article_comment_sequence",
-        allocationSize = 1
-)
+@SequenceGenerator(name = "article_comment_sequence_generator", sequenceName = "article_comment_sequence", allocationSize = 1)
 public class Comment extends ModifiableBaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_comment_sequence_generator")
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_comment_sequence_generator")
     @Column(columnDefinition = "NUMERIC(19,0)")
     private Long id;
 
@@ -54,14 +52,17 @@ public class Comment extends ModifiableBaseEntity {
     @Column(name = "login_flag", nullable = false)
     private Boolean loginFlag;
 
-    protected Comment() {}
+    protected Comment() {
+    }
 
-    private Comment(String content,
-                    Comment replyTargetComment,
-                    AnonymousUser anonymousUser,
-                    Member member,
-                    Article article,
-                    Boolean loginFlag) {
+    private Comment(
+            String content,
+            Comment replyTargetComment,
+            AnonymousUser anonymousUser,
+            Member member,
+            Article article,
+            Boolean loginFlag
+    ) {
         this.content = content;
         this.replyTargetComment = replyTargetComment;
         this.anonymousUser = anonymousUser;
@@ -70,12 +71,14 @@ public class Comment extends ModifiableBaseEntity {
         this.loginFlag = loginFlag;
     }
 
-    private static Comment of(String content,
-                              Comment replyTargetComment,
-                              AnonymousUser anonymousUser,
-                              Member member,
-                              Article article,
-                              Boolean loginFlag) {
+    private static Comment of(
+            String content,
+            Comment replyTargetComment,
+            AnonymousUser anonymousUser,
+            Member member,
+            Article article,
+            Boolean loginFlag
+    ) {
         return new Comment(content, replyTargetComment, anonymousUser, member, article, loginFlag);
     }
 
@@ -91,7 +94,12 @@ public class Comment extends ModifiableBaseEntity {
         return of(content, replyTargetComment, null, member, article, true);
     }
 
-    public static Comment createAnonymousReplyComment(String content, Comment replyTargetComment, AnonymousUser anonymousUser, Article article) {
+    public static Comment createAnonymousReplyComment(
+            String content,
+            Comment replyTargetComment,
+            AnonymousUser anonymousUser,
+            Article article
+    ) {
         return of(content, replyTargetComment, anonymousUser, null, article, false);
     }
 

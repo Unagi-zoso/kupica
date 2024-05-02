@@ -1,6 +1,7 @@
 package org.nightdivers.kupica.support.constant;
 
 public class ArticleConstant {
+
     public static final String TEST_MEMBER_ARTICLE_1_CAPTION = "test member 1 caption";
 
     public static final String TEST_MEMBER_ARTICLE_2_CAPTION = "test member 2 caption";

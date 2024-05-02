@@ -5,66 +5,67 @@
   <title>upload modal</title>
 </head>
 <body>
-  <section id="upload_modal_section">
-    <div id="upload__modal__form" class="sub__modal__form">
-      <div class="submit__modal__form__container">
-        <div id="upload__modal__form__header" class="submit__modal__form__header">
-          <p>사진 등록</p>
-        </div>
-        <div id="upload__modal__form__container" class="submit__modal__form__container">
-          <div id="upload__modal__form__body" class="submit__modal__form__body">
-            <form action="/upload" method="post" enctype="multipart/form-data" id="upload__form">
-              <div id="upload__modal__form__image__input" class="submit__modal__form__image__input">
-                <label id="upload__modal__form__image__input__label" for="file-upload" class="custom-file-upload submit__modal__form__image__input__label">
-                  <img id="upload__image" src="/imgs/image-file.svg" alt="아바타">
-                </label>
-                <input type="file" name="photo" id="file-upload" accept="image/*" style="display: none;">
+<section id="upload_modal_section">
+  <div class="sub__modal__form" id="upload__modal__form">
+    <div class="submit__modal__form__container">
+      <div class="submit__modal__form__header" id="upload__modal__form__header">
+        <p>사진 등록</p>
+      </div>
+      <div class="submit__modal__form__container" id="upload__modal__form__container">
+        <div class="submit__modal__form__body" id="upload__modal__form__body">
+          <form action="/upload" enctype="multipart/form-data" id="upload__form" method="post">
+            <div class="submit__modal__form__image__input" id="upload__modal__form__image__input">
+              <label class="custom-file-upload submit__modal__form__image__input__label" for="file-upload"
+                     id="upload__modal__form__image__input__label">
+                <img alt="아바타" id="upload__image" src="/imgs/image-file.svg">
+              </label>
+              <input accept="image/*" id="file-upload" name="photo" style="display: none;" type="file">
+            </div>
+            <div class="submit__modal__form__detail__inputs" id="upload__modal__form__detail__inputs">
+              <div id="upload__modal__form__nickname__input">
+                <label for="nickname">닉네임</label>
+                <input class="pretty__input" id="nickname" name="nickname" placeholder="닉네임을 입력해주세요" type="text">
               </div>
-              <div id="upload__modal__form__detail__inputs" class="submit__modal__form__detail__inputs">
-                <div id="upload__modal__form__nickname__input">
-                  <label for="nickname">닉네임</label>
-                  <input type="text" name="nickname" id="nickname" class="pretty__input" placeholder="닉네임을 입력해주세요">
+              <div id="upload__modal__form__password__input">
+                <label for="password">비밀번호</label>
+                <input class="pretty__input" id="password" name="password" placeholder="비밀번호를 입력해주세요" type="password">
+              </div>
+              <div id="upload__modal__form__caption__input">
+                <label for="caption">본문</label>
+                <textarea class="pretty__input" id="caption" name="caption" placeholder="본문을 입력해주세요"></textarea>
+              </div>
+              <div id="radio__upload__type__image__type">
+                <div id="radio__upload__type__sejong">
+                  <input checked id="upload__type__sejong" name="image__type" type="radio" value="SEJONG">
+                  <label for="upload__type__sejong">세종</label>
                 </div>
-                <div id="upload__modal__form__password__input">
-                  <label for="password">비밀번호</label>
-                  <input type="password" name="password" id="password" class="pretty__input" placeholder="비밀번호를 입력해주세요">
+                <div id="radio__upload__type__seoul">
+                  <input id="upload__type__seoul" name="image__type" type="radio" value="SEOUL">
+                  <label for="upload__type__seoul">서울</label>
                 </div>
-                <div id="upload__modal__form__caption__input">
-                  <label for="caption">본문</label>
-                  <textarea name="caption" id="caption" class="pretty__input" placeholder="본문을 입력해주세요"></textarea>
-                </div>
-                <div id="radio__upload__type__image__type">
-                  <div id="radio__upload__type__sejong">
-                    <input type="radio" name="image__type" id="upload__type__sejong" value="SEJONG" checked>
-                    <label for="upload__type__sejong">세종</label>
-                  </div>
-                  <div id="radio__upload__type__seoul">
-                    <input type="radio" name="image__type" id="upload__type__seoul" value="SEOUL">
-                    <label for="upload__type__seoul">서울</label>
-                  </div>
-                  <div id="radio__upload__type__out__of__campus">
-                    <input type="radio" name="image__type" id="upload__type__out__of__campus" value="OOC">
-                    <label for="upload__type__out__of__campus">캠퍼스 외</label>
-                  </div>
-                </div>
-                <div id="upload__modal__form__hashtags__input">
-                  <label for="hashtags">해시태그</label>
-                  <input type="text" name="hashtags" id="hashtags" class="pretty__input" placeholder="해시태그를 입력해주세요">
+                <div id="radio__upload__type__out__of__campus">
+                  <input id="upload__type__out__of__campus" name="image__type" type="radio" value="OOC">
+                  <label for="upload__type__out__of__campus">캠퍼스 외</label>
                 </div>
               </div>
-              <div id="upload__modal__form__buttons" class="submit__modal__form__buttons">
-                <div id="upload__modal__form__submit__btn">
-                  <button type="submit">업로드</button>
-                </div>
-                <div id="upload__modal__form__quit__btn">
-                  <button type="button" onclick="dismissUploadModal()">취소</button>
-                </div>
+              <div id="upload__modal__form__hashtags__input">
+                <label for="hashtags">해시태그</label>
+                <input class="pretty__input" id="hashtags" name="hashtags" placeholder="해시태그를 입력해주세요" type="text">
               </div>
-            </form>
-          </div>
+            </div>
+            <div class="submit__modal__form__buttons" id="upload__modal__form__buttons">
+              <div id="upload__modal__form__submit__btn">
+                <button type="submit">업로드</button>
+              </div>
+              <div id="upload__modal__form__quit__btn">
+                <button onclick="dismissUploadModal()" type="button">취소</button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 </body>
 </html>

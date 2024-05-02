@@ -4,6 +4,7 @@ import java.util.List;
 import org.nightdivers.kupica.domain.member.UserRole;
 
 public class AnonymousUserConstant {
+
     public static final int DUPLICATED_TEST_ANONYMOUS_COUNT = 3;
 
     public static final String TEST_ANONYMOUS_USER_1_NICKNAME = "anonymous user 1";

@@ -87,10 +87,12 @@ public class MemberValidatorTest {
 
         // when & then
         assertAll(
-                () -> assertThatThrownBy(() -> MemberValidator.validateEmailAddress(givenEmptyEmailAddress))
+                () -> assertThatThrownBy(
+                        () -> MemberValidator.validateEmailAddress(givenEmptyEmailAddress))
                         .isInstanceOf(IllegalArgumentException.class)
                         .hasMessage("이메일 주소는 필수 입력값입니다."),
-                () -> assertThatThrownBy(() -> MemberValidator.validateEmailAddress(givenNullEmailAddress))
+                () -> assertThatThrownBy(
+                        () -> MemberValidator.validateEmailAddress(givenNullEmailAddress))
                         .isInstanceOf(IllegalArgumentException.class)
                         .hasMessage("이메일 주소는 필수 입력값입니다.")
         );
@@ -105,10 +107,12 @@ public class MemberValidatorTest {
 
         // when & then
         assertAll(
-                () -> assertThatThrownBy(() -> MemberValidator.validateEmailAddress(givenShortEmailAddress))
+                () -> assertThatThrownBy(
+                        () -> MemberValidator.validateEmailAddress(givenShortEmailAddress))
                         .isInstanceOf(IllegalArgumentException.class)
                         .hasMessage("이메일 주소는 6자 이상 255자 이하로 입력해주세요."),
-                () -> assertThatThrownBy(() -> MemberValidator.validateEmailAddress(givenLongEmailAddress))
+                () -> assertThatThrownBy(
+                        () -> MemberValidator.validateEmailAddress(givenLongEmailAddress))
                         .isInstanceOf(IllegalArgumentException.class)
                         .hasMessage("이메일 주소는 6자 이상 255자 이하로 입력해주세요.")
         );
@@ -122,7 +126,8 @@ public class MemberValidatorTest {
         String givenInvalidFormatEmailAddress = "invalid-email";
 
         // when & then
-        assertThatThrownBy(() -> MemberValidator.validateEmailAddress(givenInvalidFormatEmailAddress))
+        assertThatThrownBy(
+                () -> MemberValidator.validateEmailAddress(givenInvalidFormatEmailAddress))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("이메일 주소 형식이 올바르지 않습니다.");
     }

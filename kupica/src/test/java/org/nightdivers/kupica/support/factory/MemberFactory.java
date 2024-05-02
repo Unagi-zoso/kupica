@@ -22,6 +22,7 @@ import org.nightdivers.kupica.domain.member.SocialLoginType;
 import org.nightdivers.kupica.domain.member.UserRole;
 
 public class MemberFactory {
+
     public static Member createTestMember1() {
         return Member.of(
                 TEST_MEMBER_1_NICKNAME,

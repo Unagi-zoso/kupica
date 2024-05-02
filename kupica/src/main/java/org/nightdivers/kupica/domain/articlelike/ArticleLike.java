@@ -29,13 +29,11 @@ import org.nightdivers.kupica.support.domain.BaseTimeEntity;
                 )
         }
 )
-@SequenceGenerator(
-        name = "article_like_sequence_generator",
-        sequenceName = "article_like_sequence",
-        allocationSize = 1
-)
+@SequenceGenerator(name = "article_like_sequence_generator", sequenceName = "article_like_sequence", allocationSize = 1)
 public class ArticleLike extends BaseTimeEntity {
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_like_sequence_generator")
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_like_sequence_generator")
     @Column(columnDefinition = "NUMERIC(19,0)")
     private Long id;
 
@@ -53,12 +51,10 @@ public class ArticleLike extends BaseTimeEntity {
     @Column(name = "login_flag", nullable = false, updatable = false)
     private Boolean loginFlag;
 
-    protected ArticleLike() {}
+    protected ArticleLike() {
+    }
 
-    private ArticleLike(String ipAddress,
-                        Member member,
-                        Article article,
-                        Boolean loginFlag) {
+    private ArticleLike(String ipAddress, Member member, Article article, Boolean loginFlag) {
         this.ipAddress = ipAddress;
         this.member = member;
         this.article = article;

@@ -12,4 +12,5 @@ import org.springframework.test.context.TestConstructor;
 @Retention(RetentionPolicy.RUNTIME)
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 public @interface BaseTestEnvironment {
+
 }

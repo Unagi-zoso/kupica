@@ -4,6 +4,7 @@ import org.nightdivers.kupica.domain.member.SocialLoginType;
 import org.nightdivers.kupica.domain.member.UserRole;
 
 public class MemberConstant {
+
     public static final String TEST_MEMBER_1_NICKNAME = "test 1 nickname";
     public static final String TEST_MEMBER_1_EMAIL = "test1@test.com";
     public static final UserRole TEST_MEMBER_1_ROLE = UserRole.MEMBER;

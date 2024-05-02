@@ -16,22 +16,21 @@ import org.nightdivers.kupica.support.domain.ModifiableBaseEntity;
 @Getter
 @Entity
 @Table(name = "hashtag")
-@SequenceGenerator(
-        name = "hashtag_sequence_generator",
-        sequenceName = "hashtag_sequence",
-        allocationSize = 1
-)
+@SequenceGenerator(name = "hashtag_sequence_generator", sequenceName = "hashtag_sequence", allocationSize = 1)
 public class Hashtag extends ModifiableBaseEntity {
+
     public final static int MAX_TAG_NAME_WITH_HASH_LENGTH = 26;
 
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hashtag_sequence_generator")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hashtag_sequence_generator")
     @Column(columnDefinition = "NUMERIC(19,0)")
     private Long id;
 
     @Column(name = "tag_name", nullable = false, unique = true, length = MAX_TAG_NAME_WITH_HASH_LENGTH)
     private String tagName;
 
-    protected Hashtag() {}
+    protected Hashtag() {
+    }
 
     private Hashtag(String tagName) {
         this.tagName = returnValidTagName(tagName);

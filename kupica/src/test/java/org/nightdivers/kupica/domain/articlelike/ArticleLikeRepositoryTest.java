@@ -34,6 +34,7 @@ import org.springframework.data.domain.PageRequest;
 @RequiredArgsConstructor
 @RepositoryTest
 class ArticleLikeRepositoryTest {
+
     private final ArticleLikeRepository articleLikeRepository;
     private final MemberRepository memberRepository;
     private final AnonymousUserRepository anonymousUserRepository;
@@ -68,12 +69,18 @@ class ArticleLikeRepositoryTest {
         givenArticle2 = articleRepository.save(createTestMemberArticle2());
         givenArticle3 = articleRepository.save(createTestMemberArticle3());
 
-        givenArticleLike1 = articleLikeRepository.save(createMemberArticleLike(givenMember1, givenArticle1));
-        givenArticleLike2 = articleLikeRepository.save(createMemberArticleLike(givenMember1, givenArticle2));
-        givenArticleLike3 = articleLikeRepository.save(createMemberArticleLike(givenMember2, givenArticle1));
-        givenArticleLike5 = articleLikeRepository.save(createAnonymousArticleLike(givenAnonymousUser1.getIpAddress(), givenArticle1));
-        givenArticleLike4 = articleLikeRepository.save(createAnonymousArticleLike(givenAnonymousUser2.getIpAddress(), givenArticle2));
-        givenArticleLike6 = articleLikeRepository.save(createAnonymousArticleLike(givenAnonymousUser1.getIpAddress(), givenArticle2));
+        givenArticleLike1 = articleLikeRepository.save(
+                createMemberArticleLike(givenMember1, givenArticle1));
+        givenArticleLike2 = articleLikeRepository.save(
+                createMemberArticleLike(givenMember1, givenArticle2));
+        givenArticleLike3 = articleLikeRepository.save(
+                createMemberArticleLike(givenMember2, givenArticle1));
+        givenArticleLike5 = articleLikeRepository.save(
+                createAnonymousArticleLike(givenAnonymousUser1.getIpAddress(), givenArticle1));
+        givenArticleLike4 = articleLikeRepository.save(
+                createAnonymousArticleLike(givenAnonymousUser2.getIpAddress(), givenArticle2));
+        givenArticleLike6 = articleLikeRepository.save(
+                createAnonymousArticleLike(givenAnonymousUser1.getIpAddress(), givenArticle2));
     }
 
     /* 좋아요 조회 */
@@ -83,7 +90,8 @@ class ArticleLikeRepositoryTest {
         // given
 
         // when
-        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByMemberId(givenMember1.getId());
+        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByMemberId(
+                givenMember1.getId());
 
         // then
         assertThat(articleLikeList).hasSize(2);
@@ -108,7 +116,8 @@ class ArticleLikeRepositoryTest {
         // given
 
         // when
-        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByMemberId(TEST_INVALID_MEMBER_ID);
+        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByMemberId(
+                TEST_INVALID_MEMBER_ID);
 
         // then
         assertThat(articleLikeList).isEmpty();
@@ -120,7 +129,8 @@ class ArticleLikeRepositoryTest {
         // given
 
         // when
-        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByArticleId(givenArticle1.getId());
+        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByArticleId(
+                givenArticle1.getId());
 
         // then
         assertThat(articleLikeList).hasSize(3);
@@ -145,7 +155,8 @@ class ArticleLikeRepositoryTest {
         // given
 
         // when
-        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByArticleId(TEST_INVALID_ARTICLE_ID);
+        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByArticleId(
+                TEST_INVALID_ARTICLE_ID);
 
         // then
         assertThat(articleLikeList).isEmpty();
@@ -156,21 +167,27 @@ class ArticleLikeRepositoryTest {
     void whenFindArticleIdOrderByCountDesc_thenReturnsArticleLikeList() {
         // given
         TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size())
-                .forEach(ip -> articleLikeRepository.save(createAnonymousArticleLike(ip, givenArticle1)));
+                .forEach(ip -> articleLikeRepository.save(
+                        createAnonymousArticleLike(ip, givenArticle1)));
         TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size() - 1)
-                .forEach(ip -> articleLikeRepository.save(createAnonymousArticleLike(ip, givenArticle2)));
+                .forEach(ip -> articleLikeRepository.save(
+                        createAnonymousArticleLike(ip, givenArticle2)));
         TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size() - 2)
-                .forEach(ip -> articleLikeRepository.save(createAnonymousArticleLike(ip, givenArticle3)));
+                .forEach(ip -> articleLikeRepository.save(
+                        createAnonymousArticleLike(ip, givenArticle3)));
 
         // when
         List<ArticleLike> actualArticleLikes = articleLikeRepository.findArticleIdOrderByCountDesc(
-                PageRequest.of(0, 10))
+                        PageRequest.of(0, 10))
                 .getContent();
         // then
         assertAll(
-                () -> assertThat(actualArticleLikes.getFirst().getArticle().getId()).isEqualTo(givenArticle1.getId()),
-                () -> assertThat(actualArticleLikes.get(1).getArticle().getId()).isEqualTo(givenArticle2.getId()),
-                () -> assertThat(actualArticleLikes.get(2).getArticle().getId()).isEqualTo(givenArticle3.getId())
+                () -> assertThat(actualArticleLikes.getFirst().getArticle().getId()).isEqualTo(
+                        givenArticle1.getId()),
+                () -> assertThat(actualArticleLikes.get(1).getArticle().getId()).isEqualTo(
+                        givenArticle2.getId()),
+                () -> assertThat(actualArticleLikes.get(2).getArticle().getId()).isEqualTo(
+                        givenArticle3.getId())
         );
     }
 
@@ -179,23 +196,30 @@ class ArticleLikeRepositoryTest {
     void whenFindArticleIdOrderByCountAsc_thenReturnsArticleLikeList() {
         // given
         TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size())
-                .forEach(ip -> articleLikeRepository.save(createAnonymousArticleLike(ip, givenArticle1)));
-        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size()-1)
-                .forEach(ip -> articleLikeRepository.save(createAnonymousArticleLike(ip, givenArticle2)));
-        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size()-2)
-                .forEach(ip -> articleLikeRepository.save(createAnonymousArticleLike(ip, givenArticle3)));
-
+                .forEach(ip -> articleLikeRepository.save(
+                        createAnonymousArticleLike(ip, givenArticle1)));
+        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size() - 1)
+                .forEach(ip -> articleLikeRepository.save(
+                        createAnonymousArticleLike(ip, givenArticle2)));
+        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size() - 2)
+                .forEach(ip -> articleLikeRepository.save(
+                        createAnonymousArticleLike(ip, givenArticle3)));
 
         // when
         List<ArticleLike> actualArticleLikes = articleLikeRepository.findArticleIdOrderByCountAsc(
-                PageRequest.of(0, 10))
+                        PageRequest.of(0, 10))
                 .getContent();
 
         // then
         assertAll(
-                () -> assertThat(actualArticleLikes.getLast().getArticle().getId()).isEqualTo(givenArticle1.getId()),
-                () -> assertThat(actualArticleLikes.get(actualArticleLikes.size()-2).getArticle().getId()).isEqualTo(givenArticle2.getId()),
-                () -> assertThat(actualArticleLikes.get(actualArticleLikes.size()-3).getArticle().getId()).isEqualTo(givenArticle3.getId())
+                () -> assertThat(actualArticleLikes.getLast().getArticle().getId()).isEqualTo(
+                        givenArticle1.getId()),
+                () -> assertThat(actualArticleLikes.get(actualArticleLikes.size() - 2).getArticle()
+                                         .getId()).isEqualTo(
+                        givenArticle2.getId()),
+                () -> assertThat(actualArticleLikes.get(actualArticleLikes.size() - 3).getArticle()
+                                         .getId()).isEqualTo(
+                        givenArticle3.getId())
         );
     }
 
@@ -208,7 +232,8 @@ class ArticleLikeRepositoryTest {
         Member member = memberRepository.save(createTestMember3());
 
         // when
-        ArticleLike actualArticleLike = articleLikeRepository.save(createMemberArticleLike(member, givenArticle1));
+        ArticleLike actualArticleLike = articleLikeRepository.save(
+                createMemberArticleLike(member, givenArticle1));
 
         // then
         assertThat(actualArticleLike).isNotNull();
@@ -221,7 +246,8 @@ class ArticleLikeRepositoryTest {
         AnonymousUser anonymousUser = anonymousUserRepository.save(createTestAnonymousUser3());
 
         // when
-        ArticleLike actualArticleLike = articleLikeRepository.save(createAnonymousArticleLike(anonymousUser.getIpAddress(), givenArticle1));
+        ArticleLike actualArticleLike = articleLikeRepository.save(
+                createAnonymousArticleLike(anonymousUser.getIpAddress(), givenArticle1));
 
         // then
         assertThat(actualArticleLike).isNotNull();
@@ -233,7 +259,8 @@ class ArticleLikeRepositoryTest {
     @Test
     void givenMemberArticleLike_whenDelete_thenReturnsVoid() {
         // given
-        ArticleLike articleLike = articleLikeRepository.save(createMemberArticleLike(givenMember1, givenArticle2));
+        ArticleLike articleLike = articleLikeRepository.save(
+                createMemberArticleLike(givenMember1, givenArticle2));
 
         // when
         articleLikeRepository.delete(articleLike);

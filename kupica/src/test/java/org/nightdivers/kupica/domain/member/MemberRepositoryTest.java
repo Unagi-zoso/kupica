@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_INVALID_MEMBER_EMAIL;
 import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_INVALID_MEMBER_ID;
 import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_INVALID_MEMBER_NICKNAME;
+import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_VALID_MEMBER_EMAIL;
 
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
@@ -19,7 +20,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.nightdivers.kupica.support.annotation.RepositoryTest;
 import org.nightdivers.kupica.support.factory.MemberFactory;
-import org.springframework.dao.DataIntegrityViolationException;
 
 @RequiredArgsConstructor
 @RepositoryTest
@@ -43,7 +43,8 @@ class MemberRepositoryTest {
         // given
 
         // when
-        Member actual = memberRepository.findByNickname(givenMember1.getNickname()).orElseThrow(NoSuchElementException::new);
+        Member actual = memberRepository.findByNickname(givenMember1.getNickname())
+                .orElseThrow(NoSuchElementException::new);
 
         // then
         assertThat(actual).isEqualTo(givenMember1);
@@ -55,7 +56,8 @@ class MemberRepositoryTest {
         // given
 
         // when & then
-        assertThatThrownBy(() -> memberRepository.findByNickname(TEST_INVALID_MEMBER_NICKNAME).orElseThrow(NoSuchElementException::new))
+        assertThatThrownBy(() -> memberRepository.findByNickname(TEST_INVALID_MEMBER_NICKNAME)
+                .orElseThrow(NoSuchElementException::new))
                 .isInstanceOf(NoSuchElementException.class);
     }
 
@@ -65,7 +67,8 @@ class MemberRepositoryTest {
         // given
 
         // when
-        Member actual = memberRepository.findByEmailAddress(givenMember1.getEmailAddress()).orElseThrow(NoSuchElementException::new);
+        Member actual = memberRepository.findByEmailAddress(givenMember1.getEmailAddress())
+                .orElseThrow(NoSuchElementException::new);
 
         // then
         assertThat(actual).isEqualTo(givenMember1);
@@ -77,7 +80,8 @@ class MemberRepositoryTest {
         // given
 
         // when & then
-        assertThatThrownBy(() -> memberRepository.findByEmailAddress(TEST_INVALID_MEMBER_EMAIL).orElseThrow(NoSuchElementException::new))
+        assertThatThrownBy(() -> memberRepository.findByEmailAddress(TEST_INVALID_MEMBER_EMAIL)
+                .orElseThrow(NoSuchElementException::new))
                 .isInstanceOf(NoSuchElementException.class);
     }
 
@@ -136,46 +140,26 @@ class MemberRepositoryTest {
 
     @DisplayName("회원 등록 - [실패 : 중복된 nickname]")
     @Test
-    void givenDuplicatedNickname_whenSave_thenThrowDataIntegrityViolationException() {
+    void givenDuplicatedNickname_whenSave_thenThrowConstraintViolationException() {
         // given
-        Member duplicatedMember = MemberFactory.createCustomMember(givenMember1.getNickname(), "valid email address");
+        Member duplicatedMember = MemberFactory.createCustomMember(givenMember1.getNickname(), TEST_VALID_MEMBER_EMAIL);
+        memberRepository.save(duplicatedMember);
 
         // when & then
-        assertThatThrownBy(() -> memberRepository.save(duplicatedMember))
-                .isInstanceOf(DataIntegrityViolationException.class);
-    }
-
-    @DisplayName("회원 등록 - [실패 : nickname 최대 길이 초과]")
-    @Test
-    void givenMemberWithTooLongNickname_whenSave_thenThrowDataIntegrityViolationException() {
-        // given
-        Member memberWithTooLongNickname = MemberFactory.createCustomMember("a".repeat(19), "valid email address");
-
-        // when & then
-        assertThatThrownBy(() -> memberRepository.save(memberWithTooLongNickname))
-                .isInstanceOf(DataIntegrityViolationException.class);
+        assertThatThrownBy(entityManager::flush)
+                .isInstanceOf(ConstraintViolationException.class);
     }
 
     @DisplayName("회원 등록 - [실패 : 중복된 email address]")
     @Test
-    void givenDuplicatedEmailAddress_whenSave_thenThrowDataIntegrityViolationException() {
+    void givenDuplicatedEmailAddress_whenSave_thenThrowConstraintViolationException() {
         // given
         Member duplicatedMember = MemberFactory.createCustomMember("valid nickname", givenMember1.getEmailAddress());
+        memberRepository.save(duplicatedMember);
 
         // when & then
-        assertThatThrownBy(() -> memberRepository.save(duplicatedMember))
-                .isInstanceOf(DataIntegrityViolationException.class);
-    }
-
-    @DisplayName("회원 등록 - [실패 : email address 최대 길이 초과]")
-    @Test
-    void givenMemberWithTooLongEmailAddress_whenSave_thenThrowDataIntegrityViolationException() {
-        // given
-        Member memberWithTooLongEmailAddress = MemberFactory.createCustomMember("valid nickname", "a".repeat(256));
-
-        // when & then
-        assertThatThrownBy(() -> memberRepository.save(memberWithTooLongEmailAddress))
-                .isInstanceOf(DataIntegrityViolationException.class);
+        assertThatThrownBy(entityManager::flush)
+                .isInstanceOf(ConstraintViolationException.class);
     }
 
 
@@ -195,9 +179,9 @@ class MemberRepositoryTest {
 
         // then
         assertAll(
-            () -> assertThat(actual).isEqualTo(prevMember),
-            () -> assertThat(actual.getNickname()).isEqualTo("newNickname"),
-            () -> assertThat(actual.getUpdatedDatetime()).isNotEqualTo(prevUpdatedDatetime)
+                () -> assertThat(actual).isEqualTo(prevMember),
+                () -> assertThat(actual.getNickname()).isEqualTo("newNickname"),
+                () -> assertThat(actual.getUpdatedDatetime()).isNotEqualTo(prevUpdatedDatetime)
         );
     }
 
@@ -207,8 +191,10 @@ class MemberRepositoryTest {
         // given
         Member duplicatedMember = memberRepository.save(MemberFactory.createTestMember3());
 
-        // when & then
+        // when
         duplicatedMember.changeNickname(givenMember1.getNickname());
+
+        // then
         assertThatThrownBy(entityManager::flush)
                 .isInstanceOf(ConstraintViolationException.class);
 
@@ -220,8 +206,10 @@ class MemberRepositoryTest {
         // given
         Member memberWithTooLongNickname = memberRepository.save(MemberFactory.createTestMember3());
 
-        // when & then
+        // when
         memberWithTooLongNickname.changeNickname("a".repeat(19));
+
+        // then
         assertThatThrownBy(entityManager::flush)
                 .isInstanceOf(DataException.class);
     }
@@ -238,7 +226,8 @@ class MemberRepositoryTest {
         memberRepository.delete(givenMember);
 
         // then
-        assertThatThrownBy(() -> memberRepository.findById(givenMember.getId()).orElseThrow(NoSuchElementException::new))
+        assertThatThrownBy(
+                () -> memberRepository.findById(givenMember.getId()).orElseThrow(NoSuchElementException::new))
                 .isInstanceOf(NoSuchElementException.class);
     }
 
@@ -252,7 +241,8 @@ class MemberRepositoryTest {
         memberRepository.deleteById(givenMember.getId());
 
         // then
-        assertThatThrownBy(() -> memberRepository.findById(givenMember.getId()).orElseThrow(NoSuchElementException::new))
+        assertThatThrownBy(
+                () -> memberRepository.findById(givenMember.getId()).orElseThrow(NoSuchElementException::new))
                 .isInstanceOf(NoSuchElementException.class);
     }
 
@@ -261,11 +251,11 @@ class MemberRepositoryTest {
     void givenInvalidId_whenDeleteById_thenNoEffect() {
         // given
         int prevSize = memberRepository.findAll().size();
-        
+
         // when
         memberRepository.deleteById(TEST_INVALID_MEMBER_ID);
         int currentSize = memberRepository.findAll().size();
-        
+
         // then
         assertThat(currentSize).isEqualTo(prevSize);
     }

@@ -77,7 +77,7 @@ create sequence article_like_sequence START WITH 21 INCREMENT BY 1;
 ALTER TABLE article_like
     ADD CONSTRAINT uk_ip_address_member_id_article_id UNIQUE (ip_address, member_id, article_id);
 
-CREATE TABLE photo_download_source
+CREATE TABLE photo_file_source
 (
     id               NUMERIC(19, 0) NOT NULL,
     photo_resolution VARCHAR2(18)   NOT NULL,
@@ -90,9 +90,9 @@ CREATE TABLE photo_download_source
     PRIMARY KEY (id)
 );
 
-create sequence photo_download_source_sequence START WITH 21 INCREMENT BY 1;
+create sequence photo_file_source_sequence START WITH 21 INCREMENT BY 1;
 
-ALTER TABLE photo_download_source
+ALTER TABLE photo_file_source
     ADD CONSTRAINT uk_file_source UNIQUE (file_source);
 
 CREATE TABLE hashtag

@@ -1,4 +1,4 @@
-package org.nightdivers.kupica.domain.photodownloadsource;
+package org.nightdivers.kupica.domain.photofilesource;
 
 import static jakarta.persistence.ConstraintMode.NO_CONSTRAINT;
 
@@ -19,12 +19,12 @@ import org.nightdivers.kupica.support.domain.ModifiableBaseEntity;
 
 @Getter
 @Entity
-@Table(name = "photo_download_source")
-@SequenceGenerator(name = "photo_download_source_sequence_generator", sequenceName = "photo_download_source_sequence", allocationSize = 1)
-public class PhotoDownloadSource extends ModifiableBaseEntity {
+@Table(name = "photo_file_source")
+@SequenceGenerator(name = "photo_file_source_sequence_generator", sequenceName = "photo_file_source_sequence", allocationSize = 1)
+public class PhotoFileSource extends ModifiableBaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "photo_download_source_sequence_generator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "photo_file_source_sequence_generator")
     @Column(columnDefinition = "NUMERIC(19,0)")
     private Long id;
 
@@ -44,10 +44,10 @@ public class PhotoDownloadSource extends ModifiableBaseEntity {
     @JoinColumn(name = "article_id", columnDefinition = "NUMERIC(19,0)", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(NO_CONSTRAINT))
     private Article article;
 
-    protected PhotoDownloadSource() {
+    protected PhotoFileSource() {
     }
 
-    private PhotoDownloadSource(
+    private PhotoFileSource(
             String photoResolution,
             String fileSource,
             Long fileByteSize,
@@ -61,15 +61,15 @@ public class PhotoDownloadSource extends ModifiableBaseEntity {
         this.article = article;
     }
 
-    public static PhotoDownloadSource of(
+    public static PhotoFileSource of(
             String photoResolution,
             String fileSource,
             Long fileByteSize,
             Long downloadCount,
             Article article
     ) {
-        return new PhotoDownloadSource(photoResolution, fileSource, fileByteSize, downloadCount,
-                                       article
+        return new PhotoFileSource(photoResolution, fileSource, fileByteSize, downloadCount,
+                                   article
         );
     }
 
@@ -82,9 +82,9 @@ public class PhotoDownloadSource extends ModifiableBaseEntity {
             return false;
         }
 
-        PhotoDownloadSource photoDownloadSource = (PhotoDownloadSource) o;
+        PhotoFileSource photoFileSource = (PhotoFileSource) o;
 
-        return this.getId() != null && Objects.equals(this.getId(), photoDownloadSource.getId());
+        return this.getId() != null && Objects.equals(this.getId(), photoFileSource.getId());
     }
 
     @Override

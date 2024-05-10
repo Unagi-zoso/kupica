@@ -46,7 +46,7 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
     testCompileOnly 'org.projectlombok:lombok:1.18.30'
 
-    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
 
     implementation 'org.springframework.boot:spring-boot-starter-actuator:3.2.4'
     developmentOnly 'org.springframework.boot:spring-boot-devtools:3.2.4'

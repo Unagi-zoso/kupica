@@ -30,4 +30,5 @@ public class MemberConstant {
     public static final Long TEST_INVALID_MEMBER_ID = -1L;
     public static final String TEST_INVALID_MEMBER_NICKNAME = "invalid nickname";
     public static final String TEST_INVALID_MEMBER_EMAIL = "invalid@test.com";
+    public static final String TEST_INVALID_SOCIAL_LOGIN_TYPE = "INVALID";
 }

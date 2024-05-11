@@ -40,8 +40,7 @@ jobs:
         working-directory: ${{ env.working-directory }}
         run: |
           ./gradlew copyCredential
-          ls .
-          ls ./src/main/resources
+          ls ./store-module
 
       - name: Test with Gradle
         working-directory: ${{ env.working-directory }}

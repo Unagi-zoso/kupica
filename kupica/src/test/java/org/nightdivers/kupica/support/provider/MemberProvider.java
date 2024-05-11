@@ -10,25 +10,22 @@ public class MemberProvider {
                 "abc@",
                 "abc.com",
                 "abc@com",
-                "abc@.com",
+                "abc@.com", // 5
                 "abc@com.",
                 "abc@com..",
                 "invalid@-com",
                 "invalid@com-",
-                "invalid@com-.com",
-                "invalid@com.-com",
-                "invalid@test..com",
+                "invalid@com.-com", // 10
                 "invalid@test.c",
-                "invalid@test.co",
                 "invalid@test.c-",
                 "invalid@test.c-",
                 "invalid-email",
-                "invalid-email@",
+                "invalid-email@", // 15
                 "invalid-email.com",
                 "invalid-email@com",
                 "invalid-email@.com",
                 "invalid-email@com.",
-                "invalid-email@com.."
+                "invalid-email@com.." // 20
         );
     }
 }

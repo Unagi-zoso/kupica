@@ -36,6 +36,10 @@ jobs:
         working-directory: ${{ env.working-directory }}
         run: chmod +x ./gradlew
 
+      - name: Init and Update submodule
+        run: |
+          git submodule init
+
       - name: Copy credential info
         working-directory: ${{ env.working-directory }}
         run: |

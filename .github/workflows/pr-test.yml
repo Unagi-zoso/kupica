@@ -36,17 +36,17 @@ jobs:
         working-directory: ${{ env.working-directory }}
         run: chmod +x ./gradlew
 
-      - name: show
-        working-directory: ${{ env.working-directory }}
-        run: ./gradlew tasks --all 
-
       - name: Copy credential info
         working-directory: ${{ env.working-directory }}
-        run: ./gradlew copyCredential
+        run: |
+          ./gradlew copyCredential
+          ls ./src/main/resources
 
       - name: Test with Gradle
         working-directory: ${{ env.working-directory }}
-        run: ./gradlew --info test
+        run: |
+          ls ./src/main/resources
+          ./gradlew --info test
 
       - name: Publish Unit Test Results
         if: always()

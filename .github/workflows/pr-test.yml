@@ -40,13 +40,12 @@ jobs:
         working-directory: ${{ env.working-directory }}
         run: |
           ./gradlew copyCredential
+          ls .
           ls ./src/main/resources
 
       - name: Test with Gradle
         working-directory: ${{ env.working-directory }}
-        run: |
-          ls ./src/main/resources
-          ./gradlew --info test
+        run: /gradlew --info test
 
       - name: Publish Unit Test Results
         if: always()

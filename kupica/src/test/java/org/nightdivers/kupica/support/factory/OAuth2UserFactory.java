@@ -4,6 +4,7 @@ import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_INVALI
 import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_VALID_MEMBER_EMAIL;
 
 import java.util.HashMap;
+import java.util.Map;
 import org.nightdivers.kupica.domain.member.SocialLoginType;
 import org.nightdivers.kupica.domain.member.UserRole;
 import org.nightdivers.kupica.service.dto.CustomOAuth2User;
@@ -33,6 +34,11 @@ public class OAuth2UserFactory {
 
 
     static class TestOAuth2Response implements OAuth2Response {
+
+        @Override
+        public Map<String, Object> getAttributes() {
+            return (Map<String, Object>) createTestMemberAttributes().get("kakao_account");
+        }
 
         @Override
         public SocialLoginType getProvider() {

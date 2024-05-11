@@ -36,6 +36,10 @@ jobs:
         working-directory: ${{ env.working-directory }}
         run: chmod +x ./gradlew
 
+      - name: Grant write permission for resources directory
+        working-directory: ${{ env.working-directory }}
+        run: chmod +w ./src/main/resources
+
       - name: Copy credential info
         working-directory: ${{ env.working-directory }}
         run: ./gradlew copyCredential

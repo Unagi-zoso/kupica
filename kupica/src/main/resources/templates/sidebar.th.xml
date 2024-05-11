@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<thlogic>
+    <attr sel="#login__btn" th:if="${not #authorization.expression('hasAuthority(''MEMBER'')')}"/>
+    <attr sel="#sign__up__btn" th:if="${not #authorization.expression('hasAuthority(''MEMBER'')')}"/>
+    <attr sel="#logout__btn" th:if="${#authorization.expression('hasAuthority(''MEMBER'')')}"/>
+</thlogic>

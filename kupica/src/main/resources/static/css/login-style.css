@@ -1,0 +1,36 @@
+.social__login__div__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10%;
+}
+
+.social__login__div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.social__login__div a {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  color: #707070;
+  font-size: 12px;
+}
+
+.social__login__div img {
+  width: 48px;
+  height: 48px;
+}
+
+.social__login__div a img:hover {
+  cursor: pointer;
+}

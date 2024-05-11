@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<thlogic>
+    <attr sel="#csrf_token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+</thlogic>

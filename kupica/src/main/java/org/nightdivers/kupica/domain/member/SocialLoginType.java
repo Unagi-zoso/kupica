@@ -11,4 +11,8 @@ public enum SocialLoginType {
     SocialLoginType(String description) {
         this.description = description;
     }
+
+    public static SocialLoginType of(String provider) {
+        return SocialLoginType.valueOf(provider.toUpperCase());
+    }
 }

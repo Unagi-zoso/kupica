@@ -37,14 +37,14 @@ class MemberRepositoryTest {
         givenMember2 = memberRepository.save(MemberFactory.createTestMember2());
     }
 
-    /* 회원 조회 */
+    /* TARGET : 회원 단일 조회 테스트 */
     @DisplayName("nickname 과 일치하는 회원 조회 - [성공]")
     @Test
     void givenNickname_whenFindByNickname_thenSuccess() {
         // given
 
         // when
-        Member actual = memberRepository.findByNickname(givenMember1.getNickname())
+        Member actual = memberRepository.findByNicknameAndErasedFlagIsFalse(givenMember1.getNickname())
                 .orElseThrow(NoSuchElementException::new);
 
         // then
@@ -57,7 +57,7 @@ class MemberRepositoryTest {
         // given
 
         // when & then
-        assertThatThrownBy(() -> memberRepository.findByNickname(TEST_INVALID_MEMBER_NICKNAME)
+        assertThatThrownBy(() -> memberRepository.findByNicknameAndErasedFlagIsFalse(TEST_INVALID_MEMBER_NICKNAME)
                 .orElseThrow(NoSuchElementException::new))
                 .isInstanceOf(NoSuchElementException.class);
     }
@@ -68,7 +68,7 @@ class MemberRepositoryTest {
         // given
 
         // when
-        Member actual = memberRepository.findByEmailAddress(givenMember1.getEmailAddress())
+        Member actual = memberRepository.findByEmailAddressAndErasedFlagIsFalse(givenMember1.getEmailAddress())
                 .orElseThrow(NoSuchElementException::new);
 
         // then
@@ -81,13 +81,13 @@ class MemberRepositoryTest {
         // given
 
         // when & then
-        assertThatThrownBy(() -> memberRepository.findByEmailAddress(TEST_INVALID_MEMBER_EMAIL)
+        assertThatThrownBy(() -> memberRepository.findByEmailAddressAndErasedFlagIsFalse(TEST_INVALID_MEMBER_EMAIL)
                 .orElseThrow(NoSuchElementException::new))
                 .isInstanceOf(NoSuchElementException.class);
     }
 
 
-    /* 회원 목록 조회 */
+    /* TARGET : 회원 목록 조회 테스트 */
     @DisplayName("모든 회원 조회 - [성공]")
     @Test
     void givenMembers_whenFindAll_thenSuccess() {
@@ -106,7 +106,7 @@ class MemberRepositoryTest {
         // given
 
         // when
-        List<Member> actualMembers = memberRepository.findByRole(givenMember1.getRole());
+        List<Member> actualMembers = memberRepository.findByRoleAndErasedFlagIsFalse(givenMember1.getRole());
 
         // then
         assertThat(actualMembers).contains(givenMember1, givenMember2);
@@ -118,14 +118,14 @@ class MemberRepositoryTest {
         // given
 
         // when
-        List<Member> actualMembers = memberRepository.findByRole(UserRole.ADMIN);
+        List<Member> actualMembers = memberRepository.findByRoleAndErasedFlagIsFalse(UserRole.ADMIN);
 
         // then
         assertThat(actualMembers).isEmpty();
     }
 
 
-    /* 회원 등록 */
+    /* TARGET : 회원 등록 테스트 */
     @DisplayName("회원 등록 - [성공]")
     @Test
     void givenMember_whenSave_thenSuccess() {
@@ -170,7 +170,7 @@ class MemberRepositoryTest {
     }
 
 
-    /* 회원 수정 */
+    /* TARGET : 회원 수정 테스트 */
     @DisplayName("회원 닉네임 수정 - [성공]")
     @Test
     void givenMember_whenChangeNickname_thenSuccess() {
@@ -182,7 +182,7 @@ class MemberRepositoryTest {
         prevMember.changeNickname("newNickname");
         entityManager.flush();
 
-        Member actual = memberRepository.findById(prevMember.getId())
+        Member actual = memberRepository.findByIdAndErasedFlagIsFalse(prevMember.getId())
                 .orElseThrow(NoSuchElementException::new);
 
         // then
@@ -222,63 +222,14 @@ class MemberRepositoryTest {
                 .isInstanceOf(DataException.class);
     }
 
-
-    /* 회원 삭제 */
-    @DisplayName("회원 삭제 - [성공]")
-    @Test
-    void givenMember_whenDelete_thenSuccess() {
-        // given
-        Member givenMember = memberRepository.save(MemberFactory.createTestMember3());
-
-        // when
-        memberRepository.delete(givenMember);
-
-        // then
-        assertThatThrownBy(
-                () -> memberRepository.findById(givenMember.getId())
-                        .orElseThrow(NoSuchElementException::new))
-                .isInstanceOf(NoSuchElementException.class);
-    }
-
-    @DisplayName("id 와 일치하는 회원 삭제 - [성공]")
-    @Test
-    void givenId_whenDeleteById_thenSuccess() {
-        // given
-        Member givenMember = memberRepository.save(MemberFactory.createTestMember3());
-
-        // when
-        memberRepository.deleteById(givenMember.getId());
-
-        // then
-        assertThatThrownBy(
-                () -> memberRepository.findById(givenMember.getId())
-                        .orElseThrow(NoSuchElementException::new))
-                .isInstanceOf(NoSuchElementException.class);
-    }
-
-    @DisplayName("id 와 일치하는 회원 삭제 - [실패 : 존재하지 않는 id]")
-    @Test
-    void givenInvalidId_whenDeleteById_thenNoEffect() {
-        // given
-        int prevSize = memberRepository.findAll().size();
-
-        // when
-        memberRepository.deleteById(TEST_INVALID_MEMBER_ID);
-        int currentSize = memberRepository.findAll().size();
-
-        // then
-        assertThat(currentSize).isEqualTo(prevSize);
-    }
-
-
-    /* 회원 존재 여부 확인 */
+    /* TARGET : 회원 존재 여부 테스트 */
     @DisplayName("id 와 일치하는 회원 존재 여부 확인 - [성공]")
     @Test
     void givenId_whenExistsById_thenSuccess() {
         // given
 
         // when
-        boolean existedFlag = memberRepository.existsById(1L);
+        boolean existedFlag = memberRepository.existsByIdAndErasedFlagIsFalse(1L);
 
         // then
         assertThat(existedFlag).isTrue();
@@ -290,7 +241,7 @@ class MemberRepositoryTest {
         // given
 
         // when
-        boolean existedFlag = memberRepository.existsById(TEST_INVALID_MEMBER_ID);
+        boolean existedFlag = memberRepository.existsByIdAndErasedFlagIsFalse(TEST_INVALID_MEMBER_ID);
 
         // then
         assertThat(existedFlag).isFalse();
@@ -303,7 +254,7 @@ class MemberRepositoryTest {
         // given
 
         // when
-        boolean existedFlag = memberRepository.existsByNickname(givenMember1.getNickname());
+        boolean existedFlag = memberRepository.existsByNicknameAndErasedFlagIsFalse(givenMember1.getNickname());
 
         // then
         assertThat(existedFlag).isTrue();
@@ -315,7 +266,7 @@ class MemberRepositoryTest {
         // given
 
         // when
-        boolean existedFlag = memberRepository.existsByNickname(TEST_INVALID_MEMBER_NICKNAME);
+        boolean existedFlag = memberRepository.existsByNicknameAndErasedFlagIsFalse(TEST_INVALID_MEMBER_NICKNAME);
 
         // then
         assertThat(existedFlag).isFalse();
@@ -327,7 +278,7 @@ class MemberRepositoryTest {
         // given
 
         // when
-        boolean existedFlag = memberRepository.existsByEmailAddress(givenMember1.getEmailAddress());
+        boolean existedFlag = memberRepository.existsByEmailAddressAndErasedFlagIsFalse(givenMember1.getEmailAddress());
 
         // then
         assertThat(existedFlag).isTrue();
@@ -339,7 +290,7 @@ class MemberRepositoryTest {
         // given
 
         // when
-        boolean existedFlag = memberRepository.existsByEmailAddress(TEST_INVALID_MEMBER_EMAIL);
+        boolean existedFlag = memberRepository.existsByEmailAddressAndErasedFlagIsFalse(TEST_INVALID_MEMBER_EMAIL);
 
         // then
         assertThat(existedFlag).isFalse();

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 class HashtagValidatorTest {
 
-    /* Hashtag validateTagName Test */
+    /* TARGET : returnValidTagName 메소드 테스트 */
     @DisplayName("# 가 앞에 붙지 않은 tagname 이 주어지면 #를 붙여서 반환한다.")
     @Test
     void givenTagNameWithoutHash_whenValidateTagName_thenAddHash() {

@@ -17,14 +17,14 @@ class ArticleHashtagRepositoryTest {
 
     private final ArticleHashtagRepository articleHashtagRepository;
 
-    /* Article Hashtag 조회 */
+    /* TARGET : ArticleHashtag 조회 테스트 */
     @DisplayName("Hashtag 와 일치하는 Article 페이지로 조회 - [성공]")
     @Test
     void givenHashtag_whenFindArticleByHashtag_thenReturnArticlePage() {
         // given
 
         // when
-        List<ArticleHashtag> articleHashtags = articleHashtagRepository.findByHashtagTagName(
+        List<ArticleHashtag> articleHashtags = articleHashtagRepository.findByHashtagTagNameAndErasedFlagIsFalse(
                 PageRequest.of(0, 5), TEST_VALID_TAG_NAME).getContent();
 
         // then
@@ -37,7 +37,7 @@ class ArticleHashtagRepositoryTest {
         // given
 
         // when
-        List<ArticleHashtag> articleHashtags = articleHashtagRepository.findByHashtagTagName(
+        List<ArticleHashtag> articleHashtags = articleHashtagRepository.findByHashtagTagNameAndErasedFlagIsFalse(
                 PageRequest.of(0, 5),
                 TEST_INVALID_TAG_NAME
         ).getContent();

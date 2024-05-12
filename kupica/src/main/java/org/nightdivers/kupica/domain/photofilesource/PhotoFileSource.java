@@ -44,6 +44,9 @@ public class PhotoFileSource extends ModifiableBaseEntity {
     @JoinColumn(name = "article_id", columnDefinition = "NUMERIC(19,0)", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(NO_CONSTRAINT))
     private Article article;
 
+    @Column(name = "erased_flag", nullable = false)
+    private Boolean erasedFlag;
+
     protected PhotoFileSource() {
     }
 
@@ -59,6 +62,7 @@ public class PhotoFileSource extends ModifiableBaseEntity {
         this.fileByteSize = fileByteSize;
         this.downloadCount = downloadCount;
         this.article = article;
+        this.erasedFlag = false;
     }
 
     public static PhotoFileSource of(
@@ -68,9 +72,7 @@ public class PhotoFileSource extends ModifiableBaseEntity {
             Long downloadCount,
             Article article
     ) {
-        return new PhotoFileSource(photoResolution, fileSource, fileByteSize, downloadCount,
-                                   article
-        );
+        return new PhotoFileSource(photoResolution, fileSource, fileByteSize, downloadCount, article);
     }
 
     @Override
@@ -90,5 +92,9 @@ public class PhotoFileSource extends ModifiableBaseEntity {
     @Override
     public int hashCode() {
         return 31 * Objects.hashCode(this.getId());
+    }
+
+    public void erase() {
+        this.erasedFlag = true;
     }
 }

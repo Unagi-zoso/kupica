@@ -83,14 +83,14 @@ class ArticleLikeRepositoryTest {
                 createAnonymousArticleLike(givenAnonymousUser1.getIpAddress(), givenArticle2));
     }
 
-    /* 좋아요 조회 */
+    /* TARGET : 좋아요 조회 테스트 */
     @DisplayName("member id 와 일치하는 좋아요 조회 - [성공]")
     @Test
     void givenMemberId_whenFindAllByMemberId_thenReturnsArticleLikeList() {
         // given
 
         // when
-        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByMemberId(
+        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByMemberIdAndErasedFlagIsFalse(
                 givenMember1.getId());
 
         // then
@@ -104,7 +104,7 @@ class ArticleLikeRepositoryTest {
         Long memberId = memberRepository.save(createTestMember3()).getId();
 
         // when
-        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByMemberId(memberId);
+        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByMemberIdAndErasedFlagIsFalse(memberId);
 
         // then
         assertThat(articleLikeList).isEmpty();
@@ -116,7 +116,7 @@ class ArticleLikeRepositoryTest {
         // given
 
         // when
-        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByMemberId(
+        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByMemberIdAndErasedFlagIsFalse(
                 TEST_INVALID_MEMBER_ID);
 
         // then
@@ -129,7 +129,7 @@ class ArticleLikeRepositoryTest {
         // given
 
         // when
-        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByArticleId(
+        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByArticleIdAndErasedFlagIsFalse(
                 givenArticle1.getId());
 
         // then
@@ -143,7 +143,7 @@ class ArticleLikeRepositoryTest {
         Long articleId = articleRepository.save(createTestMemberArticle3()).getId();
 
         // when
-        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByArticleId(articleId);
+        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByArticleIdAndErasedFlagIsFalse(articleId);
 
         // then
         assertThat(articleLikeList).isEmpty();
@@ -155,7 +155,7 @@ class ArticleLikeRepositoryTest {
         // given
 
         // when
-        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByArticleId(
+        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByArticleIdAndErasedFlagIsFalse(
                 TEST_INVALID_ARTICLE_ID);
 
         // then
@@ -224,7 +224,7 @@ class ArticleLikeRepositoryTest {
     }
 
 
-    /* 좋아요 생성 */
+    /* TARGET : 좋아요 생성 테스트 */
     @DisplayName("member 좋아요 생성 - [성공]")
     @Test
     void givenMember_whenCreateMemberArticleLike_thenReturnsArticleLike() {
@@ -253,31 +253,14 @@ class ArticleLikeRepositoryTest {
         assertThat(actualArticleLike).isNotNull();
     }
 
-
-    /* 좋아요 삭제 */
-    @DisplayName("member 좋아요 삭제 - [성공]")
-    @Test
-    void givenMemberArticleLike_whenDelete_thenReturnsVoid() {
-        // given
-        ArticleLike articleLike = articleLikeRepository.save(
-                createMemberArticleLike(givenMember1, givenArticle2));
-
-        // when
-        articleLikeRepository.delete(articleLike);
-
-        // then
-        assertThat(articleLikeRepository.findById(articleLike.getId())).isEmpty();
-    }
-
-
-    /* 좋아요 수 조회 */
+    /* TARGET : 좋아요 수 조회 테스트 */
     @DisplayName("article id 와 일치하는 좋아요 수 조회 - [성공]")
     @Test
     void givenArticleId_whenCountByArticleId_thenReturnsCount() {
         // given
 
         // when
-        Long count = articleLikeRepository.countByArticleId(givenArticle1.getId());
+        Long count = articleLikeRepository.countByArticleIdAndErasedFlagIsFalse(givenArticle1.getId());
 
         // then
         assertThat(count).isEqualTo(3);
@@ -289,7 +272,7 @@ class ArticleLikeRepositoryTest {
         // given
 
         // when
-        Long count = articleLikeRepository.countByArticleId(TEST_INVALID_ARTICLE_ID);
+        Long count = articleLikeRepository.countByArticleIdAndErasedFlagIsFalse(TEST_INVALID_ARTICLE_ID);
 
         // then
         assertThat(count).isZero();

@@ -12,7 +12,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public boolean isExist(String email) {
-        return memberRepository.existsByEmailAddress(email);
+        return memberRepository.existsByEmailAddressAndErasedFlagIsFalse(email);
     }
 
     public MemberDto save(MemberDto memberDto) {

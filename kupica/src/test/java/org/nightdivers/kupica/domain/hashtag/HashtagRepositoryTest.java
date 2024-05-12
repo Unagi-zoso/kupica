@@ -41,7 +41,7 @@ class HashtagRepositoryTest {
         givenHashtag3 = hashtagRepository.save(Hashtag.of(TEST_TAG_NAME_3));
     }
 
-    /* Hashtag 조회 */
+    /* TARGET : 해시태그 조회 테스트 */
     @DisplayName("해시태그 조회 - [성공]")
     @Test
     void givenHashtag_whenFindById_thenSuccess() {
@@ -80,7 +80,7 @@ class HashtagRepositoryTest {
     }
 
 
-    /* Hashtag 생성 */
+    /* TARGET : 해시태그 생성 테스트 */
     @DisplayName("해시태그 생성 - [성공]")
     @Test
     void givenHashtag_whenSave_thenSuccess() {
@@ -106,7 +106,7 @@ class HashtagRepositoryTest {
     }
 
 
-    /* Hashtag 수정 */
+    /* TARGET : 해시태그 수정 테스트 */
     @DisplayName("해시태그 수정 - [성공]")
     @Test
     void givenHashtag_whenUpdate_thenSuccess() {
@@ -130,19 +130,5 @@ class HashtagRepositoryTest {
         // when & then
         assertThatThrownBy(entityManager::flush)
                 .isInstanceOf(ConstraintViolationException.class);
-    }
-
-
-    /* Hashtag 삭제 */
-    @DisplayName("해시태그 삭제 - [성공]")
-    @Test
-    void givenHashtag_whenDelete_thenSuccess() {
-        // given
-
-        // when
-        hashtagRepository.deleteById(givenHashtag1.getId());
-
-        // then
-        assertThat(hashtagRepository.findAll()).doesNotContain(givenHashtag1);
     }
 }

@@ -52,6 +52,9 @@ public class Comment extends ModifiableBaseEntity {
     @Column(name = "login_flag", nullable = false)
     private Boolean loginFlag;
 
+    @Column(name = "erased_flag", nullable = false)
+    private Boolean erasedFlag;
+
     protected Comment() {
     }
 
@@ -69,6 +72,7 @@ public class Comment extends ModifiableBaseEntity {
         this.member = member;
         this.article = article;
         this.loginFlag = loginFlag;
+        this.erasedFlag = false;
     }
 
     private static Comment of(
@@ -124,5 +128,9 @@ public class Comment extends ModifiableBaseEntity {
 
     public void changeContent(String content) {
         this.content = content;
+    }
+
+    public void erase() {
+        this.erasedFlag = true;
     }
 }

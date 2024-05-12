@@ -43,6 +43,9 @@ public class Article extends ModifiableBaseEntity {
     @Column(name = "login_flag", nullable = false, updatable = false)
     private Boolean loginFlag;
 
+    @Column(name = "erased_flag", nullable = false)
+    private Boolean erasedFlag;
+
     protected Article() {
     }
 
@@ -51,6 +54,7 @@ public class Article extends ModifiableBaseEntity {
         this.member = member;
         this.anonymousUser = anonymousUser;
         this.loginFlag = loginFlag;
+        this.erasedFlag = false;
     }
 
     public static Article createMemberArticle(String caption, Member member) {
@@ -82,5 +86,9 @@ public class Article extends ModifiableBaseEntity {
 
     public void changeCaption(String caption) {
         this.caption = caption;
+    }
+
+    public void erase() {
+        this.erasedFlag = true;
     }
 }

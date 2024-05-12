@@ -37,12 +37,16 @@ public class ArticleHashtag extends ModifiableBaseEntity {
     @JoinColumn(name = "hashtag_id", columnDefinition = "NUMERIC(19,0)", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(NO_CONSTRAINT))
     private Hashtag hashtag;
 
+    @Column(name = "erased_flag", nullable = false)
+    private Boolean erasedFlag;
+
     protected ArticleHashtag() {
     }
 
     private ArticleHashtag(Article article, Hashtag hashtag) {
         this.article = article;
         this.hashtag = hashtag;
+        this.erasedFlag = false;
     }
 
     public static ArticleHashtag of(Article article, Hashtag hashtag) {
@@ -66,5 +70,9 @@ public class ArticleHashtag extends ModifiableBaseEntity {
     @Override
     public int hashCode() {
         return 31 * Objects.hashCode(this.getId());
+    }
+
+    public void erase() {
+        this.erasedFlag = true;
     }
 }

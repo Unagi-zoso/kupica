@@ -6,13 +6,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    Optional<Member> findByNickname(String nickname);
+    Optional<Member> findByIdAndErasedFlagIsFalse(Long id);
 
-    Optional<Member> findByEmailAddress(String emailAddress);
+    Optional<Member> findByNicknameAndErasedFlagIsFalse(String nickname);
 
-    List<Member> findByRole(UserRole role);
+    Optional<Member> findByEmailAddressAndErasedFlagIsFalse(String emailAddress);
 
-    boolean existsByNickname(String nickname);
+    List<Member> findByRoleAndErasedFlagIsFalse(UserRole role);
 
-    boolean existsByEmailAddress(String emailAddress);
+    boolean existsByIdAndErasedFlagIsFalse(long id);
+
+    boolean existsByNicknameAndErasedFlagIsFalse(String nickname);
+
+    boolean existsByEmailAddressAndErasedFlagIsFalse(String emailAddress);
 }

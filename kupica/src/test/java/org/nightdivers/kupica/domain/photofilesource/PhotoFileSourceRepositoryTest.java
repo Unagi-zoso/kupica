@@ -15,14 +15,14 @@ class PhotoFileSourceRepositoryTest {
 
     private final PhotoFileSourceRepository photoFileSourceRepository;
 
-    /* PhotoFileSource 조회 */
+    /* TARGET : PhotoFileSource 조회 테스트 */
     @DisplayName("article id 와 일치하는 PhotoFileSource 전체 조회 - [성공]")
     @Test
     void givenArticleId_whenFindPhotoFileSourceByArticleId_thenReturnPhotoFileSource() {
         // given
 
         // when
-        List<PhotoFileSource> photoFileSources = photoFileSourceRepository.findByArticleId(
+        List<PhotoFileSource> photoFileSources = photoFileSourceRepository.findByArticleIdAndErasedFlagIsFalse(
                 1L);
 
         // then
@@ -35,11 +35,10 @@ class PhotoFileSourceRepositoryTest {
         // given
 
         // when
-        List<PhotoFileSource> photoFileSources = photoFileSourceRepository.findByArticleId(
+        List<PhotoFileSource> photoFileSources = photoFileSourceRepository.findByArticleIdAndErasedFlagIsFalse(
                 PageRequest.of(0, 5), 1L).getContent();
 
         // then
         assertThat(photoFileSources).isNotEmpty();
     }
-
 }

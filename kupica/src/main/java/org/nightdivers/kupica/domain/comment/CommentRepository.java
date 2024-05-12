@@ -5,17 +5,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    List<Comment> findAllByArticleId(Long id);
+    List<Comment> findAllByArticleIdAndErasedFlagIsFalse(Long id);
 
-    List<Comment> findAllByMemberId(Long id);
+    List<Comment> findAllByMemberIdAndErasedFlagIsFalse(Long id);
 
-    List<Comment> findAllByMemberNickname(String nickname);
+    List<Comment> findAllByMemberNicknameAndErasedFlagIsFalse(String nickname);
 
-    List<Comment> findAllByArticleIdAndMemberId(Long articleId, Long memberId);
+    List<Comment> findAllByArticleIdAndMemberIdAndErasedFlagIsFalse(Long articleId, Long memberId);
 
-    List<Comment> findAllByArticleIdAndMemberNickname(Long id, String nickname);
+    List<Comment> findAllByArticleIdAndMemberNicknameAndErasedFlagIsFalse(Long id, String nickname);
 
-    List<Comment> findAllByAnonymousUserNickname(String nickname);
+    List<Comment> findAllByAnonymousUserNicknameAndErasedFlagIsFalse(String nickname);
 
-    List<Comment> findAllByArticleIdAndAnonymousUserNickname(Long id, String nickname);
+    List<Comment> findAllByArticleIdAndAnonymousUserNicknameAndErasedFlagIsFalse(Long id, String nickname);
 }

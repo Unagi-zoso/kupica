@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.PropertyValueException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,6 @@ import org.nightdivers.kupica.support.annotation.RepositoryTest;
 import org.nightdivers.kupica.support.factory.AnonymousUserFactory;
 import org.nightdivers.kupica.support.factory.ArticleFactory;
 import org.nightdivers.kupica.support.factory.MemberFactory;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 
 @RequiredArgsConstructor
@@ -349,20 +348,17 @@ class ArticleRepositoryTest {
         );
     }
 
-    @DisplayName("게시글 등록 - [실패 : 게시글 제목이 없는 경우]")
+    @DisplayName("게시글 등록 - [실패 : 게시글 본문이 없는 경우]")
     @Test
-    void givenArticle_whenSave_thenFail() {
+    void givenArticle_whenSave_thenThrowConstraintViolationException() {
         // given
         Article expectedMemberArticle = ArticleFactory.createCustomMemberArticle(null, null);
         Article expectedAnonymousArticle = ArticleFactory.createCustomAnonymousArticle(null, null);
 
         // when & then
-        assertAll(
-                () -> assertThatThrownBy(() -> articleRepository.save(expectedMemberArticle))
-                        .isInstanceOf(DataIntegrityViolationException.class),
-                () -> assertThatThrownBy(() -> articleRepository.save(expectedAnonymousArticle))
-                        .isInstanceOf(DataIntegrityViolationException.class)
-        );
+        articleRepository.saveAll(List.of(expectedMemberArticle, expectedAnonymousArticle));
+        assertThatThrownBy(entityManager::flush).isInstanceOf(ConstraintViolationException.class);
+
     }
 
 
@@ -400,9 +396,9 @@ class ArticleRepositoryTest {
         );
     }
 
-    @DisplayName("게시글 본문 수정 - [실패 : 게시글 제목이 없는 경우]")
+    @DisplayName("게시글 본문 수정 - [실패 : 게시글 본문이 없는 경우]")
     @Test
-    void givenArticle_whenChangeCaption_thenThrowPropertyValueException() {
+    void givenArticle_whenChangeCaption_thenThrowConstraintViolationException() {
         // given
         Article memberArticle = articleRepository.findById(givenMemberArticle1.getId())
                 .orElseThrow(NoSuchElementException::new);
@@ -415,7 +411,7 @@ class ArticleRepositoryTest {
 
         // then
         assertThatThrownBy(entityManager::flush)
-                .isInstanceOf(PropertyValueException.class);
+                .isInstanceOf(ConstraintViolationException.class);
     }
 
 

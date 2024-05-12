@@ -16,4 +16,6 @@
           th:replace="~{detail-article/comment-modify-modal.html :: #comment_modify_modal_section}"/>
     <attr sel="#empty__comment__delete__modal__section"
           th:replace="~{detail-article/comment-delete-modal.html :: #comment_delete_modal_section}"/>
+    <attr sel="#csrf__token" th:content="${_csrf.token}"/>
+    <attr sel="#csrf__header" th:content="${_csrf.headerName}"/>
 </thlogic>

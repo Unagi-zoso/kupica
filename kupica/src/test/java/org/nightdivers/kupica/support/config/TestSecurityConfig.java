@@ -1,28 +1,19 @@
-package org.nightdivers.kupica.config;
+package org.nightdivers.kupica.support.config;
 
 import static org.nightdivers.kupica.domain.member.UserRole.ANONYMOUS;
 import static org.nightdivers.kupica.domain.member.UserRole.MEMBER;
 import static org.nightdivers.kupica.domain.member.UserRole.SIGNING_UP;
 
-import lombok.RequiredArgsConstructor;
-import org.nightdivers.kupica.handler.OAuth2AuthenticationSuccessHandler;
-import org.nightdivers.kupica.service.CustomOAuth2UserService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
-@RequiredArgsConstructor
-@Configuration
-public class SecurityConfig {
-
-    private final CustomOAuth2UserService customOAuth2UserService;
-
-    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+@TestConfiguration
+public class TestSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -35,13 +26,6 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .anonymous(anonymous -> anonymous
                         .authorities(ANONYMOUS.getDescription())
-                )
-                .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfo -> userInfo
-                                .userService(customOAuth2UserService)
-                        )
-                        .loginPage("/login")
-                        .successHandler(oAuth2AuthenticationSuccessHandler)
                 )
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/").permitAll()
@@ -58,14 +42,5 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID")
                 )
                 .build();
-    }
-}
-
-@Configuration
-class WebSecurityConfig {
-
-    @Bean
-    public DefaultOAuth2UserService defaultOAuth2UserService() {
-        return new DefaultOAuth2UserService();
     }
 }

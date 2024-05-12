@@ -25,6 +25,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.2.4'
     implementation 'org.springframework.boot:spring-boot-starter-web:3.2.4'
     implementation 'org.springframework.boot:spring-boot-starter-security:3.2.4'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client:3.2.4'
+    implementation 'org.springframework.boot:spring-boot-starter-validation:3.2.4'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux:3.2.4'
 
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:3.2.4'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.2.RELEASE'
@@ -42,6 +45,8 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.30'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
     testCompileOnly 'org.projectlombok:lombok:1.18.30'
+
+    implementation 'com.google.code.gson:gson:2.10.1'
 
     implementation 'org.springframework.boot:spring-boot-starter-actuator:3.2.4'
     developmentOnly 'org.springframework.boot:spring-boot-devtools:3.2.4'

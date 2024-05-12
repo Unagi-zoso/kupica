@@ -121,14 +121,13 @@ public class MemberValidatorTest {
     @DisplayName("이메일 주소가 이메일 형식에 맞지 않으면 IllegalArgumentException 을 던진다.")
     @ParameterizedTest
     @MethodSource("org.nightdivers.kupica.support.provider.MemberProvider#invalidEmailAddressParameters")
-    void givenInvalidFormatEmailAddress_whenValidateEmailAddress_thenThrowIllegalArgumentException() {
+    void givenInvalidFormatEmailAddress_whenValidateEmailAddress_thenThrowIllegalArgumentException(String givenInvalidFormatEmailAddress) {
         // given
-        String givenInvalidFormatEmailAddress = "invalid-email";
 
         // when & then
         assertThatThrownBy(
                 () -> MemberValidator.validateEmailAddress(givenInvalidFormatEmailAddress))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("이메일 주소 형식이 올바르지 않습니다.");
+                .hasMessageContaining("이메일 주소");
     }
 }

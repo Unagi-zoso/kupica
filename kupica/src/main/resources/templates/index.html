@@ -2,6 +2,8 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta id="csrf__token" name="_csrf"/>
+  <meta id="csrf__header" name="_csrf_header">
   <title>kupica</title>
   <link href="/css/main-style.css" rel="stylesheet">
   <link href="/css/modal-style.css" rel="stylesheet">
@@ -24,6 +26,7 @@
   <script defer src="/js/DetailArticleModalFormBtn.js"></script>
   <script defer src="/js/ScrollToTopBtn.js"></script>
   <script defer src="/js/UploadModalFunc.js"></script>
+  <script defer src="/js/LogoutRequestApi.js"></script>
 </head>
 <body id="main__page">
 <header id="empty__header__nav">
@@ -54,7 +57,7 @@
 <section>
   <div id="upload__btn__container" onclick="presentUploadModal()">
     <a href="#" id="upload__btn">
-      <img alt="업로드 모달 표현 버튼 이미지" src="/imgs/plus.svg">
+      <img alt="업로드 모달 표현 버튼 이미지" src="/images/plus.svg">
     </a>
   </div>
 </section>

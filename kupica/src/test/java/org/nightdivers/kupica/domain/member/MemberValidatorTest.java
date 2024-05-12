@@ -14,7 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("test")
 public class MemberValidatorTest {
 
-    /* Member validateNickname Test */
+    /* TARGET : validateNickname 테스트 */
     @DisplayName("정상적인 닉네임이 주어지면 그대로 반환한다. (2자 이상 18자 이하)")
     @Test
     void givenValidNickname_whenValidateNickname_thenReturnAsItIs() {
@@ -64,7 +64,7 @@ public class MemberValidatorTest {
         );
     }
 
-    /* Member validateEmailAddress Test */
+    /* TARGET validateEmailAddress 메소드 테스트 */
     @DisplayName("정상적인 이메일 주소가 주어지면 그대로 반환한다. (5자 이상 255자 이하)")
     @Test
     void givenValidEmailAddress_whenValidateEmailAddress_thenReturnAsItIs() {

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PhotoFileSourceRepository extends JpaRepository<PhotoFileSource, Long> {
 
-    List<PhotoFileSource> findByArticleId(long articleId);
+    List<PhotoFileSource> findByArticleIdAndErasedFlagIsFalse(long articleId);
 
-    Page<PhotoFileSource> findByArticleId(Pageable pageable, long articleId);
+    Page<PhotoFileSource> findByArticleIdAndErasedFlagIsFalse(Pageable pageable, long articleId);
 }

@@ -51,6 +51,9 @@ public class ArticleLike extends BaseTimeEntity {
     @Column(name = "login_flag", nullable = false, updatable = false)
     private Boolean loginFlag;
 
+    @Column(name = "erased_flag", nullable = false)
+    private Boolean erasedFlag;
+
     protected ArticleLike() {
     }
 
@@ -59,6 +62,7 @@ public class ArticleLike extends BaseTimeEntity {
         this.member = member;
         this.article = article;
         this.loginFlag = loginFlag;
+        this.erasedFlag = false;
     }
 
     public static ArticleLike createMemberArticleLike(Member member, Article article) {
@@ -86,5 +90,9 @@ public class ArticleLike extends BaseTimeEntity {
     @Override
     public int hashCode() {
         return 31 * Objects.hashCode(this.getId());
+    }
+
+    public void erase() {
+        this.erasedFlag = true;
     }
 }

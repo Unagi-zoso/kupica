@@ -5,6 +5,7 @@ CREATE TABLE member
     email_address     VARCHAR2(255)  NOT NULL UNIQUE,
     user_role         VARCHAR2(255)  NOT NULL CHECK (user_role IN ('ADMIN', 'MEMBER', 'ANONYMOUS')),
     social_login_type VARCHAR2(20)   NOT NULL CHECK (social_login_type IN ('KAKAO')),
+    erased_flag       BOOLEAN        NOT NULL,
     created_datetime  TIMESTAMP(6)   NOT NULL,
     updated_datetime  TIMESTAMP(6)   NOT NULL,
     PRIMARY KEY (id)
@@ -37,6 +38,7 @@ CREATE TABLE article
     anonymous_user_id NUMERIC(19, 0),
     member_id         NUMERIC(19, 0),
     login_flag        BOOLEAN        NOT NULL,
+    erased_flag       BOOLEAN        NOT NULL,
     created_datetime  TIMESTAMP(6)   NOT NULL,
     updated_datetime  TIMESTAMP(6)   NOT NULL,
     PRIMARY KEY (id)
@@ -53,6 +55,7 @@ CREATE TABLE article_comment
     member_id               NUMERIC(19, 0),
     article_id              NUMERIC(19, 0) NOT NULL,
     login_flag              BOOLEAN        NOT NULL,
+    erased_flag             BOOLEAN        NOT NULL,
     created_datetime        TIMESTAMP(6)   NOT NULL,
     updated_datetime        TIMESTAMP(6)   NOT NULL,
     PRIMARY KEY (id)
@@ -67,6 +70,7 @@ CREATE TABLE article_like
     member_id        NUMERIC(19, 0),
     article_id       NUMERIC(19, 0) NOT NULL,
     login_flag       BOOLEAN        NOT NULL,
+    erased_flag      BOOLEAN        NOT NULL,
     created_datetime TIMESTAMP(6)   NOT NULL,
     PRIMARY KEY (id),
     CONSTRAINT article_like_member_id_article_id_unique UNIQUE (ip_address, member_id, article_id)
@@ -85,6 +89,7 @@ CREATE TABLE photo_file_source
     file_byte_size   NUMERIC(19, 0) NOT NULL,
     download_count   NUMERIC(19, 0) NOT NULL,
     article_id       NUMERIC(19, 0) NOT NULL,
+    erased_flag      BOOLEAN        NOT NULL,
     created_datetime TIMESTAMP(6)   NOT NULL,
     updated_datetime TIMESTAMP(6)   NOT NULL,
     PRIMARY KEY (id)
@@ -114,6 +119,7 @@ CREATE TABLE article_hashtag
     id               NUMERIC(19, 0) NOT NULL,
     article_id       NUMERIC(19, 0) NOT NULL,
     hashtag_id       NUMERIC(19, 0) NOT NULL,
+    erased_flag      BOOLEAN        NOT NULL,
     created_datetime TIMESTAMP(6)   NOT NULL,
     updated_datetime TIMESTAMP(6)   NOT NULL,
     PRIMARY KEY (id)

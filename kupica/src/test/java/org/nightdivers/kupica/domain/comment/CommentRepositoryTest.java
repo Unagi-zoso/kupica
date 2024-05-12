@@ -97,14 +97,14 @@ class CommentRepositoryTest {
                 ));
     }
 
-    /* 댓글 조회 */
+    /* TARGET : 댓글 조회 테스트 */
     @DisplayName("게시글 id 와 일치하는 댓글 전체 조회 - [성공]")
     @Test
     void givenArticleId_whenFindAllByArticleId_thenCommentList() {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByArticleId(
+        List<Comment> comments = commentRepository.findAllByArticleIdAndErasedFlagIsFalse(
                 givenAnonymousArticle1.getId());
 
         // then
@@ -127,7 +127,7 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByMemberId(givenMember1.getId());
+        List<Comment> comments = commentRepository.findAllByMemberIdAndErasedFlagIsFalse(givenMember1.getId());
 
         // then
         assertThat(comments).contains(
@@ -144,7 +144,7 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByMemberId(TEST_INVALID_MEMBER_ID);
+        List<Comment> comments = commentRepository.findAllByMemberIdAndErasedFlagIsFalse(TEST_INVALID_MEMBER_ID);
 
         // then
         assertThat(comments).isEmpty();
@@ -156,7 +156,7 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByMemberNickname(
+        List<Comment> comments = commentRepository.findAllByMemberNicknameAndErasedFlagIsFalse(
                 givenMember1.getNickname());
 
         // then
@@ -174,7 +174,7 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByMemberNickname(
+        List<Comment> comments = commentRepository.findAllByMemberNicknameAndErasedFlagIsFalse(
                 TEST_INVALID_MEMBER_NICKNAME);
 
         // then
@@ -187,7 +187,7 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberNickname(
+        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberNicknameAndErasedFlagIsFalse(
                 givenAnonymousArticle1.getId(),
                 givenMember1.getNickname()
         );
@@ -207,7 +207,7 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberNickname(
+        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberNicknameAndErasedFlagIsFalse(
                 TEST_INVALID_ARTICLE_ID,
                 givenMember1.getNickname()
         );
@@ -222,7 +222,7 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberNickname(
+        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberNicknameAndErasedFlagIsFalse(
                 givenAnonymousArticle1.getId(),
                 TEST_INVALID_MEMBER_NICKNAME
         );
@@ -237,7 +237,7 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByAnonymousUserNickname(
+        List<Comment> comments = commentRepository.findAllByAnonymousUserNicknameAndErasedFlagIsFalse(
                 givenAnonymousUser1.getNickname());
 
         // then
@@ -255,7 +255,7 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByAnonymousUserNickname(
+        List<Comment> comments = commentRepository.findAllByAnonymousUserNicknameAndErasedFlagIsFalse(
                 TEST_INVALID_ANONYMOUS_USER_NICKNAME);
 
         // then
@@ -269,7 +269,7 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberId(
+        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberIdAndErasedFlagIsFalse(
                 givenAnonymousArticle1.getId(),
                 givenMember1.getId()
         );
@@ -289,7 +289,7 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberId(
+        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberIdAndErasedFlagIsFalse(
                 TEST_INVALID_ARTICLE_ID,
                 givenMember1.getId()
         );
@@ -304,7 +304,7 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberId(
+        List<Comment> comments = commentRepository.findAllByArticleIdAndMemberIdAndErasedFlagIsFalse(
                 givenAnonymousArticle1.getId(),
                 TEST_INVALID_MEMBER_ID
         );
@@ -319,7 +319,7 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByArticleIdAndAnonymousUserNickname(
+        List<Comment> comments = commentRepository.findAllByArticleIdAndAnonymousUserNicknameAndErasedFlagIsFalse(
                 givenAnonymousArticle1.getId(), givenAnonymousUser1.getNickname());
 
         // then
@@ -337,7 +337,7 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByArticleIdAndAnonymousUserNickname(
+        List<Comment> comments = commentRepository.findAllByArticleIdAndAnonymousUserNicknameAndErasedFlagIsFalse(
                 TEST_INVALID_ARTICLE_ID,
                 givenAnonymousUser1.getNickname()
         );
@@ -352,7 +352,7 @@ class CommentRepositoryTest {
         // given
 
         // when
-        List<Comment> comments = commentRepository.findAllByArticleIdAndAnonymousUserNickname(
+        List<Comment> comments = commentRepository.findAllByArticleIdAndAnonymousUserNicknameAndErasedFlagIsFalse(
                 givenAnonymousArticle1.getId(), TEST_INVALID_ANONYMOUS_USER_NICKNAME);
 
         // then
@@ -360,7 +360,7 @@ class CommentRepositoryTest {
     }
 
 
-    /* 댓글 생성 */
+    /* TARGET : 댓글 생성 테스트 */
     @DisplayName("member 댓글 생성 - [성공]")
     @Test
     void givenMember_whenSave_thenComment() {
@@ -446,7 +446,7 @@ class CommentRepositoryTest {
     }
 
 
-    /* 댓글 수정 */
+    /* TARGET : 댓글 수정 테스트 */
     @DisplayName("댓글 수정 - [성공]")
     @Test
     void givenComment_whenUpdate_thenComment() {
@@ -478,19 +478,5 @@ class CommentRepositoryTest {
                         prevParentCommentId),
                 () -> assertThat(updatedComment.getContent()).isEqualTo(updatedContent)
         );
-    }
-
-
-    /* 댓글 삭제 */
-    @DisplayName("댓글 삭제 - [성공]")
-    @Test
-    void givenComment_whenDelete_thenComment() {
-        // given
-
-        // when
-        commentRepository.delete(givenMemberComment1);
-
-        // then
-        assertThat(commentRepository.findById(givenMemberComment1.getId())).isEmpty();
     }
 }

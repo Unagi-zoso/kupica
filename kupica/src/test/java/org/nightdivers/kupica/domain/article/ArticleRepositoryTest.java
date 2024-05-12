@@ -71,16 +71,16 @@ class ArticleRepositoryTest {
                 ));
     }
 
-    /* 게시글 단일 조회 */
+    /* TARGET : 게시글 단일 조회 테스트 */
     @DisplayName("게시글 단일 조회 - [성공]")
     @Test
     void givenArticle_whenFindById_thenSuccess() {
         // given
 
         // when
-        Article actualMemberArticle = articleRepository.findById(givenMemberArticle1.getId())
+        Article actualMemberArticle = articleRepository.findByIdAndErasedFlagIsFalse(givenMemberArticle1.getId())
                 .orElseThrow(NoSuchElementException::new);
-        Article actualAnonymousArticle = articleRepository.findById(givenAnonymousArticle1.getId())
+        Article actualAnonymousArticle = articleRepository.findByIdAndErasedFlagIsFalse(givenAnonymousArticle1.getId())
                 .orElseThrow(NoSuchElementException::new);
 
         // then
@@ -97,24 +97,24 @@ class ArticleRepositoryTest {
 
         // when & then
         assertAll(
-                () -> assertThatThrownBy(() -> articleRepository.findById(TEST_INVALID_ARTICLE_ID)
+                () -> assertThatThrownBy(() -> articleRepository.findByIdAndErasedFlagIsFalse(TEST_INVALID_ARTICLE_ID)
                         .orElseThrow(NoSuchElementException::new))
                         .isInstanceOf(NoSuchElementException.class),
-                () -> assertThatThrownBy(() -> articleRepository.findById(TEST_INVALID_ARTICLE_ID)
+                () -> assertThatThrownBy(() -> articleRepository.findByIdAndErasedFlagIsFalse(TEST_INVALID_ARTICLE_ID)
                         .orElseThrow(NoSuchElementException::new))
                         .isInstanceOf(NoSuchElementException.class)
         );
     }
 
 
-    /* 게시글 목록 조회 */
+    /* TARGET : 게시글 목록 조회 테스트 */
     @DisplayName("게시글 목록 조회 - [성공]")
     @Test
     void givenArticles_whenFindAll_thenSuccess() {
         // given
 
         // when
-        List<Article> actualArticles = articleRepository.findAll();
+        List<Article> actualArticles = articleRepository.findAllByErasedFlagIsFalse();
 
         // then
         assertThat(actualArticles).contains(givenMemberArticle1, givenMemberArticle2,
@@ -129,7 +129,7 @@ class ArticleRepositoryTest {
         // given
 
         // when
-        List<Article> actualArticles = articleRepository.findAllByOrderByCreatedDatetimeDesc(
+        List<Article> actualArticles = articleRepository.findAllByErasedFlagIsFalseOrderByCreatedDatetimeDesc(
                 PageRequest.of(0, givenTestDataSetSize)).getContent();
 
         // then
@@ -146,7 +146,7 @@ class ArticleRepositoryTest {
         // given
 
         // when
-        List<Article> actualArticles = articleRepository.findAllByOrderByCreatedDatetimeAsc(
+        List<Article> actualArticles = articleRepository.findAllByErasedFlagIsFalseOrderByCreatedDatetimeAsc(
                         PageRequest.of(0, 100))
                 .getContent();
 
@@ -176,7 +176,7 @@ class ArticleRepositoryTest {
                 List.of(givenMemberArticle1ByMember1, givenMemberArticle2ByMember1));
 
         // when
-        List<Article> actualArticles = articleRepository.findByMemberIdAndLoginFlagIsTrueOrderByCreatedDatetimeDesc(
+        List<Article> actualArticles = articleRepository.findByMemberIdAndLoginFlagIsTrueAndErasedFlagIsFalseOrderByCreatedDatetimeDesc(
                         PageRequest.of(0, givenTestDataSetSize),
                         givenMemberArticle1ByMember1.getMember().getId()
                 )
@@ -195,7 +195,7 @@ class ArticleRepositoryTest {
         // given
 
         // when & then
-        assertThat(articleRepository.findByMemberIdAndLoginFlagIsTrueOrderByCreatedDatetimeDesc(
+        assertThat(articleRepository.findByMemberIdAndLoginFlagIsTrueAndErasedFlagIsFalseOrderByCreatedDatetimeDesc(
                 PageRequest.of(0, givenTestDataSetSize),
                 TEST_INVALID_MEMBER_ID
         ))
@@ -218,7 +218,7 @@ class ArticleRepositoryTest {
                 List.of(givenMemberArticle1ByMember1, givenMemberArticle2ByMember1));
 
         // when
-        List<Article> actualArticles = articleRepository.findByMemberIdAndLoginFlagIsTrueOrderByCreatedDatetimeAsc(
+        List<Article> actualArticles = articleRepository.findByMemberIdAndLoginFlagIsTrueAndErasedFlagIsFalseOrderByCreatedDatetimeAsc(
                         PageRequest.of(0, givenTestDataSetSize),
                         givenMemberArticle1ByMember1.getMember().getId()
                 )
@@ -237,7 +237,7 @@ class ArticleRepositoryTest {
         // given
 
         // when & then
-        assertThat(articleRepository.findByMemberIdAndLoginFlagIsTrueOrderByCreatedDatetimeAsc(
+        assertThat(articleRepository.findByMemberIdAndLoginFlagIsTrueAndErasedFlagIsFalseOrderByCreatedDatetimeAsc(
                 PageRequest.of(0, givenTestDataSetSize),
                 TEST_INVALID_MEMBER_ID
         ))
@@ -259,7 +259,7 @@ class ArticleRepositoryTest {
                 ));
 
         // when
-        List<Article> actualArticles = articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeDesc(
+        List<Article> actualArticles = articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseAndErasedFlagIsFalseOrderByCreatedDatetimeDesc(
                         PageRequest.of(0, givenTestDataSetSize),
                         givenAnonymousUser1.getNickname()
                 )
@@ -279,7 +279,7 @@ class ArticleRepositoryTest {
 
         // when & then
         assertThat(
-                articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeDesc(
+                articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseAndErasedFlagIsFalseOrderByCreatedDatetimeDesc(
                         PageRequest.of(0, givenTestDataSetSize),
                         "invalidAnonymousUser"
                 ))
@@ -301,7 +301,7 @@ class ArticleRepositoryTest {
                 ));
 
         // when
-        List<Article> actualArticles = articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeAsc(
+        List<Article> actualArticles = articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseAndErasedFlagIsFalseOrderByCreatedDatetimeAsc(
                         PageRequest.of(0, givenTestDataSetSize),
                         givenAnonymousUser1.getNickname()
                 )
@@ -321,7 +321,7 @@ class ArticleRepositoryTest {
 
         // when & then
         assertThat(
-                articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeAsc(
+                articleRepository.findByAnonymousUserNicknameAndLoginFlagIsFalseAndErasedFlagIsFalseOrderByCreatedDatetimeAsc(
                         PageRequest.of(0, givenTestDataSetSize),
                         TEST_INVALID_ANONYMOUS_USER_NICKNAME
                 ))
@@ -329,7 +329,7 @@ class ArticleRepositoryTest {
     }
 
 
-    /* 게시글 등록 */
+    /* TARGET : 게시글 등록 테스트 */
     @DisplayName("게시글 등록 - [성공]")
     @Test
     void givenArticle_whenSave_thenSuccess() {
@@ -362,15 +362,15 @@ class ArticleRepositoryTest {
     }
 
 
-    /* 게시글 수정 */
+    /* TARGET : 게시글 수정 테스트 */
     @DisplayName("게시글 본문 수정 - [성공]")
     @Test
     void givenArticle_whenChangeCaption_thenSuccess() {
         // given
-        Article memberArticle = articleRepository.findById(givenMemberArticle1.getId())
+        Article memberArticle = articleRepository.findByIdAndErasedFlagIsFalse(givenMemberArticle1.getId())
                 .orElseThrow(NoSuchElementException::new);
         LocalDateTime prevMemberArticleUpdatedDatetime = memberArticle.getUpdatedDatetime();
-        Article anonymousArticle = articleRepository.findById(givenAnonymousArticle1.getId())
+        Article anonymousArticle = articleRepository.findByIdAndErasedFlagIsFalse(givenAnonymousArticle1.getId())
                 .orElseThrow(NoSuchElementException::new);
         LocalDateTime prevAnonymousArticleUpdatedDatetime = anonymousArticle.getUpdatedDatetime();
 
@@ -380,9 +380,9 @@ class ArticleRepositoryTest {
 
         entityManager.flush();
 
-        Article actualMemberArticle = articleRepository.findById(memberArticle.getId())
+        Article actualMemberArticle = articleRepository.findByIdAndErasedFlagIsFalse(memberArticle.getId())
                 .orElseThrow(NoSuchElementException::new);
-        Article actualAnonymousArticle = articleRepository.findById(anonymousArticle.getId())
+        Article actualAnonymousArticle = articleRepository.findByIdAndErasedFlagIsFalse(anonymousArticle.getId())
                 .orElseThrow(NoSuchElementException::new);
 
         // then
@@ -400,9 +400,9 @@ class ArticleRepositoryTest {
     @Test
     void givenArticle_whenChangeCaption_thenThrowConstraintViolationException() {
         // given
-        Article memberArticle = articleRepository.findById(givenMemberArticle1.getId())
+        Article memberArticle = articleRepository.findByIdAndErasedFlagIsFalse(givenMemberArticle1.getId())
                 .orElseThrow(NoSuchElementException::new);
-        Article anonymousArticle = articleRepository.findById(givenAnonymousArticle1.getId())
+        Article anonymousArticle = articleRepository.findByIdAndErasedFlagIsFalse(givenAnonymousArticle1.getId())
                 .orElseThrow(NoSuchElementException::new);
 
         // when
@@ -412,39 +412,5 @@ class ArticleRepositoryTest {
         // then
         assertThatThrownBy(entityManager::flush)
                 .isInstanceOf(ConstraintViolationException.class);
-    }
-
-
-    /* 게시글 삭제 */
-    @DisplayName("게시글 삭제 - [성공]")
-    @Test
-    void givenArticle_whenDelete_thenSuccess() {
-        // given
-
-        // when
-        articleRepository.delete(givenMemberArticle1);
-        articleRepository.delete(givenAnonymousArticle1);
-
-        // then
-        assertThat(articleRepository.findAll()).doesNotContain(
-                givenMemberArticle1,
-                givenAnonymousArticle1
-        );
-    }
-
-    @DisplayName("id 가 일치하는 게시글 삭제 - [성공]")
-    @Test
-    void givenArticleId_whenDeleteById_thenSuccess() {
-        // given
-
-        // when
-        articleRepository.deleteById(givenMemberArticle1.getId());
-        articleRepository.deleteById(givenAnonymousArticle1.getId());
-
-        // then
-        assertThat(articleRepository.findAll()).doesNotContain(
-                givenMemberArticle1,
-                givenAnonymousArticle1
-        );
     }
 }

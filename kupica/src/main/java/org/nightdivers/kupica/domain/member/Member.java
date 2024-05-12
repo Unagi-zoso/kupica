@@ -41,6 +41,9 @@ public class Member extends ModifiableBaseEntity {
     @Column(name = "social_login_type", nullable = false, updatable = false, length = 20)
     private SocialLoginType socialLoginType;
 
+    @Column(name = "erased_flag", nullable = false)
+    private Boolean erasedFlag;
+
     protected Member() {
     }
 
@@ -54,6 +57,7 @@ public class Member extends ModifiableBaseEntity {
         this.emailAddress = validateEmailAddress(emailAddress);
         this.role = role;
         this.socialLoginType = socialLoginType;
+        this.erasedFlag = false;
     }
 
     public static Member of(
@@ -86,5 +90,9 @@ public class Member extends ModifiableBaseEntity {
 
     public void changeNickname(String newNickname) {
         this.nickname = newNickname;
+    }
+
+    public void erase() {
+        this.erasedFlag = true;
     }
 }

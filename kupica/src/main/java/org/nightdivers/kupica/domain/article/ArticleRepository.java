@@ -1,31 +1,37 @@
 package org.nightdivers.kupica.domain.article;
 
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
-    Page<Article> findAllByOrderByCreatedDatetimeDesc(Pageable pageable);
+    Optional<Article> findByIdAndErasedFlagIsFalse(Long id);
 
-    Page<Article> findAllByOrderByCreatedDatetimeAsc(Pageable pageable);
+    List<Article> findAllByErasedFlagIsFalse();
 
-    Page<Article> findByMemberIdAndLoginFlagIsTrueOrderByCreatedDatetimeDesc(
+    Page<Article> findAllByErasedFlagIsFalseOrderByCreatedDatetimeDesc(Pageable pageable);
+
+    Page<Article> findAllByErasedFlagIsFalseOrderByCreatedDatetimeAsc(Pageable pageable);
+
+    Page<Article> findByMemberIdAndLoginFlagIsTrueAndErasedFlagIsFalseOrderByCreatedDatetimeDesc(
             Pageable pageable,
             Long memberId
     );
 
-    Page<Article> findByMemberIdAndLoginFlagIsTrueOrderByCreatedDatetimeAsc(
+    Page<Article> findByMemberIdAndLoginFlagIsTrueAndErasedFlagIsFalseOrderByCreatedDatetimeAsc(
             Pageable pageable,
             Long memberId
     );
 
-    Page<Article> findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeDesc(
+    Page<Article> findByAnonymousUserNicknameAndLoginFlagIsFalseAndErasedFlagIsFalseOrderByCreatedDatetimeDesc(
             Pageable pageable,
             String anonymousUser1
     );
 
-    Page<Article> findByAnonymousUserNicknameAndLoginFlagIsFalseOrderByCreatedDatetimeAsc(
+    Page<Article> findByAnonymousUserNicknameAndLoginFlagIsFalseAndErasedFlagIsFalseOrderByCreatedDatetimeAsc(
             Pageable pageable,
             String nickname
     );

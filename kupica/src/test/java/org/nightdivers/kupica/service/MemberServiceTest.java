@@ -53,13 +53,13 @@ class MemberServiceTest {
     @Test
     void givenExistEmail_whenIsExist_thenTrue() {
         // given
-        when(memberRepository.existsByEmailAddress(TEST_VALID_MEMBER_EMAIL)).thenReturn(true);
+        when(memberRepository.existsByEmailAddressAndErasedFlagIsFalse(TEST_VALID_MEMBER_EMAIL)).thenReturn(true);
 
         // when
         boolean actual = memberService.isExist(TEST_VALID_MEMBER_EMAIL);
 
         // then
-        verify(memberRepository).existsByEmailAddress(TEST_VALID_MEMBER_EMAIL);
+        verify(memberRepository).existsByEmailAddressAndErasedFlagIsFalse(TEST_VALID_MEMBER_EMAIL);
         assertTrue(actual);
     }
 
@@ -67,13 +67,13 @@ class MemberServiceTest {
     @Test
     void givenNotExistEmail_whenIsExist_thenFalse() {
         // given
-        when(memberRepository.existsByEmailAddress(TEST_INVALID_MEMBER_EMAIL)).thenReturn(false);
+        when(memberRepository.existsByEmailAddressAndErasedFlagIsFalse(TEST_INVALID_MEMBER_EMAIL)).thenReturn(false);
 
         // when
         boolean actual = memberService.isExist(TEST_INVALID_MEMBER_EMAIL);
 
         // then
-        verify(memberRepository).existsByEmailAddress(TEST_INVALID_MEMBER_EMAIL);
+        verify(memberRepository).existsByEmailAddressAndErasedFlagIsFalse(TEST_INVALID_MEMBER_EMAIL);
         assertFalse(actual);
     }
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.nightdivers.kupica.domain.member.SocialLoginType;
 
 public class KakaoResponse implements OAuth2Response {
+
     private final Map<String, Object> attributes;
 
     public KakaoResponse(Map<String, Object> attributes) {

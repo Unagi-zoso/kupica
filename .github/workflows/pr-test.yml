@@ -41,9 +41,7 @@ jobs:
 
       - name: Copy credential info
         working-directory: ${{ env.working-directory }}
-        run: |
-          ./gradlew copyCredential
-          ls ./store-module
+        run: ./gradlew copyCredential
 
       - name: Test with Gradle
         working-directory: ${{ env.working-directory }}

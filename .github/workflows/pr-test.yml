@@ -45,7 +45,7 @@ jobs:
 
       - name: Test with Gradle
         working-directory: ${{ env.working-directory }}
-        run: /gradlew --info test
+        run: ./gradlew --info test
 
       - name: Publish Unit Test Results
         if: always()

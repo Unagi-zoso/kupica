@@ -12,6 +12,7 @@ import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_INVALI
 import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_INVALID_SOCIAL_LOGIN_TYPE;
 import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_MEMBER_1_SOCIAL_LOGIN_TYPE;
 import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_VALID_MEMBER_EMAIL;
+import static org.nightdivers.kupica.support.factory.MemberFactory.createTestMember1;
 import static org.nightdivers.kupica.support.factory.OAuth2UserFactory.createTestMemberAttributes;
 import static org.nightdivers.kupica.support.factory.OAuth2UserFactory.createTestNotMemberAttributes;
 
@@ -22,6 +23,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.nightdivers.kupica.service.dto.CustomOAuth2User;
 import org.nightdivers.kupica.service.dto.KakaoResponse;
+import org.nightdivers.kupica.service.dto.MemberDto;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -75,6 +77,7 @@ class CustomOAuth2UserServiceTest {
         when(userRequest.getClientRegistration().getRegistrationId()).thenReturn(
                 TEST_MEMBER_1_SOCIAL_LOGIN_TYPE.getDescription());
         when(memberService.isExist(TEST_VALID_MEMBER_EMAIL)).thenReturn(true);
+        when(memberService.getMemberByEmail(TEST_VALID_MEMBER_EMAIL)).thenReturn(MemberDto.fromEntity(createTestMember1()));
 
         OAuth2User expected = new CustomOAuth2User(new KakaoResponse(createTestMemberAttributes()), MEMBER);
 

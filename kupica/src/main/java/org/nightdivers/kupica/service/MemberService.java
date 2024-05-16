@@ -25,19 +25,21 @@ public class MemberService {
     }
 
     public MemberDto getMemberByEmail(String email) {
-        return MemberDto.fromEntity(memberRepository.findByEmailAddressAndErasedFlagIsFalse(email).orElseThrow(NoSuchElementException::new));
+        return MemberDto.fromEntity(
+                memberRepository.findByEmailAddressAndErasedFlagIsFalse(email).orElseThrow(NoSuchElementException::new)
+        );
     }
 
     @Transactional
     public MemberDto updateNickname(String newNickname, String email) {
-        Member member = memberRepository.findByEmailAddressAndErasedFlagIsFalse(email).orElseThrow(NoSuchElementException::new);
+        Member member = getMemberByEmail(email).toEntity();
         member.changeNickname(newNickname);
         return MemberDto.fromEntity(memberRepository.save(member));
     }
 
     @Transactional
     public void remove(String email) {
-        Member member = memberRepository.findByEmailAddressAndErasedFlagIsFalse(email).orElseThrow(NoSuchElementException::new);
+        Member member = getMemberByEmail(email).toEntity();
         member.erase();
         memberRepository.save(member);
     }

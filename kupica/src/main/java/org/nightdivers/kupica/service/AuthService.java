@@ -17,6 +17,6 @@ public class AuthService {
 
     @Transactional
     public MemberDto signup(RegisterRequest request, CustomOAuth2User oAuth2User) {
-        return memberService.save(MemberDto.of(request, oAuth2User, MEMBER));
+        return memberService.append(MemberDto.of(request, oAuth2User, MEMBER));
     }
 }

@@ -33,18 +33,18 @@ class AuthServiceTest {
         openMocks(this);
     }
 
-    /* TARGET signup 메서드 테스트 */
+    /* TARGET : signup 메서드 테스트 */
     @DisplayName("유효한 데이터가 있는 경우")
     @Test
     void givenValidData_whenSignup_thenSuccess() {
         // given
-        when(memberService.save(any(MemberDto.class))).thenReturn(MemberDto.fromEntity(createTestMember1()));
+        when(memberService.append(any(MemberDto.class))).thenReturn(MemberDto.fromEntity(createTestMember1()));
 
         // when
         authService.signup(new RegisterRequest("TEST"), createTestOAuth2User(MEMBER));
 
         // then
-        verify(memberService).save(any(MemberDto.class));
+        verify(memberService).append(any(MemberDto.class));
         assertEquals(
                 MemberDto.fromEntity(createTestMember1()), authService.signup(new RegisterRequest("TEST"), createTestOAuth2User(MEMBER))
         );
@@ -55,7 +55,7 @@ class AuthServiceTest {
     @Test
     void givenMemberSaveFailure_whenSignup_thenThrowException() {
         // given
-        doThrow(new IllegalArgumentException()).when(memberService).save(any(MemberDto.class));
+        doThrow(new IllegalArgumentException()).when(memberService).append(any(MemberDto.class));
 
         // when & then
         assertThrows(

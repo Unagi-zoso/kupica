@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
-import org.hibernate.exception.DataException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -210,16 +209,13 @@ class MemberRepositoryTest {
 
     @DisplayName("회원 닉네임 수정 - [실패 : nickname 최대 길이 초과]")
     @Test
-    void givenMemberWithTooLongNickname_whenChangeNickname_thenThrowDataException() {
+    void givenMemberWithTooLongNickname_whenChangeNickname_thenThrowIllegalArgumentException() {
         // given
         Member memberWithTooLongNickname = memberRepository.save(MemberFactory.createTestMember3());
 
-        // when
-        memberWithTooLongNickname.changeNickname("a".repeat(19));
-
-        // then
-        assertThatThrownBy(entityManager::flush)
-                .isInstanceOf(DataException.class);
+        // when , then
+        assertThatThrownBy(() -> memberWithTooLongNickname.changeNickname("a".repeat(19)))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     /* TARGET : 회원 존재 여부 테스트 */

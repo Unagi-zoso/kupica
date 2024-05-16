@@ -118,6 +118,11 @@
   height: 100%;
 }
 
+.modal-text {
+  font-size: var(--font-small);
+  margin: 10% 0;
+}
+
 .pretty__input {
   border: none;
   border-bottom: 1px solid #ccc;

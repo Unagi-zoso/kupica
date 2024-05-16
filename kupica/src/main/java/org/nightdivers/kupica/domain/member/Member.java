@@ -48,11 +48,13 @@ public class Member extends ModifiableBaseEntity {
     }
 
     private Member(
+            Long id,
             String nickname,
             String emailAddress,
             UserRole role,
             SocialLoginType socialLoginType
     ) {
+        this.id = id;
         this.nickname = validateNickname(nickname);
         this.emailAddress = validateEmailAddress(emailAddress);
         this.role = role;
@@ -61,12 +63,22 @@ public class Member extends ModifiableBaseEntity {
     }
 
     public static Member of(
+            Long id,
             String nickname,
             String emailAddress,
             UserRole role,
             SocialLoginType socialLoginType
     ) {
-        return new Member(nickname, emailAddress, role, socialLoginType);
+        return new Member(id, nickname, emailAddress, role, socialLoginType);
+    }
+
+    public static Member of(
+            String nickname,
+            String emailAddress,
+            UserRole role,
+            SocialLoginType socialLoginType
+    ) {
+        return new Member(null, nickname, emailAddress, role, socialLoginType);
     }
 
     @Override
@@ -89,7 +101,7 @@ public class Member extends ModifiableBaseEntity {
     }
 
     public void changeNickname(String newNickname) {
-        this.nickname = newNickname;
+        this.nickname = validateNickname(newNickname);
     }
 
     public void erase() {

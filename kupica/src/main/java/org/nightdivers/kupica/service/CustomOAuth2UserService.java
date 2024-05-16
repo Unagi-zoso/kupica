@@ -35,7 +35,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         if (memberService.isExist(oAuth2Response.getEmail())) {
-            return new CustomOAuth2User(oAuth2Response, MEMBER);
+            String nickname = memberService.getMemberByEmail(oAuth2Response.getEmail()).nickname();
+            return new CustomOAuth2User(oAuth2Response, MEMBER, nickname);
         } else {
             return new CustomOAuth2User(oAuth2Response, SIGNING_UP);
         }

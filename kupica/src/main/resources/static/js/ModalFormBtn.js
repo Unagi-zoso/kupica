@@ -22,3 +22,26 @@ function uploadModalOutsideClick(event) {
     dismissUploadModal();
   }
 }
+
+const withdrawModal = document.getElementById("withdraw__modal__form");
+const withdrawModalSection = document.getElementById('withdraw_modal_section')
+
+function presentWithdrawModal() {
+  withdrawModalSection.classList.add('modal__overlay')
+  withdrawModal.style.visibility = "visible";
+  withdrawModal.addEventListener("click", function (event) {
+    event.stopPropagation();
+  });
+  document.addEventListener("click", withdrawModalOutsideClick);
+}
+
+function dismissWithdrawModal() {
+  withdrawModal.style.visibility = "hidden";
+  withdrawModalSection.classList.remove('modal__overlay')
+}
+
+function withdrawModalOutsideClick(event) {
+  if (withdrawModalSection.contains(event.target)) {
+    dismissWithdrawModal();
+  }
+}

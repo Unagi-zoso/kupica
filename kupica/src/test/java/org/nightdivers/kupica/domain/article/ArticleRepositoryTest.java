@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.nightdivers.kupica.support.constant.AnonymousUserConstant.TEST_INVALID_ANONYMOUS_USER_NICKNAME;
 import static org.nightdivers.kupica.support.constant.ArticleConstant.TEST_INVALID_ARTICLE_ID;
 import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_INVALID_MEMBER_ID;
+import static org.nightdivers.kupica.support.factory.ArticleFactory.createTestMemberArticle2;
 
 import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
@@ -54,16 +55,16 @@ class ArticleRepositoryTest {
     void setUp() {
         givenMember1 = memberRepository.save(MemberFactory.createTestMember1());
 
-        givenMemberArticle1 = ArticleFactory.createTestMemberArticle1();
-        givenMemberArticle2 = ArticleFactory.createTestMemberArticle2();
-        givenMemberArticle3 = ArticleFactory.createTestMemberArticle3();
+        givenMemberArticle1 = ArticleFactory.createTestMemberArticle1(givenMember1);
+        givenMemberArticle2 = createTestMemberArticle2(givenMember1);
+        givenMemberArticle3 = ArticleFactory.createTestMemberArticle3(givenMember1);
 
         givenAnonymousUser1 = anonymousUserRepository.save(
                 AnonymousUserFactory.createTestAnonymousUser1());
 
-        givenAnonymousArticle1 = ArticleFactory.createTestAnonymousArticle1();
-        givenAnonymousArticle2 = ArticleFactory.createTestAnonymousArticle2();
-        givenAnonymousArticle3 = ArticleFactory.createTestAnonymousArticle3();
+        givenAnonymousArticle1 = ArticleFactory.createTestAnonymousArticle1(givenAnonymousUser1);
+        givenAnonymousArticle2 = ArticleFactory.createTestAnonymousArticle2(givenAnonymousUser1);
+        givenAnonymousArticle3 = ArticleFactory.createTestAnonymousArticle3(givenAnonymousUser1);
 
         articleRepository.saveAll(
                 List.of(givenMemberArticle1, givenMemberArticle2, givenMemberArticle3,
@@ -164,16 +165,11 @@ class ArticleRepositoryTest {
     @Test
     void givenMemberId_whenFindAllByMemberIdOrderByCreatedDatetimeDesc_thenSuccess() {
         // given
-        Article givenMemberArticle1ByMember1 = ArticleFactory.createCustomMemberArticle(
-                "memberArticle2ByMember1",
-                givenMember1
-        );
-        Article givenMemberArticle2ByMember1 = ArticleFactory.createCustomMemberArticle(
-                "memberArticle3ByMember1",
-                givenMember1
-        );
+        Article givenMemberArticle1ByMember1 = createTestMemberArticle2(givenMember1);
+        Article givenMemberArticle2ByMember1 = ArticleFactory.createTestMemberArticle3(givenMember1);
         articleRepository.saveAll(
-                List.of(givenMemberArticle1ByMember1, givenMemberArticle2ByMember1));
+                List.of(givenMemberArticle1ByMember1, givenMemberArticle2ByMember1)
+        );
 
         // when
         List<Article> actualArticles = articleRepository.findByMemberIdAndLoginFlagIsTrueAndErasedFlagIsFalseOrderByCreatedDatetimeDesc(
@@ -206,14 +202,8 @@ class ArticleRepositoryTest {
     @Test
     void givenMemberId_whenFindAllByMemberIdOrderByCreatedDatetimeAsc_thenSuccess() {
         // given
-        Article givenMemberArticle1ByMember1 = ArticleFactory.createCustomMemberArticle(
-                "memberArticle2ByMember1",
-                givenMember1
-        );
-        Article givenMemberArticle2ByMember1 = ArticleFactory.createCustomMemberArticle(
-                "memberArticle3ByMember1",
-                givenMember1
-        );
+        Article givenMemberArticle1ByMember1 = ArticleFactory.createTestMemberArticle1(givenMember1);
+        Article givenMemberArticle2ByMember1 = ArticleFactory.createTestMemberArticle2(givenMember1);
         articleRepository.saveAll(
                 List.of(givenMemberArticle1ByMember1, givenMemberArticle2ByMember1));
 
@@ -334,8 +324,8 @@ class ArticleRepositoryTest {
     @Test
     void givenArticle_whenSave_thenSuccess() {
         // given
-        Article expectedMemberArticle = ArticleFactory.createTestMemberArticle4();
-        Article expectedAnonymousArticle = ArticleFactory.createTestAnonymousArticle4();
+        Article expectedMemberArticle = ArticleFactory.createTestMemberArticle4(givenMember1);
+        Article expectedAnonymousArticle = ArticleFactory.createTestAnonymousArticle4(givenAnonymousUser1);
 
         // when
         Article actualMemberArticle = articleRepository.save(expectedMemberArticle);
@@ -352,8 +342,8 @@ class ArticleRepositoryTest {
     @Test
     void givenArticle_whenSave_thenThrowConstraintViolationException() {
         // given
-        Article expectedMemberArticle = ArticleFactory.createCustomMemberArticle(null, null);
-        Article expectedAnonymousArticle = ArticleFactory.createCustomAnonymousArticle(null, null);
+        Article expectedMemberArticle = ArticleFactory.createCustomMemberArticle(null, givenMember1);
+        Article expectedAnonymousArticle = ArticleFactory.createCustomAnonymousArticle(null, givenAnonymousUser1);
 
         // when & then
         articleRepository.saveAll(List.of(expectedMemberArticle, expectedAnonymousArticle));

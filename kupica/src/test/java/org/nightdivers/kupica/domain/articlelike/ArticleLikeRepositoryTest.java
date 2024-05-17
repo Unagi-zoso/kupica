@@ -65,9 +65,9 @@ class ArticleLikeRepositoryTest {
         givenAnonymousUser1 = anonymousUserRepository.save(createTestAnonymousUser1());
         givenAnonymousUser2 = anonymousUserRepository.save(createTestAnonymousUser2());
 
-        givenArticle1 = articleRepository.save(createTestMemberArticle1());
-        givenArticle2 = articleRepository.save(createTestMemberArticle2());
-        givenArticle3 = articleRepository.save(createTestMemberArticle3());
+        givenArticle1 = articleRepository.save(createTestMemberArticle1(givenMember1));
+        givenArticle2 = articleRepository.save(createTestMemberArticle2(givenMember1));
+        givenArticle3 = articleRepository.save(createTestMemberArticle3(givenMember2));
 
         givenArticleLike1 = articleLikeRepository.save(
                 createMemberArticleLike(givenMember1, givenArticle1));
@@ -140,7 +140,7 @@ class ArticleLikeRepositoryTest {
     @Test
     void givenValidArticleId_whenFindAllByArticleId_thenReturnsEmptyList() {
         // given
-        Long articleId = articleRepository.save(createTestMemberArticle3()).getId();
+        Long articleId = articleRepository.save(createTestMemberArticle3(givenMember1)).getId();
 
         // when
         List<ArticleLike> articleLikeList = articleLikeRepository.findAllByArticleIdAndErasedFlagIsFalse(articleId);

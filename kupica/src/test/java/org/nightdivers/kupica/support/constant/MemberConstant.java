@@ -9,21 +9,25 @@ public class MemberConstant {
     public static final String TEST_MEMBER_1_EMAIL = "test1@test.com";
     public static final UserRole TEST_MEMBER_1_ROLE = UserRole.MEMBER;
     public static final SocialLoginType TEST_MEMBER_1_SOCIAL_LOGIN_TYPE = SocialLoginType.KAKAO;
+    public static final Long TEST_MEMBER_1_MOCK_ID = 1L;
 
     public static final String TEST_MEMBER_2_NICKNAME = "test 2 nickname";
     public static final String TEST_MEMBER_2_EMAIL = "test2@test.com";
     public static final UserRole TEST_MEMBER_2_ROLE = UserRole.MEMBER;
     public static final SocialLoginType TEST_MEMBER_2_SOCIAL_LOGIN_TYPE = SocialLoginType.KAKAO;
+    public static final Long TEST_MEMBER_2_MOCK_ID = 2L;
 
     public static final String TEST_MEMBER_3_NICKNAME = "test 3 nickname";
     public static final String TEST_MEMBER_3_EMAIL = "test3@test.com";
     public static final UserRole TEST_MEMBER_3_ROLE = UserRole.MEMBER;
     public static final SocialLoginType TEST_MEMBER_3_SOCIAL_LOGIN_TYPE = SocialLoginType.KAKAO;
+    public static final Long TEST_MEMBER_3_MOCK_ID = 3L;
 
     public static final String TEST_MEMBER_4_NICKNAME = "test 4 nickname";
     public static final String TEST_MEMBER_4_EMAIL = "test4@test.com";
     public static final UserRole TEST_MEMBER_4_ROLE = UserRole.MEMBER;
     public static final SocialLoginType TEST_MEMBER_4_SOCIAL_LOGIN_TYPE = SocialLoginType.KAKAO;
+    public static final Long TEST_MEMBER_4_MOCK_ID = 4L;
 
     public static final String TEST_VALID_MEMBER_EMAIL = "valid@test.com";
 

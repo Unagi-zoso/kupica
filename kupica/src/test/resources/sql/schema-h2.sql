@@ -11,7 +11,7 @@ CREATE TABLE member
     PRIMARY KEY (id)
 );
 
-CREATE SEQUENCE member_sequence START WITH 11 INCREMENT BY 1;
+CREATE SEQUENCE member_sequence START WITH 1 INCREMENT BY 1;
 
 ALTER TABLE member
     ADD CONSTRAINT uk_nickname_on_member UNIQUE (nickname);
@@ -29,7 +29,7 @@ CREATE TABLE anonymous_user
     PRIMARY KEY (id)
 );
 
-create sequence anonymous_user_sequence START WITH 8 INCREMENT BY 1;
+create sequence anonymous_user_sequence START WITH 1 INCREMENT BY 1;
 
 CREATE TABLE article
 (
@@ -44,7 +44,7 @@ CREATE TABLE article
     PRIMARY KEY (id)
 );
 
-create sequence article_sequence START WITH 15 INCREMENT BY 1;
+create sequence article_sequence START WITH 1 INCREMENT BY 1;
 
 CREATE TABLE article_comment
 (
@@ -61,7 +61,7 @@ CREATE TABLE article_comment
     PRIMARY KEY (id)
 );
 
-create sequence article_comment_sequence START WITH 31 INCREMENT BY 1;
+create sequence article_comment_sequence START WITH 1 INCREMENT BY 1;
 
 CREATE TABLE article_like
 (
@@ -76,7 +76,7 @@ CREATE TABLE article_like
     CONSTRAINT article_like_member_id_article_id_unique UNIQUE (ip_address, member_id, article_id)
 );
 
-create sequence article_like_sequence START WITH 21 INCREMENT BY 1;
+create sequence article_like_sequence START WITH 1 INCREMENT BY 1;
 
 ALTER TABLE article_like
     ADD CONSTRAINT uk_ip_address_member_id_article_id UNIQUE (ip_address, member_id, article_id);
@@ -95,7 +95,7 @@ CREATE TABLE photo_file_source
     PRIMARY KEY (id)
 );
 
-create sequence photo_file_source_sequence START WITH 21 INCREMENT BY 1;
+create sequence photo_file_source_sequence START WITH 1 INCREMENT BY 1;
 
 ALTER TABLE photo_file_source
     ADD CONSTRAINT uk_file_source UNIQUE (file_source);
@@ -109,7 +109,7 @@ CREATE TABLE hashtag
     PRIMARY KEY (id)
 );
 
-create sequence hashtag_sequence START WITH 15 INCREMENT BY 1;
+create sequence hashtag_sequence START WITH 1 INCREMENT BY 1;
 
 ALTER TABLE hashtag
     ADD CONSTRAINT uk_tag_name UNIQUE (tag_name);
@@ -125,5 +125,4 @@ CREATE TABLE article_hashtag
     PRIMARY KEY (id)
 );
 
-create sequence article_hashtag_sequence START WITH 15 INCREMENT BY 1;
-
+create sequence article_hashtag_sequence START WITH 1 INCREMENT BY 1;

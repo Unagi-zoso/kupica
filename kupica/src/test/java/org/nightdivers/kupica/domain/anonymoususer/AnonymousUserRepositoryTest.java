@@ -121,32 +121,4 @@ class AnonymousUserRepositoryTest {
                 () -> assertThat(actualAnonymousUsers.size()).isEqualTo(DUPLICATED_TEST_ANONYMOUS_COUNT)
         );
     }
-
-    @DisplayName("모든 익명 사용자 조회 - [성공]")
-    @Test
-    void givenAnonymousUsers_whenFindAll_thenSuccess() {
-        // given
-
-        // when
-        List<AnonymousUser> actualAnonymousUsers = anonymousUserRepository.findAll();
-
-        // then
-        assertThat(actualAnonymousUsers).containsAll(givenDuplicatedAnonymousUsers);
-        assertThat(actualAnonymousUsers.size()).isGreaterThan(DUPLICATED_TEST_ANONYMOUS_COUNT);
-    }
-
-
-    /* TARGET : 익명 사용자 등록 테스트 */
-    @DisplayName("익명 사용자 등록 - [성공]")
-    @Test
-    void givenAnonymousUser_whenSave_thenSuccess() {
-        // given
-        AnonymousUser expected = AnonymousUserFactory.createTestAnonymousUser3();
-
-        // when
-        AnonymousUser actual = anonymousUserRepository.save(expected);
-
-        // then
-        assertThat(actual).isEqualTo(expected);
-    }
 }

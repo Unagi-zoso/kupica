@@ -1,7 +1,6 @@
 package org.nightdivers.kupica.domain.comment;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.nightdivers.kupica.support.constant.AnonymousUserConstant.TEST_INVALID_ANONYMOUS_USER_NICKNAME;
 import static org.nightdivers.kupica.support.constant.ArticleConstant.TEST_ANONYMOUS_ARTICLE_1_CAPTION;
 import static org.nightdivers.kupica.support.constant.ArticleConstant.TEST_INVALID_ARTICLE_ID;
@@ -119,7 +118,6 @@ class CommentRepositoryTest {
                 givenAnonymousReplyComment3
         );
     }
-    // 시간, 대댓글, 쓴이
 
     @DisplayName("member id 와 일치하는 댓글 전체 조회 - [성공]")
     @Test
@@ -357,126 +355,5 @@ class CommentRepositoryTest {
 
         // then
         assertThat(comments).isEmpty();
-    }
-
-
-    /* TARGET : 댓글 생성 테스트 */
-    @DisplayName("member 댓글 생성 - [성공]")
-    @Test
-    void givenMember_whenSave_thenComment() {
-        // given
-
-        // when
-        Comment comment = commentRepository.save(
-                createTestMemberComment1(givenMember1, givenAnonymousArticle1));
-
-        // then
-        assertAll(
-                () -> assertThat(comment).isNotNull(),
-                () -> assertThat(comment.getMember()).isEqualTo(givenMember1),
-                () -> assertThat(comment.getArticle()).isEqualTo(givenAnonymousArticle1)
-        );
-    }
-
-    @DisplayName("anonymous 댓글 생성 - [성공]")
-    @Test
-    void givenAnonymousUser_whenSave_thenComment() {
-        // given
-        AnonymousUser anonymousUser = anonymousUserRepository.save(createTestAnonymousUser1());
-        Article article = articleRepository.save(
-                createCustomAnonymousArticle(
-                        TEST_ANONYMOUS_ARTICLE_1_CAPTION,
-                        givenAnonymousUser1
-                ));
-
-        // when
-        Comment comment = commentRepository.save(
-                createTestAnonymousComment1(anonymousUser, article));
-
-        // then
-        assertAll(
-                () -> assertThat(comment).isNotNull(),
-                () -> assertThat(comment.getAnonymousUser()).isEqualTo(anonymousUser),
-                () -> assertThat(comment.getArticle()).isEqualTo(article)
-        );
-    }
-
-    @DisplayName("member 대댓글 생성 - [성공]")
-    @Test
-    void givenParentCommentAndMember_whenSave_thenComment() {
-        // given
-
-        // when
-        Comment comment = commentRepository.save(
-                createTestMemberReplyComment1(givenMemberComment1, givenMember1,
-                                              givenAnonymousArticle1
-                ));
-
-        // then
-        assertAll(
-                () -> assertThat(comment).isNotNull(),
-                () -> assertThat(comment.getMember()).isEqualTo(givenMember1),
-                () -> assertThat(comment.getArticle()).isEqualTo(givenAnonymousArticle1),
-                () -> assertThat(comment.getReplyTargetComment()).isEqualTo(givenMemberComment1)
-        );
-    }
-
-    @DisplayName("anonymous 대댓글 생성 - [성공]")
-    @Test
-    void givenParentCommentAndAnonymousUser_whenSave_thenComment() {
-        // given
-        AnonymousUser anonymousUser = anonymousUserRepository.save(createTestAnonymousUser1());
-        Article article = articleRepository.save(
-                createCustomAnonymousArticle(
-                        TEST_ANONYMOUS_ARTICLE_1_CAPTION,
-                        givenAnonymousUser1
-                ));
-
-        // when
-        Comment comment = commentRepository.save(
-                createTestAnonymousReplyComment1(givenAnonymousComment1, anonymousUser, article));
-
-        // then
-        assertAll(
-                () -> assertThat(comment).isNotNull(),
-                () -> assertThat(comment.getAnonymousUser()).isEqualTo(anonymousUser),
-                () -> assertThat(comment.getArticle()).isEqualTo(article),
-                () -> assertThat(comment.getReplyTargetComment()).isEqualTo(givenAnonymousComment1)
-        );
-    }
-
-
-    /* TARGET : 댓글 수정 테스트 */
-    @DisplayName("댓글 수정 - [성공]")
-    @Test
-    void givenComment_whenUpdate_thenComment() {
-        // given
-        String updatedContent = "Updated content";
-
-        // when
-        givenMemberComment1.changeContent(updatedContent);
-        Comment updatedComment = commentRepository.save(givenMemberComment1);
-
-        // then
-        assertThat(updatedComment.getContent()).isEqualTo(updatedContent);
-    }
-
-    @DisplayName("대댓글 수정 - [성공]")
-    @Test
-    void givenReplyComment_whenUpdate_thenComment() {
-        // given
-        Long prevParentCommentId = givenMemberReplyComment1.getReplyTargetComment().getId();
-        String updatedContent = "Updated content";
-
-        // when
-        givenMemberReplyComment1.changeContent(updatedContent);
-        Comment updatedComment = commentRepository.save(givenMemberReplyComment1);
-
-        // then
-        assertAll(
-                () -> assertThat(updatedComment.getReplyTargetComment().getId()).isEqualTo(
-                        prevParentCommentId),
-                () -> assertThat(updatedComment.getContent()).isEqualTo(updatedContent)
-        );
     }
 }

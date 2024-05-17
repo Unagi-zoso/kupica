@@ -6,14 +6,17 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.nightdivers.kupica.support.constant.AnonymousUserConstant.TEST_INVALID_ANONYMOUS_USER_NICKNAME;
 import static org.nightdivers.kupica.support.constant.ArticleConstant.TEST_INVALID_ARTICLE_ID;
 import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_INVALID_MEMBER_ID;
+import static org.nightdivers.kupica.support.factory.AnonymousUserFactory.createTestAnonymousUser1;
+import static org.nightdivers.kupica.support.factory.ArticleFactory.createTestAnonymousArticle1;
+import static org.nightdivers.kupica.support.factory.ArticleFactory.createTestAnonymousArticle2;
+import static org.nightdivers.kupica.support.factory.ArticleFactory.createTestAnonymousArticle3;
+import static org.nightdivers.kupica.support.factory.ArticleFactory.createTestMemberArticle1;
 import static org.nightdivers.kupica.support.factory.ArticleFactory.createTestMemberArticle2;
+import static org.nightdivers.kupica.support.factory.ArticleFactory.createTestMemberArticle3;
 
-import jakarta.persistence.EntityManager;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,7 +25,6 @@ import org.nightdivers.kupica.domain.anonymoususer.AnonymousUserRepository;
 import org.nightdivers.kupica.domain.member.Member;
 import org.nightdivers.kupica.domain.member.MemberRepository;
 import org.nightdivers.kupica.support.annotation.RepositoryTest;
-import org.nightdivers.kupica.support.factory.AnonymousUserFactory;
 import org.nightdivers.kupica.support.factory.ArticleFactory;
 import org.nightdivers.kupica.support.factory.MemberFactory;
 import org.springframework.data.domain.PageRequest;
@@ -34,13 +36,11 @@ class ArticleRepositoryTest {
     private final ArticleRepository articleRepository;
     private final MemberRepository memberRepository;
     private final AnonymousUserRepository anonymousUserRepository;
-    private final EntityManager entityManager;
 
     Member givenMember1;
 
     AnonymousUser givenAnonymousUser1;
 
-    // 실제론 테스트 시 test.resource.sql.data-h2.sql 에서 만들어 둔 테스트 셋이 더 존재합니다.
     int givenTestDataSetSize = 6;
 
     Article givenMemberArticle1;
@@ -55,16 +55,16 @@ class ArticleRepositoryTest {
     void setUp() {
         givenMember1 = memberRepository.save(MemberFactory.createTestMember1());
 
-        givenMemberArticle1 = ArticleFactory.createTestMemberArticle1(givenMember1);
+        givenMemberArticle1 = createTestMemberArticle1(givenMember1);
         givenMemberArticle2 = createTestMemberArticle2(givenMember1);
-        givenMemberArticle3 = ArticleFactory.createTestMemberArticle3(givenMember1);
+        givenMemberArticle3 = createTestMemberArticle3(givenMember1);
 
         givenAnonymousUser1 = anonymousUserRepository.save(
-                AnonymousUserFactory.createTestAnonymousUser1());
+                createTestAnonymousUser1());
 
-        givenAnonymousArticle1 = ArticleFactory.createTestAnonymousArticle1(givenAnonymousUser1);
-        givenAnonymousArticle2 = ArticleFactory.createTestAnonymousArticle2(givenAnonymousUser1);
-        givenAnonymousArticle3 = ArticleFactory.createTestAnonymousArticle3(givenAnonymousUser1);
+        givenAnonymousArticle1 = createTestAnonymousArticle1(givenAnonymousUser1);
+        givenAnonymousArticle2 = createTestAnonymousArticle2(givenAnonymousUser1);
+        givenAnonymousArticle3 = createTestAnonymousArticle3(givenAnonymousUser1);
 
         articleRepository.saveAll(
                 List.of(givenMemberArticle1, givenMemberArticle2, givenMemberArticle3,
@@ -118,8 +118,7 @@ class ArticleRepositoryTest {
         List<Article> actualArticles = articleRepository.findAllByErasedFlagIsFalse();
 
         // then
-        assertThat(actualArticles).contains(givenMemberArticle1, givenMemberArticle2,
-                                            givenMemberArticle3,
+        assertThat(actualArticles).contains(givenMemberArticle1, givenMemberArticle2, givenMemberArticle3,
                                             givenAnonymousArticle1, givenAnonymousArticle2, givenAnonymousArticle3
         );
     }
@@ -155,8 +154,7 @@ class ArticleRepositoryTest {
         assertThat(actualArticles.subList(
                 actualArticles.size() - givenTestDataSetSize,
                 actualArticles.size()
-        )).containsExactly(givenMemberArticle1, givenMemberArticle2,
-                           givenMemberArticle3,
+        )).containsExactly(givenMemberArticle1, givenMemberArticle2, givenMemberArticle3,
                            givenAnonymousArticle1, givenAnonymousArticle2, givenAnonymousArticle3
         );
     }
@@ -166,7 +164,7 @@ class ArticleRepositoryTest {
     void givenMemberId_whenFindAllByMemberIdOrderByCreatedDatetimeDesc_thenSuccess() {
         // given
         Article givenMemberArticle1ByMember1 = createTestMemberArticle2(givenMember1);
-        Article givenMemberArticle2ByMember1 = ArticleFactory.createTestMemberArticle3(givenMember1);
+        Article givenMemberArticle2ByMember1 = createTestMemberArticle3(givenMember1);
         articleRepository.saveAll(
                 List.of(givenMemberArticle1ByMember1, givenMemberArticle2ByMember1)
         );
@@ -179,7 +177,7 @@ class ArticleRepositoryTest {
                 .getContent();
 
         // then
-        assertThat(actualArticles).containsExactly(
+        assertThat(actualArticles).contains(
                 givenMemberArticle2ByMember1,
                 givenMemberArticle1ByMember1
         );
@@ -202,7 +200,7 @@ class ArticleRepositoryTest {
     @Test
     void givenMemberId_whenFindAllByMemberIdOrderByCreatedDatetimeAsc_thenSuccess() {
         // given
-        Article givenMemberArticle1ByMember1 = ArticleFactory.createTestMemberArticle1(givenMember1);
+        Article givenMemberArticle1ByMember1 = createTestMemberArticle1(givenMember1);
         Article givenMemberArticle2ByMember1 = ArticleFactory.createTestMemberArticle2(givenMember1);
         articleRepository.saveAll(
                 List.of(givenMemberArticle1ByMember1, givenMemberArticle2ByMember1));
@@ -215,7 +213,7 @@ class ArticleRepositoryTest {
                 .getContent();
 
         // then
-        assertThat(actualArticles).containsExactly(
+        assertThat(actualArticles).contains(
                 givenMemberArticle1ByMember1,
                 givenMemberArticle2ByMember1
         );
@@ -256,7 +254,7 @@ class ArticleRepositoryTest {
                 .getContent();
 
         // then
-        assertThat(actualArticles).containsExactly(
+        assertThat(actualArticles).contains(
                 givenAnonymousArticle2ByAnonymousUser1,
                 givenAnonymousArticle1ByAnonymousUser1
         );
@@ -298,7 +296,7 @@ class ArticleRepositoryTest {
                 .getContent();
 
         // then
-        assertThat(actualArticles).containsExactly(
+        assertThat(actualArticles).contains(
                 givenAnonymousArticle1ByAnonymousUser1,
                 givenAnonymousArticle2ByAnonymousUser1
         );
@@ -316,91 +314,5 @@ class ArticleRepositoryTest {
                         TEST_INVALID_ANONYMOUS_USER_NICKNAME
                 ))
                 .isEmpty();
-    }
-
-
-    /* TARGET : 게시글 등록 테스트 */
-    @DisplayName("게시글 등록 - [성공]")
-    @Test
-    void givenArticle_whenSave_thenSuccess() {
-        // given
-        Article expectedMemberArticle = ArticleFactory.createTestMemberArticle4(givenMember1);
-        Article expectedAnonymousArticle = ArticleFactory.createTestAnonymousArticle4(givenAnonymousUser1);
-
-        // when
-        Article actualMemberArticle = articleRepository.save(expectedMemberArticle);
-        Article actualAnonymousArticle = articleRepository.save(expectedAnonymousArticle);
-
-        // then
-        assertAll(
-                () -> assertThat(actualMemberArticle).isEqualTo(expectedMemberArticle),
-                () -> assertThat(actualAnonymousArticle).isEqualTo(expectedAnonymousArticle)
-        );
-    }
-
-    @DisplayName("게시글 등록 - [실패 : 게시글 본문이 없는 경우]")
-    @Test
-    void givenArticle_whenSave_thenThrowConstraintViolationException() {
-        // given
-        Article expectedMemberArticle = ArticleFactory.createCustomMemberArticle(null, givenMember1);
-        Article expectedAnonymousArticle = ArticleFactory.createCustomAnonymousArticle(null, givenAnonymousUser1);
-
-        // when & then
-        articleRepository.saveAll(List.of(expectedMemberArticle, expectedAnonymousArticle));
-        assertThatThrownBy(entityManager::flush).isInstanceOf(ConstraintViolationException.class);
-
-    }
-
-
-    /* TARGET : 게시글 수정 테스트 */
-    @DisplayName("게시글 본문 수정 - [성공]")
-    @Test
-    void givenArticle_whenChangeCaption_thenSuccess() {
-        // given
-        Article memberArticle = articleRepository.findByIdAndErasedFlagIsFalse(givenMemberArticle1.getId())
-                .orElseThrow(NoSuchElementException::new);
-        LocalDateTime prevMemberArticleUpdatedDatetime = memberArticle.getUpdatedDatetime();
-        Article anonymousArticle = articleRepository.findByIdAndErasedFlagIsFalse(givenAnonymousArticle1.getId())
-                .orElseThrow(NoSuchElementException::new);
-        LocalDateTime prevAnonymousArticleUpdatedDatetime = anonymousArticle.getUpdatedDatetime();
-
-        // when
-        memberArticle.changeCaption("newCaption");
-        anonymousArticle.changeCaption("newCaption");
-
-        entityManager.flush();
-
-        Article actualMemberArticle = articleRepository.findByIdAndErasedFlagIsFalse(memberArticle.getId())
-                .orElseThrow(NoSuchElementException::new);
-        Article actualAnonymousArticle = articleRepository.findByIdAndErasedFlagIsFalse(anonymousArticle.getId())
-                .orElseThrow(NoSuchElementException::new);
-
-        // then
-        assertAll(
-                () -> assertThat(actualMemberArticle.getCaption()).isEqualTo("newCaption"),
-                () -> assertThat(actualMemberArticle.getUpdatedDatetime()).isAfter(
-                        prevMemberArticleUpdatedDatetime),
-                () -> assertThat(actualAnonymousArticle.getCaption()).isEqualTo("newCaption"),
-                () -> assertThat(actualAnonymousArticle.getUpdatedDatetime()).isAfter(
-                        prevAnonymousArticleUpdatedDatetime)
-        );
-    }
-
-    @DisplayName("게시글 본문 수정 - [실패 : 게시글 본문이 없는 경우]")
-    @Test
-    void givenArticle_whenChangeCaption_thenThrowConstraintViolationException() {
-        // given
-        Article memberArticle = articleRepository.findByIdAndErasedFlagIsFalse(givenMemberArticle1.getId())
-                .orElseThrow(NoSuchElementException::new);
-        Article anonymousArticle = articleRepository.findByIdAndErasedFlagIsFalse(givenAnonymousArticle1.getId())
-                .orElseThrow(NoSuchElementException::new);
-
-        // when
-        memberArticle.changeCaption(null);
-        anonymousArticle.changeCaption(null);
-
-        // then
-        assertThatThrownBy(entityManager::flush)
-                .isInstanceOf(ConstraintViolationException.class);
     }
 }

@@ -25,11 +25,8 @@ import org.springframework.data.domain.PageRequest;
 class ArticleHashtagRepositoryTest {
 
     private final ArticleRepository articleRepository;
-
     private final AnonymousUserRepository anonymousUserRepository;
-
     private final HashtagRepository hashtagRepository;
-
     private final ArticleHashtagRepository articleHashtagRepository;
 
     AnonymousUser givenAnonymousUser;

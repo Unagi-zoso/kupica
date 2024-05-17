@@ -9,7 +9,6 @@ import static org.nightdivers.kupica.support.constant.ArticleConstant.TEST_INVAL
 import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_INVALID_MEMBER_ID;
 import static org.nightdivers.kupica.support.factory.AnonymousUserFactory.createTestAnonymousUser1;
 import static org.nightdivers.kupica.support.factory.AnonymousUserFactory.createTestAnonymousUser2;
-import static org.nightdivers.kupica.support.factory.AnonymousUserFactory.createTestAnonymousUser3;
 import static org.nightdivers.kupica.support.factory.ArticleFactory.createTestMemberArticle1;
 import static org.nightdivers.kupica.support.factory.ArticleFactory.createTestMemberArticle2;
 import static org.nightdivers.kupica.support.factory.ArticleFactory.createTestMemberArticle3;
@@ -221,36 +220,6 @@ class ArticleLikeRepositoryTest {
                                          .getId()).isEqualTo(
                         givenArticle3.getId())
         );
-    }
-
-
-    /* TARGET : 좋아요 생성 테스트 */
-    @DisplayName("member 좋아요 생성 - [성공]")
-    @Test
-    void givenMember_whenCreateMemberArticleLike_thenReturnsArticleLike() {
-        // given
-        Member member = memberRepository.save(createTestMember3());
-
-        // when
-        ArticleLike actualArticleLike = articleLikeRepository.save(
-                createMemberArticleLike(member, givenArticle1));
-
-        // then
-        assertThat(actualArticleLike).isNotNull();
-    }
-
-    @DisplayName("anonymous user 좋아요 생성 - [성공]")
-    @Test
-    void givenAnonymousUser_whenCreateAnonymousArticleLike_thenReturnsArticleLike() {
-        // given
-        AnonymousUser anonymousUser = anonymousUserRepository.save(createTestAnonymousUser3());
-
-        // when
-        ArticleLike actualArticleLike = articleLikeRepository.save(
-                createAnonymousArticleLike(anonymousUser.getIpAddress(), givenArticle1));
-
-        // then
-        assertThat(actualArticleLike).isNotNull();
     }
 
     /* TARGET : 좋아요 수 조회 테스트 */

@@ -5,6 +5,7 @@ import static org.nightdivers.kupica.domain.member.UserRole.MEMBER;
 import static org.nightdivers.kupica.domain.member.UserRole.SIGNING_UP;
 
 import lombok.RequiredArgsConstructor;
+import org.nightdivers.kupica.handler.CustomAccessDeniedHandler;
 import org.nightdivers.kupica.handler.OAuth2AuthenticationSuccessHandler;
 import org.nightdivers.kupica.service.CustomOAuth2UserService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -42,6 +43,9 @@ public class SecurityConfig {
                         )
                         .loginPage("/login")
                         .successHandler(oAuth2AuthenticationSuccessHandler)
+                )
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .accessDeniedHandler(new CustomAccessDeniedHandler())
                 )
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/").permitAll()

@@ -4,6 +4,8 @@ import static org.nightdivers.kupica.domain.member.UserRole.ANONYMOUS;
 import static org.nightdivers.kupica.domain.member.UserRole.MEMBER;
 import static org.nightdivers.kupica.domain.member.UserRole.SIGNING_UP;
 
+import org.nightdivers.kupica.handler.CustomAccessDeniedHandler;
+import org.nightdivers.kupica.handler.CustomAuthenticationEntryPoint;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -27,11 +29,14 @@ public class TestSecurityConfig {
                 .anonymous(anonymous -> anonymous
                         .authorities(ANONYMOUS.getDescription())
                 )
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .accessDeniedHandler(new CustomAccessDeniedHandler())
+                )
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/oauth2/**", "/login/**").hasAnyAuthority(ANONYMOUS.getDescription(), SIGNING_UP.getDescription())
                         .requestMatchers("/register/**", "/api/v1/auth/register").hasAuthority(SIGNING_UP.getDescription())
-                        .requestMatchers("/logout").hasAuthority(MEMBER.getDescription())
+                        .requestMatchers("/logout", "/api/v1/member/withdraw").hasAuthority(MEMBER.getDescription())
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .anyRequest().permitAll()
                 )

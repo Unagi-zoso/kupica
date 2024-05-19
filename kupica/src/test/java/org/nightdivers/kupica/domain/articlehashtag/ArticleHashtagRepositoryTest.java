@@ -7,7 +7,9 @@ import static org.nightdivers.kupica.support.constant.HashtagConstant.TEST_VALID
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.nightdivers.kupica.domain.anonymoususer.AnonymousUser;
 import org.nightdivers.kupica.domain.anonymoususer.AnonymousUserRepository;
@@ -20,6 +22,7 @@ import org.nightdivers.kupica.support.factory.AnonymousUserFactory;
 import org.nightdivers.kupica.support.factory.ArticleFactory;
 import org.springframework.data.domain.PageRequest;
 
+@DisplayNameGeneration(ReplaceUnderscores.class)
 @RequiredArgsConstructor
 @RepositoryTest
 class ArticleHashtagRepositoryTest {
@@ -39,6 +42,10 @@ class ArticleHashtagRepositoryTest {
 
     @BeforeEach
     void setUp() {
+        initTestData();
+    }
+
+    private void initTestData() {
         givenAnonymousUser = anonymousUserRepository.save(AnonymousUserFactory.createTestAnonymousUser1());
         givenArticles = articleRepository.saveAll(
                 List.of(
@@ -55,34 +62,36 @@ class ArticleHashtagRepositoryTest {
                         ArticleHashtag.of(givenArticles.get(2), givenHashtag)
                 )
         );
+
     }
 
-    /* TARGET : ArticleHashtag 조회 테스트 */
-    @DisplayName("Hashtag 와 일치하는 Article 페이지로 조회 - [성공]")
-    @Test
-    void givenHashtag_whenFindArticleByHashtag_thenReturnArticlePage() {
-        // given
+    @Nested
+    class 해시태그와_일치하는_게시글_조회_시 {
 
-        // when
-        List<ArticleHashtag> articleHashtags = articleHashtagRepository.findByHashtagTagNameAndErasedFlagIsFalse(
-                PageRequest.of(0, 5), TEST_VALID_TAG_NAME).getContent();
+        @Nested
+        class 존재하는_경우 {
 
-        // then
-        assertThat(articleHashtags).isNotEmpty();
-    }
+            @Test
+            void 해당되는_게시글을_반환한다() {
+                List<ArticleHashtag> actual = articleHashtagRepository.findByHashtagTagNameAndErasedFlagIsFalse(
+                        PageRequest.of(0, 5), TEST_VALID_TAG_NAME).getContent();
 
-    @DisplayName("Hashtag 와 일치하는 Article 페이지로 조회 - [실패 : Hashtag 미존재]")
-    @Test
-    void givenHashtag_whenFindArticleByHashtag_thenEmpty() {
-        // given
+                assertThat(actual).isNotEmpty();
+            }
+        }
 
-        // when
-        List<ArticleHashtag> articleHashtags = articleHashtagRepository.findByHashtagTagNameAndErasedFlagIsFalse(
-                PageRequest.of(0, 5),
-                TEST_INVALID_TAG_NAME
-        ).getContent();
+        @Nested
+        class 존재하지_않는_경우 {
 
-        // then
-        assertThat(articleHashtags).isEmpty();
+            @Test
+            void 빈_목록을_반환한다() {
+                List<ArticleHashtag> articleHashtags = articleHashtagRepository.findByHashtagTagNameAndErasedFlagIsFalse(
+                        PageRequest.of(0, 5),
+                        TEST_INVALID_TAG_NAME
+                ).getContent();
+
+                assertThat(articleHashtags).isEmpty();
+            }
+        }
     }
 }

@@ -12,27 +12,26 @@ import static org.nightdivers.kupica.support.factory.OAuth2UserFactory.createTes
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.nightdivers.kupica.service.MemberService;
 import org.springframework.security.core.Authentication;
 
+@DisplayNameGeneration(ReplaceUnderscores.class)
 class OAuth2AuthenticationSuccessHandlerTest {
 
     @Mock
     private MemberService memberService;
-
     @Mock
     private HttpServletRequest request;
-
     @Mock
     private HttpServletResponse response;
-
     @Mock
     private Authentication authentication;
-
     @InjectMocks
     private OAuth2AuthenticationSuccessHandler successHandler;
 
@@ -41,35 +40,44 @@ class OAuth2AuthenticationSuccessHandlerTest {
         openMocks(this);
     }
 
-    /* TARGET onAuthenticationSuccess 메서드 테스트 */
-    @DisplayName("Member가 DB 에 존재하는 경우 루트 페이지 redirection")
-    @Test
-    public void givenExistMember_whenOnAuthenticationSuccess_thenRedirectToRoot() throws Exception {
-        // given
-        when(authentication.getPrincipal()).thenReturn(createTestOAuth2User(MEMBER));
-        when(memberService.isExist(TEST_VALID_MEMBER_EMAIL)).thenReturn(true);
+    @Nested
+    class 소셜_로그인_성공_시 {
 
-        // when
-        successHandler.onAuthenticationSuccess(request, response, authentication);
+        @Nested
+        class 이미_회원가입한_이용자일_경우 {
 
-        // then
-        verify(memberService, times(1)).isExist(TEST_VALID_MEMBER_EMAIL);
-        verify(response).sendRedirect(request.getContextPath() + "/");
-    }
+            @BeforeEach
+            void context() {
+                when(authentication.getPrincipal()).thenReturn(createTestOAuth2User(MEMBER));
+                when(memberService.isExist(TEST_VALID_MEMBER_EMAIL)).thenReturn(true);
+            }
 
-    @DisplayName("Member가 DB 에 존재하지 않는 경우 회원가입 페이지 redirection")
-    @Test
-    public void givenNotExistMember_whenOnAuthenticationSuccess_thenRedirectToRegister() throws Exception {
-        // given
-        when(authentication.getPrincipal()).thenReturn(createTestOAuth2User(SIGNING_UP));
-        when(memberService.isExist(TEST_VALID_MEMBER_EMAIL)).thenReturn(false);
+            @Test
+            void 루트_페이지로_리다이렉션한다() throws Exception {
+                successHandler.onAuthenticationSuccess(request, response, authentication);
 
-        // when
-        successHandler.onAuthenticationSuccess(request, response, authentication);
+                verify(memberService, times(1)).isExist(TEST_VALID_MEMBER_EMAIL);
+                verify(response).sendRedirect(request.getContextPath() + "/");
+            }
+        }
 
-        // then
-        verify(memberService, times(1)).isExist(TEST_VALID_MEMBER_EMAIL);
-        verify(response).sendRedirect(request.getContextPath() + "/register");
+        @Nested
+        class 회원가입을_하지_않은_이용자일_경우 {
+
+            @BeforeEach
+            void context() {
+                when(authentication.getPrincipal()).thenReturn(createTestOAuth2User(SIGNING_UP));
+                when(memberService.isExist(TEST_VALID_MEMBER_EMAIL)).thenReturn(false);
+            }
+
+            @Test
+            void 회원가입_페이지로_리다이렉션한다() throws Exception {
+                successHandler.onAuthenticationSuccess(request, response, authentication);
+
+                verify(memberService, times(1)).isExist(TEST_VALID_MEMBER_EMAIL);
+                verify(response).sendRedirect(request.getContextPath() + "/register");
+            }
+        }
     }
 }
 

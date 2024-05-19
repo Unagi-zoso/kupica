@@ -3,9 +3,6 @@ package org.nightdivers.kupica.domain.anonymoususer;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.nightdivers.kupica.support.constant.AnonymousUserConstant.DUPLICATED_TEST_ANONYMOUS_COUNT;
-import static org.nightdivers.kupica.support.constant.AnonymousUserConstant.TEST_ANONYMOUS_USER_1_IP_ADDRESS;
-import static org.nightdivers.kupica.support.constant.AnonymousUserConstant.TEST_ANONYMOUS_USER_1_NICKNAME;
-import static org.nightdivers.kupica.support.constant.AnonymousUserConstant.TEST_ANONYMOUS_USER_1_PW;
 import static org.nightdivers.kupica.support.constant.AnonymousUserConstant.TEST_ANONYMOUS_USER_2_IP_ADDRESS;
 import static org.nightdivers.kupica.support.constant.AnonymousUserConstant.TEST_ANONYMOUS_USER_2_NICKNAME;
 import static org.nightdivers.kupica.support.constant.AnonymousUserConstant.TEST_INVALID_ANONYMOUS_USER_NICKNAME;
@@ -14,11 +11,14 @@ import static org.nightdivers.kupica.support.factory.AnonymousUserFactory.create
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.nightdivers.kupica.support.annotation.RepositoryTest;
 import org.nightdivers.kupica.support.factory.AnonymousUserFactory;
 
+@DisplayNameGeneration(ReplaceUnderscores.class)
 @RequiredArgsConstructor
 @RepositoryTest
 class AnonymousUserRepositoryTest {
@@ -30,95 +30,110 @@ class AnonymousUserRepositoryTest {
     @BeforeEach
     void setUp() {
         givenDuplicatedAnonymousUsers = anonymousUserRepository.saveAll(
-                createDuplicatedAnonymousUsers(AnonymousUserFactory::createTestAnonymousUser1, DUPLICATED_TEST_ANONYMOUS_COUNT));
-    }
-
-    /* TARGET : 익명 사용자 목록 조회 테스트 */
-    @DisplayName("nickname 과 일치하는 익명 사용자 목록 조회 - [성공]")
-    @Test
-    void givenDuplicatedAnonymousUsers_whenFindAllByNickname_thenSuccess() {
-        // given
-
-        // when
-        List<AnonymousUser> actualAnonymousUsers = anonymousUserRepository.findAllByNickname(
-                givenDuplicatedAnonymousUsers.getFirst().getNickname());
-
-        // then
-        assertAll(
-                () -> assertThat(actualAnonymousUsers).containsAll(givenDuplicatedAnonymousUsers),
-                () -> assertThat(actualAnonymousUsers.size()).isGreaterThanOrEqualTo(DUPLICATED_TEST_ANONYMOUS_COUNT)
+                createDuplicatedAnonymousUsers(AnonymousUserFactory::createTestAnonymousUser1, DUPLICATED_TEST_ANONYMOUS_COUNT)
         );
     }
 
-    @DisplayName("nickname 과 일치하는 익명 사용자 목록 조회 - [실패 : 일치하는 nickname 없음]")
-    @Test
-    void givenDuplicatedAnonymousUsers_whenFindAllByNickname_thenEmpty() {
-        // given
+    @Nested
+    class 익명_이용자_nickname_과_일치하는_익명_이용자_목록_조회_시 {
 
-        // when
-        List<AnonymousUser> actualAnonymousUsers = anonymousUserRepository.findAllByNickname(TEST_INVALID_ANONYMOUS_USER_NICKNAME);
+        @Nested
+        class 일치하는_경우 {
 
-        // then
-        assertThat(actualAnonymousUsers).isEmpty();
+            @Test
+            void 해당되는_익명_이용자_목록을_반환한다() {
+                List<AnonymousUser> actualAnonymousUsers = anonymousUserRepository.findAllByNickname(
+                        givenDuplicatedAnonymousUsers.getFirst().getNickname());
+
+                assertAll(
+                        () -> assertThat(actualAnonymousUsers).containsAll(givenDuplicatedAnonymousUsers),
+                        () -> assertThat(actualAnonymousUsers.size()).isGreaterThanOrEqualTo(DUPLICATED_TEST_ANONYMOUS_COUNT)
+                );
+            }
+        }
+
+        @Nested
+        class 일치하지_않는_경우 {
+
+            @Test
+            void 빈_목록을_반환한다() {
+                assertThat(anonymousUserRepository.findAllByNickname(TEST_INVALID_ANONYMOUS_USER_NICKNAME)).isEmpty();
+            }
+        }
     }
 
-    @DisplayName("ip address 와 일치하는 익명 사용자 목록 조회 - [성공]")
-    @Test
-    void givenDuplicatedAnonymousUsers_whenFindAllByIpAddress_thenSuccess() {
-        // given
+    @Nested
+    class 익명_이용자_ip_address_와_일치하는_익명_이용자_목록_조회_시 {
 
-        // when
-        List<AnonymousUser> actualAnonymousUsers = anonymousUserRepository.findAllByIpAddress(
-                givenDuplicatedAnonymousUsers.getFirst().getIpAddress());
+        @Nested
+        class 일치하는_경우 {
 
-        // then
-        assertAll(
-                () -> assertThat(actualAnonymousUsers).containsAll(givenDuplicatedAnonymousUsers),
-                () -> assertThat(actualAnonymousUsers.size()).isGreaterThanOrEqualTo(DUPLICATED_TEST_ANONYMOUS_COUNT)
-        );
+            @Test
+            void 해당되는_익명_이용자_목록을_반환한다() {
+                List<AnonymousUser> actualAnonymousUsers = anonymousUserRepository.findAllByIpAddress(
+                        givenDuplicatedAnonymousUsers.getFirst().getIpAddress());
+
+                assertAll(
+                        () -> assertThat(actualAnonymousUsers).containsAll(givenDuplicatedAnonymousUsers),
+                        () -> assertThat(actualAnonymousUsers.size()).isGreaterThanOrEqualTo(DUPLICATED_TEST_ANONYMOUS_COUNT)
+                );
+            }
+        }
+
+        @Nested
+        class 일치하지_않는_경우 {
+
+            @Test
+            void 빈_목록을_반환한다() {
+                assertThat(anonymousUserRepository.findAllByIpAddress(TEST_INVALID_ANONYMOUS_USER_NICKNAME)).isEmpty();
+            }
+        }
     }
 
-    @DisplayName("ip address 와 일치하는 익명 사용자 목록 조회 - [실패 : 일치하는 익명 사용자 없음]")
-    @Test
-    void givenDuplicatedAnonymousUsers_whenFindAllByIpAddress_thenEmpty() {
-        // given
+    @Nested
+    class 익명_이용자_nickname_과_ip_address_와_일치하는_익명_이용자_목록_조회_시 {
 
-        // when
-        List<AnonymousUser> actualAnonymousUsers = anonymousUserRepository.findAllByIpAddress(TEST_INVALID_ANONYMOUS_USER_NICKNAME);
+        @Nested
+        class 일치하는_경우 {
 
-        // then
-        assertThat(actualAnonymousUsers).isEmpty();
-    }
+            @BeforeEach
+            void context() {
+                anonymousUserRepository.save(
+                        AnonymousUserFactory.createCustomAnonymousUser(
+                                givenDuplicatedAnonymousUsers.getFirst().getNickname(),
+                                TEST_ANONYMOUS_USER_2_IP_ADDRESS
+                        )
+                );
+                anonymousUserRepository.save(
+                        AnonymousUserFactory.createCustomAnonymousUser(
+                                TEST_ANONYMOUS_USER_2_NICKNAME,
+                                givenDuplicatedAnonymousUsers.getFirst().getIpAddress()
+                        )
+                );
+            }
 
-    @DisplayName("nickname 과 ip address 와 일치하는 익명 사용자 목록 조회 - [성공]")
-    @Test
-    void givenDuplicatedAnonymousUsers_whenFindAllByNicknameAndIpAddress_thenSuccess() {
-        // given
-        // 테스트 익명 사용자 1 의 닉네임 과 테스트 익명 사용자 2 의 ip address 가 일치하는 익명 사용자 생성
-        anonymousUserRepository.save(
-                AnonymousUserFactory.createCustomAnonymousUser(
-                        TEST_ANONYMOUS_USER_1_NICKNAME,
-                        TEST_ANONYMOUS_USER_1_PW,
-                        TEST_ANONYMOUS_USER_2_IP_ADDRESS
-                )
-        );
-        // 테스트 익명 사용자 2 의 닉네임 과 테스트 익명 사용자 1 의 ip address 가 일치하는 익명 사용자 생성
-        anonymousUserRepository.save(
-                AnonymousUserFactory.createCustomAnonymousUser(
-                        TEST_ANONYMOUS_USER_2_NICKNAME,
-                        TEST_ANONYMOUS_USER_1_PW,
-                        TEST_ANONYMOUS_USER_1_IP_ADDRESS
-                )
-        );
+            @Test
+            void 해당되는_익명_이용자_목록을_반환한다() {
+                List<AnonymousUser> actualAnonymousUsers = anonymousUserRepository.findAllByNicknameAndIpAddress(
+                        givenDuplicatedAnonymousUsers.getFirst().getNickname(),
+                        givenDuplicatedAnonymousUsers.getFirst().getIpAddress()
+                );
 
-        // when
-        List<AnonymousUser> actualAnonymousUsers = anonymousUserRepository.findAllByNicknameAndIpAddress(
-                TEST_ANONYMOUS_USER_1_NICKNAME, TEST_ANONYMOUS_USER_1_IP_ADDRESS);
+                assertAll(
+                        () -> assertThat(actualAnonymousUsers).containsAll(givenDuplicatedAnonymousUsers),
+                        () -> assertThat(actualAnonymousUsers.size()).isEqualTo(DUPLICATED_TEST_ANONYMOUS_COUNT)
+                );
+            }
+        }
 
-        // then
-        assertAll(
-                () -> assertThat(actualAnonymousUsers).containsAll(givenDuplicatedAnonymousUsers),
-                () -> assertThat(actualAnonymousUsers.size()).isEqualTo(DUPLICATED_TEST_ANONYMOUS_COUNT)
-        );
+        @Nested
+        class 일치하지_않는_경우 {
+
+            @Test
+            void 빈_목록을_반환한다() {
+                assertThat(anonymousUserRepository.findAllByNicknameAndIpAddress(
+                        TEST_INVALID_ANONYMOUS_USER_NICKNAME, TEST_INVALID_ANONYMOUS_USER_NICKNAME)).isEmpty();
+            }
+        }
     }
 }

@@ -8,7 +8,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -18,6 +22,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+@DisplayNameGeneration(ReplaceUnderscores.class)
 @RequiredArgsConstructor
 @WebMvcTest(ViewController.class)
 @ControllerTest
@@ -28,101 +33,134 @@ public class ViewControllerTest {
     @MockBean
     private final AuthService authService;
 
-    @DisplayName("메인 루트 페이지 정상 호출 테스트 - [성공] GET / 200")
-    @Test
-    void givenRootURI_whenGet_thenSuccess() throws Exception {
-        // given
-        String requestURI = "/";
+    @Nested
+    class 메인_루트_페이지_GET_요청_시 {
 
-        // when & then
-        mockMvc.perform(get(requestURI))
-                .andExpect(status().isOk())
-                .andExpect(view().name("index"));
+        @Nested
+        class 정상_접근할_경우 {
+
+            @Test
+            void 메인_루트_페이지를_반환한다() throws Exception {
+                mockMvc.perform(get("/"))
+                        .andExpect(status().isOk())
+                        .andExpect(view().name("index"));
+            }
+        }
     }
 
-    @DisplayName("정적 리소스 호출 테스트 -[성공] GET /static/** 200")
-    @MethodSource("org.nightdivers.kupica.support.provider.StaticResourceUriProvider#provideStaticResourceUriParameters")
-    @ParameterizedTest
-    void givenStaticResourceUri_whenGet_thenSuccess(String requestUri) throws Exception {
-        // given
+    @Nested
+    class 정적_리소스_GET_요청_시 {
 
-        // when & then
-        mockMvc.perform(get(requestUri))
-                .andExpect(status().isOk());
+        @Nested
+        class 정상_접근할_경우 {
+
+            @MethodSource("org.nightdivers.kupica.support.provider.StaticResourceUriProvider#provideStaticResourceUriParameters")
+            @ParameterizedTest
+            void 정적_리소스를_반환한다(String requestUri) throws Exception {
+                mockMvc.perform(get(requestUri))
+                        .andExpect(status().isOk());
+            }
+        }
     }
 
-    @DisplayName("로그인 페이지 호출 테스트 MEMBER 권한 - [실패] GET /login 403")
-    @Test
-    void givenLoginURIAndMemberRole_whenGet_thenForbidden() throws Exception {
-        // given
-        String requestURI = "/login";
-        applyMemberAuth();
+    @Nested
+    class 로그인_페이지_GET_요청_시 {
 
-        // when & then
-        mockMvc.perform(get(requestURI))
-                .andExpect(status().isForbidden());
+        @Nested
+        class 회원_권한으로_접근할_경우 {
+
+            @BeforeEach
+            void context() {
+                applyMemberAuth();
+            }
+
+            @Test
+            void 로그인_페이지를_반환한다() throws Exception {
+                mockMvc.perform(get("/login"))
+                        .andExpect(status().isForbidden());
+            }
+        }
+
+        @Nested
+        class 회원가입_중_권한으로_접근할_경우 {
+
+            @BeforeEach
+            void context() {
+                applySigningUpAuth();
+            }
+
+            @Test
+            void 로그인_페이지를_반환한다() throws Exception {
+                mockMvc.perform(get("/login"))
+                        .andExpect(status().isOk())
+                        .andExpect(view().name("login"));
+            }
+        }
+
+        @Nested
+        class 익명_권한으로_접근할_경우 {
+
+            @BeforeEach
+            void context() {
+                applyAnonymousAuth();
+            }
+
+            @Test
+            void 로그인_페이지를_반환한다() throws Exception {
+                mockMvc.perform(get("/login"))
+                        .andExpect(status().isOk())
+                        .andExpect(view().name("login"));
+            }
+        }
     }
 
-    @DisplayName("로그인 페이지 호출 테스트 SIGNING_UP 권한 - [성공] GET /login 200")
-    @Test
-    void givenLoginURIAndSigningUp_whenGet_thenOk() throws Exception {
-        // given
-        String requestURI = "/login";
-        applySigningUpAuth();
+    @Nested
+    class 회원가입_페이지_GET_요청_시 {
 
-        // when & then
-        mockMvc.perform(get(requestURI))
-                .andExpect(status().isOk())
-                .andExpect(view().name("login"));
-    }
+        @Nested
+        class 회원_권한으로_접근할_경우 {
 
-    @DisplayName("로그인 페이지 호출 테스트 ANONYMOUS 권한 - [성공] GET /login 200")
-    @Test
-    void givenLoginURIAndAnonymous_whenGet_thenOk() throws Exception {
-        // given
-        String requestURI = "/login";
-        applyAnonymousAuth();
+            @BeforeEach
+            void context() {
+                applyMemberAuth();
+            }
 
-        // when & then
-        mockMvc.perform(get(requestURI))
-                .andExpect(status().isOk())
-                .andExpect(view().name("login"));
-    }
+            @Test
+            void 회원가입_페이지를_반환한다() throws Exception {
+                mockMvc.perform(get("/register"))
+                        .andExpect(status().isForbidden());
+            }
+        }
 
-    @DisplayName("회원가입 페이지 호출 테스트 MEMBER 권한- [실패] GET /register 403")
-    @Test
-    void givenRegisterURIAndMemberRole_whenGet_thenForbidden() throws Exception {
-        // given
-        String requestURI = "/register";
-        applyMemberAuth();
+        @Nested
+        class 회원가입_중_권한으로_접근할_경우 {
 
-        // when & then
-        mockMvc.perform(get(requestURI))
-                .andExpect(status().isForbidden());
-    }
+            @BeforeEach
+            void context() {
+                applySigningUpAuth();
+            }
 
-    @DisplayName("회원가입 페이지 호출 테스트 SIGNING_UP 권한 - [성공] GET /register 200")
-    @Test
-    void givenRegisterURIAndSigningUp_whenGet_thenOk() throws Exception {
-        // given
-        String requestURI = "/register";
-        applySigningUpAuth();
+            @Test
+            void 회원가입_페이지를_반환한다() throws Exception {
+                mockMvc.perform(get("/register"))
+                        .andExpect(status().isOk())
+                        .andExpect(view().name("register"));
+            }
+        }
 
-        // when & then
-        mockMvc.perform(get(requestURI))
-                .andExpect(status().isOk())
-                .andExpect(view().name("register"));
-    }
+        @Nested
+        class 익명_권한으로_접근할_경우 {
 
-    @DisplayName("회원가입 페이지 호출 테스트 ANONYMOUS 권한 - [실패] GET /register 403")
-    @Test
-    void givenRegisterURIAndAnonymous_whenGet_thenForbidden() throws Exception {
-        // given
-        String requestURI = "/register";
-        applyAnonymousAuth();
+            @BeforeEach
+            void context() {
+                applyAnonymousAuth();
+            }
 
-        // when & then
-        mockMvc.perform(get(requestURI))
-                .andExpect(status().isForbidden());
+            @Test
+            void 회원가입_페이지를_반환한다() throws Exception {
+                mockMvc.perform(get("/register"))
+                        .andExpect(status().isForbidden());
+            }
+        }
     }
 }

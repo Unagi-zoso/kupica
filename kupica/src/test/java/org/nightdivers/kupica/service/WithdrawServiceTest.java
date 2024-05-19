@@ -11,15 +11,18 @@ import static org.nightdivers.kupica.support.constant.MemberConstant.TEST_MEMBER
 
 import java.util.NoSuchElementException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+@DisplayNameGeneration(ReplaceUnderscores.class)
 public class WithdrawServiceTest {
 
     @Mock
     MemberService memberService;
-
     @InjectMocks
     WithdrawService withdrawService;
 
@@ -28,26 +31,38 @@ public class WithdrawServiceTest {
         openMocks(this);
     }
 
-    /* TARGET : withdrawUser 메서드 테스트 */
-    @Test
-    void 유효한_이메일이_들어온_경우_성공() {
-        // given
-        doNothing().when(memberService).remove(TEST_MEMBER_1_EMAIL);
+    @Nested
+    class 회원_탈퇴_시 {
 
-        // when
-        withdrawService.withdrawUser(TEST_MEMBER_1_EMAIL, MEMBER);
+        @Nested
+        class 유효한_이메일이_들어온_경우 {
 
-        // then
-        verify(memberService).remove(TEST_MEMBER_1_EMAIL);
-    }
+            @BeforeEach
+            void context() {
+                doNothing().when(memberService).remove(TEST_MEMBER_1_EMAIL);
+            }
 
-    @Test
-    void 유효하지_않은_이메일이_들어온_경우_실패() {
-        // given
-        doThrow(NoSuchElementException.class).when(memberService).remove(TEST_INVALID_MEMBER_EMAIL);
+            @Test
+            void 해당_회원을_제거한다() {
+                withdrawService.withdrawUser(TEST_MEMBER_1_EMAIL);
 
-        // when & then
-        assertThrows(NoSuchElementException.class, () -> withdrawService.withdrawUser(TEST_INVALID_MEMBER_EMAIL, MEMBER));
-        verify(memberService).remove(TEST_INVALID_MEMBER_EMAIL);
+                verify(memberService).remove(TEST_MEMBER_1_EMAIL);
+            }
+        }
+
+        @Nested
+        class 유효하지_않은_이메일이_들어온_경우 {
+
+            @BeforeEach
+            void context() {
+                doThrow(NoSuchElementException.class).when(memberService).remove(TEST_INVALID_MEMBER_EMAIL);
+            }
+
+            @Test
+            void NoSuchElementException_예외를_던진다() {
+                assertThrows(NoSuchElementException.class, () -> withdrawService.withdrawUser(TEST_INVALID_MEMBER_EMAIL));
+                verify(memberService).remove(TEST_INVALID_MEMBER_EMAIL);
+            }
+        }
     }
 }

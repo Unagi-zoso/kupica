@@ -20,6 +20,9 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.nightdivers.kupica.domain.anonymoususer.AnonymousUser;
 import org.nightdivers.kupica.domain.anonymoususer.AnonymousUserRepository;
@@ -30,6 +33,7 @@ import org.nightdivers.kupica.domain.member.MemberRepository;
 import org.nightdivers.kupica.support.annotation.RepositoryTest;
 import org.springframework.data.domain.PageRequest;
 
+@DisplayNameGeneration(ReplaceUnderscores.class)
 @RequiredArgsConstructor
 @RepositoryTest
 class ArticleLikeRepositoryTest {
@@ -41,6 +45,7 @@ class ArticleLikeRepositoryTest {
 
     Member givenMember1;
     Member givenMember2;
+    Member noArticleMember;
 
     AnonymousUser givenAnonymousUser1;
     AnonymousUser givenAnonymousUser2;
@@ -58,8 +63,159 @@ class ArticleLikeRepositoryTest {
 
     @BeforeEach
     void setUp() {
+        initTestData();
+    }
+
+    @Nested
+    class 전체_좋아요를_조회_시 {
+
+        @Nested
+        class 회원_id_와_일치하는_좋아요가_있는_경우 {
+
+            @Test
+            void 해당되는_좋아요_목록을_반환한다() {
+                List<ArticleLike> actual = articleLikeRepository.findAllByMemberIdAndErasedFlagIsFalse(
+                        givenMember1.getId());
+
+                assertThat(actual).contains(givenArticleLike1, givenArticleLike2);
+            }
+        }
+
+        @Nested
+        class 회원_id_와_일치하는_좋아요가_없는_경우 {
+
+            @Test
+            void 빈_리스트를_반환한다() {
+                List<ArticleLike> actual = articleLikeRepository.findAllByMemberIdAndErasedFlagIsFalse(
+                        noArticleMember.getId());
+
+                assertThat(actual).isEmpty();
+            }
+        }
+
+        @Nested
+        class 사진글_id_와_일치하는_좋아요가_있는_경우 {
+
+            @Test
+            void 해당되는_좋아요_목록을_반환한다() {
+                List<ArticleLike> actual = articleLikeRepository.findAllByArticleIdAndErasedFlagIsFalse(
+                        givenArticle1.getId());
+
+                assertThat(actual).contains(givenArticleLike1, givenArticleLike3, givenArticleLike5);
+            }
+        }
+
+        @Nested
+        class 사진글_id_와_일치하는_좋아요가_없는_경우 {
+
+            @Test
+            void 빈_리스트를_반환한다() {
+                List<ArticleLike> actual = articleLikeRepository.findAllByArticleIdAndErasedFlagIsFalse(
+                        givenArticle3.getId());
+
+                assertThat(actual).isEmpty();
+            }
+        }
+
+        @Nested
+        class 좋아요_수가_많은_순서로_조회할_경우 {
+
+            @BeforeEach
+            void context() {
+                TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size())
+                        .forEach(ip -> articleLikeRepository.save(
+                                createAnonymousArticleLike(ip, givenArticle1)));
+                TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size() - 1)
+                        .forEach(ip -> articleLikeRepository.save(
+                                createAnonymousArticleLike(ip, givenArticle2)));
+                TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size() - 2)
+                        .forEach(ip -> articleLikeRepository.save(
+                                createAnonymousArticleLike(ip, givenArticle3)));
+            }
+
+            @Test
+            void 해당되는_좋아요_목록을_반환한다() {
+                List<ArticleLike> actualArticleLikes = articleLikeRepository.findArticleIdOrderByCountDesc(
+                        PageRequest.of(0, 10)).getContent();
+
+                assertAll(
+                        () -> assertThat(actualArticleLikes.getFirst().getArticle().getId()).isEqualTo(
+                                givenArticle1.getId()),
+                        () -> assertThat(actualArticleLikes.get(1).getArticle().getId()).isEqualTo(
+                                givenArticle2.getId()),
+                        () -> assertThat(actualArticleLikes.get(2).getArticle().getId()).isEqualTo(
+                                givenArticle3.getId())
+                );
+            }
+        }
+
+        @Nested
+        class 좋아요_수가_적은_순서로_조회할_경우 {
+
+            @BeforeEach
+            void context() {
+                TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size())
+                        .forEach(ip -> articleLikeRepository.save(
+                                createAnonymousArticleLike(ip, givenArticle1)));
+                TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size() - 1)
+                        .forEach(ip -> articleLikeRepository.save(
+                                createAnonymousArticleLike(ip, givenArticle2)));
+                TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size() - 2)
+                        .forEach(ip -> articleLikeRepository.save(
+                                createAnonymousArticleLike(ip, givenArticle3)));
+            }
+
+            @Test
+            void 해당되는_좋아요_목록을_반환한다() {
+                List<ArticleLike> actualArticleLikes = articleLikeRepository.findArticleIdOrderByCountAsc(
+                        PageRequest.of(0, 10)).getContent();
+
+                assertAll(
+                        () -> assertThat(actualArticleLikes.getLast().getArticle().getId()).isEqualTo(
+                                givenArticle1.getId()),
+                        () -> assertThat(actualArticleLikes.get(actualArticleLikes.size() - 2).getArticle()
+                                             .getId()).isEqualTo(
+                                givenArticle2.getId()),
+                        () -> assertThat(actualArticleLikes.get(actualArticleLikes.size() - 3).getArticle()
+                                             .getId()).isEqualTo(
+                                givenArticle3.getId())
+                );
+            }
+        }
+    }
+
+    @Nested
+    class 좋아요_수를_조회할_시 {
+
+            @Nested
+            class 사진글_id_와_일치하는_좋아요_수를_조회할_경우 {
+
+                @Test
+                void 해당되는_좋아요_수를_반환한다() {
+                    Long actual = articleLikeRepository.countByArticleIdAndErasedFlagIsFalse(
+                            givenArticle1.getId());
+
+                    assertThat(actual).isEqualTo(3);
+                }
+            }
+
+            @Nested
+            class 유효하지_않은_사진글_id_와_일치하는_좋아요_수를_조회할_경우 {
+
+                @Test
+                void 좋아요_수_0_을_반환한다() {
+                    Long actual = articleLikeRepository.countByArticleIdAndErasedFlagIsFalse(
+                            TEST_INVALID_ARTICLE_ID);
+
+                    assertThat(actual).isZero();
+                }
+            }
+    }
+
+    private void initTestData() {
         givenMember1 = memberRepository.save(createTestMember1());
         givenMember2 = memberRepository.save(createTestMember2());
+        noArticleMember = memberRepository.save(createTestMember3());
 
         givenAnonymousUser1 = anonymousUserRepository.save(createTestAnonymousUser1());
         givenAnonymousUser2 = anonymousUserRepository.save(createTestAnonymousUser2());
@@ -80,170 +236,5 @@ class ArticleLikeRepositoryTest {
                 createAnonymousArticleLike(givenAnonymousUser2.getIpAddress(), givenArticle2));
         givenArticleLike6 = articleLikeRepository.save(
                 createAnonymousArticleLike(givenAnonymousUser1.getIpAddress(), givenArticle2));
-    }
-
-    /* TARGET : 좋아요 조회 테스트 */
-    @DisplayName("member id 와 일치하는 좋아요 조회 - [성공]")
-    @Test
-    void givenMemberId_whenFindAllByMemberId_thenReturnsArticleLikeList() {
-        // given
-
-        // when
-        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByMemberIdAndErasedFlagIsFalse(
-                givenMember1.getId());
-
-        // then
-        assertThat(articleLikeList).hasSize(2);
-    }
-
-    @DisplayName("member id 와 일치하는 좋아요 조회 - [실패 : 좋아요 없음]")
-    @Test
-    void givenValidMemberId_whenFindAllByMemberId_thenReturnsEmptyList() {
-        // given
-        Long memberId = memberRepository.save(createTestMember3()).getId();
-
-        // when
-        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByMemberIdAndErasedFlagIsFalse(memberId);
-
-        // then
-        assertThat(articleLikeList).isEmpty();
-    }
-
-    @DisplayName("member id 와 일치하는 좋아요 조회 - [실패 : member id 없음]")
-    @Test
-    void givenInvalidMemberId_whenFindAllByMemberId_thenReturnsEmptyList() {
-        // given
-
-        // when
-        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByMemberIdAndErasedFlagIsFalse(
-                TEST_INVALID_MEMBER_ID);
-
-        // then
-        assertThat(articleLikeList).isEmpty();
-    }
-
-    @DisplayName("article id 와 일치하는 좋아요 조회 - [성공]")
-    @Test
-    void givenArticleId_whenFindAllByArticleId_thenReturnsArticleLikeList() {
-        // given
-
-        // when
-        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByArticleIdAndErasedFlagIsFalse(
-                givenArticle1.getId());
-
-        // then
-        assertThat(articleLikeList).hasSize(3);
-    }
-
-    @DisplayName("article id 와 일치하는 좋아요 조회 - [실패 : 좋아요 없음]")
-    @Test
-    void givenValidArticleId_whenFindAllByArticleId_thenReturnsEmptyList() {
-        // given
-        Long articleId = articleRepository.save(createTestMemberArticle3(givenMember1)).getId();
-
-        // when
-        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByArticleIdAndErasedFlagIsFalse(articleId);
-
-        // then
-        assertThat(articleLikeList).isEmpty();
-    }
-
-    @DisplayName("article id 와 일치하는 좋아요 조회 - [실패 : article id 없음]")
-    @Test
-    void givenInvalidArticleId_whenFindAllByArticleId_thenReturnsEmptyList() {
-        // given
-
-        // when
-        List<ArticleLike> articleLikeList = articleLikeRepository.findAllByArticleIdAndErasedFlagIsFalse(
-                TEST_INVALID_ARTICLE_ID);
-
-        // then
-        assertThat(articleLikeList).isEmpty();
-    }
-
-    @DisplayName("좋아요 수가 많은 순서로 조회 - [성공]")
-    @Test
-    void whenFindArticleIdOrderByCountDesc_thenReturnsArticleLikeList() {
-        // given
-        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size())
-                .forEach(ip -> articleLikeRepository.save(
-                        createAnonymousArticleLike(ip, givenArticle1)));
-        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size() - 1)
-                .forEach(ip -> articleLikeRepository.save(
-                        createAnonymousArticleLike(ip, givenArticle2)));
-        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size() - 2)
-                .forEach(ip -> articleLikeRepository.save(
-                        createAnonymousArticleLike(ip, givenArticle3)));
-
-        // when
-        List<ArticleLike> actualArticleLikes = articleLikeRepository.findArticleIdOrderByCountDesc(
-                        PageRequest.of(0, 10))
-                .getContent();
-        // then
-        assertAll(
-                () -> assertThat(actualArticleLikes.getFirst().getArticle().getId()).isEqualTo(
-                        givenArticle1.getId()),
-                () -> assertThat(actualArticleLikes.get(1).getArticle().getId()).isEqualTo(
-                        givenArticle2.getId()),
-                () -> assertThat(actualArticleLikes.get(2).getArticle().getId()).isEqualTo(
-                        givenArticle3.getId())
-        );
-    }
-
-    @DisplayName("좋아요 수가 적은 순서로 조회 - [성공]")
-    @Test
-    void whenFindArticleIdOrderByCountAsc_thenReturnsArticleLikeList() {
-        // given
-        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size())
-                .forEach(ip -> articleLikeRepository.save(
-                        createAnonymousArticleLike(ip, givenArticle1)));
-        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size() - 1)
-                .forEach(ip -> articleLikeRepository.save(
-                        createAnonymousArticleLike(ip, givenArticle2)));
-        TEST_ANONYMOUS_IP_LIST.subList(0, TEST_ANONYMOUS_IP_LIST.size() - 2)
-                .forEach(ip -> articleLikeRepository.save(
-                        createAnonymousArticleLike(ip, givenArticle3)));
-
-        // when
-        List<ArticleLike> actualArticleLikes = articleLikeRepository.findArticleIdOrderByCountAsc(
-                        PageRequest.of(0, 10))
-                .getContent();
-
-        // then
-        assertAll(
-                () -> assertThat(actualArticleLikes.getLast().getArticle().getId()).isEqualTo(
-                        givenArticle1.getId()),
-                () -> assertThat(actualArticleLikes.get(actualArticleLikes.size() - 2).getArticle()
-                                         .getId()).isEqualTo(
-                        givenArticle2.getId()),
-                () -> assertThat(actualArticleLikes.get(actualArticleLikes.size() - 3).getArticle()
-                                         .getId()).isEqualTo(
-                        givenArticle3.getId())
-        );
-    }
-
-    /* TARGET : 좋아요 수 조회 테스트 */
-    @DisplayName("article id 와 일치하는 좋아요 수 조회 - [성공]")
-    @Test
-    void givenArticleId_whenCountByArticleId_thenReturnsCount() {
-        // given
-
-        // when
-        Long count = articleLikeRepository.countByArticleIdAndErasedFlagIsFalse(givenArticle1.getId());
-
-        // then
-        assertThat(count).isEqualTo(3);
-    }
-
-    @DisplayName("article id 와 일치하는 좋아요 수 조회 - [실패 : 유효하지 않은 article id]")
-    @Test
-    void givenInvalidArticleId_whenCountByArticleId_thenReturnsZero() {
-        // given
-
-        // when
-        Long count = articleLikeRepository.countByArticleIdAndErasedFlagIsFalse(TEST_INVALID_ARTICLE_ID);
-
-        // then
-        assertThat(count).isZero();
     }
 }

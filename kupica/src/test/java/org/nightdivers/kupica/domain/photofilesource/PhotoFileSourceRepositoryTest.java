@@ -6,7 +6,9 @@ import static org.nightdivers.kupica.support.constant.ArticleConstant.TEST_MEMBE
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.nightdivers.kupica.domain.anonymoususer.AnonymousUser;
 import org.nightdivers.kupica.domain.anonymoususer.AnonymousUserRepository;
@@ -17,24 +19,53 @@ import org.nightdivers.kupica.support.factory.AnonymousUserFactory;
 import org.nightdivers.kupica.support.factory.ArticleFactory;
 import org.springframework.data.domain.PageRequest;
 
+@DisplayNameGeneration(ReplaceUnderscores.class)
 @RequiredArgsConstructor
 @RepositoryTest
 class PhotoFileSourceRepositoryTest {
 
     private final AnonymousUserRepository anonymousUserRepository;
-
     private final ArticleRepository articleRepository;
-
     private final PhotoFileSourceRepository photoFileSourceRepository;
 
     AnonymousUser givenAnonymousUser;
-
     Article givenArticle;
-
     List<PhotoFileSource> givenPhotoFileSources;
 
     @BeforeEach
     void setUp() {
+        initTestData();
+    }
+
+    @Nested
+    class 전체_PhotoFileSource_를_조회할_시 {
+
+        @Nested
+        class article_id_와_일치하는_PhotoFileSource_가_있는_경우 {
+
+            @Test
+            void 해당되는_페이징_결과를_반환한다() {
+                List<PhotoFileSource> photoFileSources = photoFileSourceRepository.findByArticleIdAndErasedFlagIsFalse(
+                        PageRequest.of(0, 5), givenArticle.getId()).getContent();
+
+                assertThat(photoFileSources).isNotEmpty();
+            }
+        }
+
+        @Nested
+        class article_id_와_일치하는_PhotoFileSource_가_없는_경우 {
+
+            @Test
+            void 빈_결과를_반환한다() {
+                List<PhotoFileSource> photoFileSources = photoFileSourceRepository.findByArticleIdAndErasedFlagIsFalse(
+                        PageRequest.of(0, 5), 0L).getContent();
+
+                assertThat(photoFileSources).isEmpty();
+            }
+        }
+    }
+
+    private void initTestData() {
         givenAnonymousUser = anonymousUserRepository.save(AnonymousUserFactory.createTestAnonymousUser1());
 
         givenArticle = articleRepository.save(
@@ -47,30 +78,5 @@ class PhotoFileSourceRepositoryTest {
                         PhotoFileSource.of("840x640", "test2.com", 1000L, 5L, givenArticle)
                 )
         );
-    }
-
-    /* TARGET : PhotoFileSource 조회 테스트 */
-    @DisplayName("article id 와 일치하는 PhotoFileSource 전체 조회 - [성공]")
-    @Test
-    void givenArticleId_whenFindPhotoFileSourceByArticleId_thenReturnPhotoFileSource() {
-        // given
-
-        // when
-        List<PhotoFileSource> photoFileSources = photoFileSourceRepository.findByArticleIdAndErasedFlagIsFalse(givenArticle.getId());
-
-        // then
-        assertThat(photoFileSources).isNotEmpty();
-    }
-
-    @DisplayName("article id 와 일치하는 PhotoFileSource 페이징 조회 - [성공]")
-    @Test
-    void givenArticleId_whenFindPhotoFileSourceByArticleId_thenReturnPhotoFileSourcePage() {
-        // given
-        // when
-        List<PhotoFileSource> photoFileSources = photoFileSourceRepository.findByArticleIdAndErasedFlagIsFalse(
-                PageRequest.of(0, 5), givenArticle.getId()).getContent();
-
-        // then
-        assertThat(photoFileSources).isNotEmpty();
     }
 }

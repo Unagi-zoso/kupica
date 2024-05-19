@@ -26,7 +26,7 @@ public class MemberController {
             Authentication authentication
     ) {
         CustomOAuth2User member = (CustomOAuth2User) authentication.getPrincipal();
-        withdrawService.withdrawUser(member.getEmail(), member.getUserRole());
+        withdrawService.withdrawUser(member.getEmail());
         new SecurityContextLogoutHandler().logout(request, response, authentication);
         return ResponseEntity.ok().build();
     }

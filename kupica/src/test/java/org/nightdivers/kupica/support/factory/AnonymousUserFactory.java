@@ -71,12 +71,12 @@ public class AnonymousUserFactory {
     }
 
     public static AnonymousUser createCustomAnonymousUser(
-            String nickname, String password,
+            String nickname,
             String ipAddress
     ) {
         return AnonymousUser.of(
                 nickname,
-                password,
+                TEST_ANONYMOUS_USER_1_PW,
                 ipAddress,
                 UserRole.ANONYMOUS
         );

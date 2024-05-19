@@ -5,7 +5,6 @@ import static org.nightdivers.kupica.domain.member.UserRole.MEMBER;
 import static org.nightdivers.kupica.domain.member.UserRole.SIGNING_UP;
 
 import org.nightdivers.kupica.handler.CustomAccessDeniedHandler;
-import org.nightdivers.kupica.handler.CustomAuthenticationEntryPoint;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;

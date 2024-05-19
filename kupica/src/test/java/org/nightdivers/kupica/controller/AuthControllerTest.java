@@ -1,11 +1,8 @@
 package org.nightdivers.kupica.controller;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.nightdivers.kupica.support.factory.MemberFactory.createTestMember1;
-import static org.nightdivers.kupica.support.provider.JsonParserMethodProvider.parseMapFromString;
 import static org.nightdivers.kupica.support.provider.TestAuthenticationApplier.applyAnonymousAuth;
 import static org.nightdivers.kupica.support.provider.TestAuthenticationApplier.applyMemberAuth;
 import static org.nightdivers.kupica.support.provider.TestAuthenticationApplier.applySigningUpAuth;
@@ -15,10 +12,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.nightdivers.kupica.controller.dto.MemberResponse;
 import org.nightdivers.kupica.controller.dto.RegisterRequest;
 import org.nightdivers.kupica.service.AuthService;
 import org.nightdivers.kupica.service.dto.CustomOAuth2User;
@@ -28,6 +25,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+@DisplayNameGeneration(ReplaceUnderscores.class)
 @RequiredArgsConstructor
 @WebMvcTest(AuthController.class)
 @ControllerTest
@@ -43,6 +41,7 @@ public class AuthControllerTest {
 
         @Nested
         class 회원_권한인_경우 {
+
             String requestURI;
 
             @BeforeEach
@@ -60,6 +59,7 @@ public class AuthControllerTest {
 
         @Nested
         class 회원가입_중_권한인_경우 {
+
             String requestURI;
 
             @BeforeEach
@@ -75,6 +75,7 @@ public class AuthControllerTest {
 
         @Nested
         class 익명_권한인_경우 {
+
             String requestURI;
 
             @BeforeEach
